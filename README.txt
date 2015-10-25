@@ -1,0 +1,1 @@
+Git repozitáø pro KIV/OS
