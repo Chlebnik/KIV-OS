@@ -1,1 +1,1 @@
-Git repozitáø pro KIV/OS
+Git repozitory for KIV/OS
