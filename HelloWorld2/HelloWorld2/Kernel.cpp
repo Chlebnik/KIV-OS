@@ -119,3 +119,14 @@ Pipe* Kernel::GetPipe(int pipeIndex)
 	}
 	return NULL;
 }
+
+int Kernel::Execute(int parentPid, string path, string programName, string parameters, IOType inputType, string inputParam, IOType outputType, string outputParam)
+{
+	
+	return 0;
+}
+
+int Kernel::WaitForChildren(int parentPid)
+{
+	return 0;
+}

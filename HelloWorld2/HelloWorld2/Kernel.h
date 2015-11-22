@@ -5,6 +5,8 @@
 
 using namespace std;
 
+enum IOType {PIPE_SINLGE_TYPE, PIPE_BOTH_TYPE, FILE_TYPE, STANDARD_TYPE};
+
 class Kernel
 {	
 
@@ -36,4 +38,7 @@ public:
 
 	void ClosePipeInput(int pipeIndex);
 	void ClosePipeOutput(int pipeIndex);
+
+	int Execute(int parentPid, string path, string programName, string parameters, IOType inputType, string inputParam, IOType outputType, string outputParam);
+	int WaitForChildren(int parentPid);
 };
