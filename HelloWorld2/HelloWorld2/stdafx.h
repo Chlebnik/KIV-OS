@@ -23,6 +23,7 @@
 #include <strsafe.h>
 
 #include "targetver.h"
+#include "Utils.h"
 
 #include "Pipe.h"
 #include "Kernel.h"

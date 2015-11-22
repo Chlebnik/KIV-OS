@@ -12,8 +12,8 @@ int main()
 	AbstractOutput* output = new StandardOutput(kernel);
 	AbstractOutput* errorOutput = new StandardOutput(kernel);
 	
-	AbstractProcess* cd = new Echo(0, kernel);
-	cd->Init(input, output, errorOutput, {});
+	AbstractProcess* cd = new Echo(1, 0, kernel);
+	cd->Init(input, output, errorOutput, {"Zkusime \"jak mu\" to"});
 	cd->Run();
 
 	//ifstream fileInput("C:/testData/test.txt");

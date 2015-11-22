@@ -11,10 +11,13 @@ protected:
 	AbstractOutput* errorOutput;
 	Kernel* kernel;
 	int pid;
+	int parentPid;
 	vector<string> parameters;
+	string path;
+	void setParameters(string parameters);
 
 public:
-	AbstractProcess(int pid, Kernel* kernel);
+	AbstractProcess(int pid, int parentPid, Kernel* kernel);
 	virtual string GetHelpContent()
 	{
 		return "This program or command has no help content.";
@@ -22,10 +25,11 @@ public:
 	virtual bool HasValidParameters() = 0;
 	virtual int RunProcess() = 0;
 	
-	void Init(AbstractInput* input, AbstractOutput* output, AbstractOutput* errorOutput, vector<string> parameters);
+	void Init(AbstractInput* input, AbstractOutput* output, AbstractOutput* errorOutput, string parameters);
 	int Run();
 	void WriteHelp();
-
-
-
+	string GetPath();
+	void SetPath(string path);
+	int GetPid();
+	int GetParentPid();
 };

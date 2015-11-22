@@ -113,7 +113,7 @@ int Dir::list_dir(string path) {
 
 	}
 	else {
-		wstr = kernel->StringToWchar(path);
+		wstr = Utils::StringToWchar(path);
 	}
 
 	StringCchLength(wstr, MAX_PATH, &length_of_arg);
@@ -125,7 +125,7 @@ int Dir::list_dir(string path) {
 	}
 
 	line = "\nTarget directory is ";
-	line += kernel->WcharToString(wstr) + "\n";
+	line += Utils::WcharToString(wstr) + "\n";
 	write_line(line);
 
 
@@ -176,7 +176,7 @@ int Dir::list_dir(string path) {
 			line += getTime(ffd.ftCreationTime) + " ";
 			line += to_string(filesize.QuadPart) + " ";
 		}
-		line += kernel->WcharToString(ffd.cFileName);
+		line += Utils::WcharToString(ffd.cFileName);
 
 		write_line(line);
 

@@ -96,7 +96,7 @@ bool ChangeDirectory::changePath(string new_path) {
 	bool success = false;
 
 	if (dirExists(new_path)) {
-		wchar_t* wstr = kernel->StringToWchar(new_path);
+		wchar_t* wstr = Utils::StringToWchar(new_path);
 
 		if (!SetCurrentDirectory(wstr))
 		{

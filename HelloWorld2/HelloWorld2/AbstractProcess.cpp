@@ -1,17 +1,47 @@
 #include "stdafx.h"
 
-AbstractProcess::AbstractProcess(int pid, Kernel* kernel)
+void AbstractProcess::setParameters(string parameters)
 {
-	this->pid = pid;
-	this->kernel = kernel;
+	vector<string> params;
+	bool comma = false;
+	int startPos = 0;
+	int curentPos = 0;
+	for (char& c : parameters) {
+		if (c == '"' || c == '\'') {
+			if (comma) {
+				comma = false;
+			}
+			else {
+				comma = true;
+			}			
+		}else if(isspace(c) && !comma && startPos != (curentPos + 1)){
+			string new_param = parameters.substr(startPos,(curentPos-startPos));
+			params.push_back(new_param);
+			startPos = curentPos + 1;
+		}
+		else if (curentPos == 0) {
+			startPos = curentPos;
+		}
+		curentPos++;
+	}
+	if (curentPos != startPos) {
+		string new_param = parameters.substr(startPos, (curentPos - startPos));
+		params.push_back(new_param);
+	}
+
+	this->parameters = vector<string>();
 }
 
-void AbstractProcess::Init(AbstractInput* input, AbstractOutput* output, AbstractOutput* errorOutput, vector<string> parameters)
+AbstractProcess::AbstractProcess(int pid, int parentPid, Kernel* kernel) : pid {pid} , parentPid {pid} , kernel {kernel}
+{
+}
+
+void AbstractProcess::Init(AbstractInput* input, AbstractOutput* output, AbstractOutput* errorOutput, string parameters)
 {
 	this->input = input;
 	this->output = output;
 	this->errorOutput = errorOutput;
-	this->parameters = parameters;
+	setParameters(parameters);
 }
 
 int AbstractProcess::Run()
@@ -30,3 +60,24 @@ void AbstractProcess::WriteHelp()
 {
 	output->WriteLine(this->GetHelpContent());
 }
+
+void AbstractProcess::SetPath(string path)
+{
+	this->path = path;
+}
+
+int AbstractProcess::GetPid()
+{
+	return pid;
+}
+
+string AbstractProcess::GetPath()
+{
+	return path;
+}
+
+int AbstractProcess::GetParentPid()
+{
+	return parentPid;
+}
+
