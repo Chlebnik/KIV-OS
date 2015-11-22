@@ -1,17 +1,17 @@
 #pragma once
-#include "stdafx.h"
 
-class Rand : public AbstractProcess
+class Dir : public AbstractProcess
 {
 	using AbstractProcess::AbstractProcess;
-
 private:
 	bool showHelp;
-	atomic_bool stop;
-	void Loop();
-	string convertFloatToString(float number);
-	string read_line();
+	bool showAll;
+	int pathIndex;
 	void write_line(string line);
+	string read_line();
+	string getTime(FILETIME time);
+	int list_dir(string path);
+
 
 public:
 	// Inherited form Abstract process
@@ -20,3 +20,4 @@ public:
 	int RunProcess();
 
 };
+

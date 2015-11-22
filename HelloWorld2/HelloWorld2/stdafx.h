@@ -13,12 +13,14 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include <random>
 #include <atomic>
 #include <thread>
 #include <mutex>
 #include <deque>
 #include <map>
 #include <windows.h>
+#include <strsafe.h>
 
 #include "targetver.h"
 
@@ -42,5 +44,8 @@
 #include "Shell.h"
 #include "Sort.h"
 #include "Rand.h"
+#include "ChangeDirectory.h"
+#include "Dir.h"
+#include "Echo.h"
 
 // TODO: reference additional headers your program requires here

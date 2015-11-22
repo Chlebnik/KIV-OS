@@ -149,6 +149,9 @@
     <ClInclude Include="AbstractIO.h" />
     <ClInclude Include="AbstractOutput.h" />
     <ClInclude Include="AbstractProcess.h" />
+    <ClInclude Include="ChangeDirectory.h" />
+    <ClInclude Include="Dir.h" />
+    <ClInclude Include="Echo.h" />
     <ClInclude Include="FileInput.h" />
     <ClInclude Include="FileOutput.h" />
     <ClInclude Include="Pipe.h" />
@@ -166,6 +169,9 @@
   <ItemGroup>
     <ClCompile Include="AbstractIO.cpp" />
     <ClCompile Include="AbstractOutput.cpp" />
+    <ClCompile Include="ChangeDirectory.cpp" />
+    <ClCompile Include="Dir.cpp" />
+    <ClCompile Include="Echo.cpp" />
     <ClCompile Include="FileInput.cpp" />
     <ClCompile Include="FileOutput.cpp" />
     <ClCompile Include="HelloWorld2.cpp" />

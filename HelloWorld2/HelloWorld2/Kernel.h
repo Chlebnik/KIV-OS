@@ -36,4 +36,14 @@ public:
 
 	void ClosePipeInput(int pipeIndex);
 	void ClosePipeOutput(int pipeIndex);
+
+
+	string WcharToString(wchar_t* text);
+	wchar_t* StringToWchar(string text);
+
+	//For fileSystem manipulation
+	DWORD OurGetFileAttributesA(const string& dirName_in);
+	DWORD OurGetCurrentDirectory(_In_ DWORD BUFSIZE, _Out_ LPWSTR Buffer);
+	HANDLE OurFindFirstFile(_In_ LPWSTR szDir, _Out_ LPWIN32_FIND_DATAW ffd);
+	DWORD OurFindNextFile(_In_ HANDLE hFind, _Out_ LPWIN32_FIND_DATAW ffd);
 };
