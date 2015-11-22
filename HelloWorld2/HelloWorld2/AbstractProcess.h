@@ -13,8 +13,9 @@ protected:
 	int pid;
 	int parentPid;
 	vector<string> parameters;
-	string path;
 	void setParameters(string parameters);
+	string path;
+
 
 public:
 	AbstractProcess(int pid, int parentPid, Kernel* kernel);

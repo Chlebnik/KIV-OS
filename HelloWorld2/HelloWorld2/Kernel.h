@@ -5,7 +5,7 @@
 
 using namespace std;
 
-enum IOType { PIPE_SINLGE_TYPE, PIPE_BOTH_TYPE, FILE_TYPE, STANDARD_TYPE };
+enum IOType {PIPE_SINLGE_TYPE, PIPE_BOTH_TYPE, FILE_TYPE, STANDARD_TYPE};
 
 class Kernel
 {	
