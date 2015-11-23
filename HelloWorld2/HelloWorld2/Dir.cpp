@@ -48,22 +48,6 @@ bool Dir::HasValidParameters()
 	return valid;
 }
 
-void Dir::write_line(string line) {
-	output->WriteLine(line);
-
-}
-
-string Dir::read_line() {
-	string line;
-	bool success = true;
-
-	line = input->ReadLine(success);
-
-	if (success) {
-		return line;
-	}
-}
-
 string Dir::getTime(FILETIME time) {
 	SYSTEMTIME stUTC, stLocal;
 
@@ -98,7 +82,7 @@ int Dir::list_dir(string path) {
 			line = "GetCurrentDirectory failed (";
 			line += to_string(GetLastError());
 			line += ")\n";
-			write_line(line);
+			output->WriteLine(line);
 			return -1;
 		}
 		if (dwRet > BUFSIZE)
@@ -106,7 +90,7 @@ int Dir::list_dir(string path) {
 			line = "Buffer too small; need ";
 			line += to_string(dwRet);
 			line += " characters\n";
-			write_line(line);
+			output->WriteLine(line);
 			return -2;
 		}
 		wstr = Buffer;
@@ -120,13 +104,13 @@ int Dir::list_dir(string path) {
 
 	if (length_of_arg > (MAX_PATH - 3))
 	{
-		write_line("\nDirectory path is too long.\n");
+		output->WriteLine("\nDirectory path is too long.\n");
 		return (-3);
 	}
 
 	line = "\nTarget directory is ";
 	line += Utils::WcharToString(wstr) + "\n";
-	write_line(line);
+	output->WriteLine(line);
 
 
 	// Prepare string for use with FindFile functions.  First, copy the
@@ -142,7 +126,7 @@ int Dir::list_dir(string path) {
 	if (INVALID_HANDLE_VALUE == hFind)
 	{
 		line = "Invalid target directory.";
-		write_line(line);
+		output->WriteLine(line);
 		return -4;
 	}
 
@@ -155,7 +139,7 @@ int Dir::list_dir(string path) {
 	}
 	line += "NAME";
 
-	write_line(line);
+	output->WriteLine(line);
 	do
 	{
 		if (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
@@ -178,7 +162,7 @@ int Dir::list_dir(string path) {
 		}
 		line += Utils::WcharToString(ffd.cFileName);
 
-		write_line(line);
+		output->WriteLine(line);
 
 	} while (kernel->OurFindNextFile(hFind, &ffd) != 0);
 
@@ -186,7 +170,7 @@ int Dir::list_dir(string path) {
 
 	if (dwError != ERROR_NO_MORE_FILES)
 	{
-		write_line("FindFirstFile");
+		output->WriteLine("FindFirstFile");
 		FindClose(hFind);
 	}
 
@@ -199,7 +183,7 @@ int Dir::RunProcess()
 {
 	int returnValue = 0;
 	if (showHelp) {
-		write_line(GetHelpContent());
+		output->WriteLine(GetHelpContent());
 	}
 	else if(pathIndex > 0){
 		returnValue = list_dir(parameters[pathIndex]);

@@ -1,15 +1,14 @@
 #pragma once
-#include "stdafx.h"
-
-class Rand : public AbstractProcess
+class WordCount : public AbstractProcess
 {
 	using AbstractProcess::AbstractProcess;
-
 private:
 	bool showHelp;
-	atomic_bool stop;
-	void Loop();
-	string convertFloatToString(float number);
+	bool countBytes;
+	bool countWords;
+	bool countLines;
+	bool fromFile;
+	int count;
 
 public:
 	// Inherited form Abstract process
@@ -18,3 +17,4 @@ public:
 	int RunProcess();
 
 };
+
