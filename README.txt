@@ -6,11 +6,12 @@ Shell - DONE
 Echo - DONE
 Cd - DONE
 Dir - DONE
+Wc - DONE
 Md
 Type
-Sort
-Ranr - DONE (twice)
-Fraq - DONE
+Sort - DONE
+Rand - DONE
+Fraq 
 ---------------------------------------------------------------------------
 I/O - DONE
 Pipes - DONE
