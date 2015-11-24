@@ -3,19 +3,27 @@
 
 using namespace std;
 
+class AbstractInput;
+class AbstractOutput;
+class Kernel;
+
 class AbstractProcess
 {
+private:
+	thread* t;
+	int pipeIdLast;
+
 protected:
 	AbstractInput* input;
 	AbstractOutput* output;
 	AbstractOutput* errorOutput;
+	vector<int> childrenPids;
 	Kernel* kernel;
 	int pid;
 	int parentPid;
 	vector<string> parameters;
 	void setParameters(string parameters);
 	string path;
-
 
 public:
 	AbstractProcess(int pid, int parentPid, Kernel* kernel);
@@ -33,4 +41,8 @@ public:
 	void SetPath(string path);
 	int GetPid();
 	int GetParentPid();
+	void Join();
+	void SetThread(thread* t);
+	int GetPipeIdLast();
+	void SetPipeIdLast(int pipeIdLast);
 };

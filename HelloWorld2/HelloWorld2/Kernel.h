@@ -1,11 +1,10 @@
 #pragma once
 #include "stdafx.h"
-
-#define EOF 26
+#include "AbstractProcess.h"
 
 using namespace std;
-
-enum IOType {PIPE_SINLGE_TYPE, PIPE_BOTH_TYPE, FILE_TYPE, STANDARD_TYPE};
+#define EOF 26
+enum IOType {PIPE_SINGLE_TYPE, PIPE_BOTH_TYPE, FILE_TYPE, STANDARD_TYPE};
 
 class Kernel
 {	
@@ -16,11 +15,20 @@ private:
 	int Write(ostream& stream, string output);
 	int WriteLine(ostream& stream, string output);
 	map<int, Pipe*> pipeMap;
-	int pipeCounter;
+	atomic_int pipeCounter;
+	map<int, AbstractProcess*> processMap;
+	atomic_int pidCounter;
+	mutex mutexProcess;
+	mutex pipeMutex;
+	
 	Pipe* GetPipe(int pipeIndex);
+	AbstractProcess* CreateProcessClass(string programName, int parentPid);
+	AbstractOutput* CreateOutputClass(IOType type, string param, int parentPid);
+	int CreatePipe(bool closedEntry, bool closedExit, int parentPid);
 
 public:
 	Kernel();
+	AbstractInput* CreateInputClass(IOType type, string param, int parendPid);
 	//int PrintToMonitor(string output);
 	string ReadFromKeyboard();
 	string ReadLineFromKeyboard(bool& success);
@@ -40,7 +48,7 @@ public:
 	void ClosePipeOutput(int pipeIndex);
 
 	int Execute(int parentPid, string path, string programName, string parameters, IOType inputType, string inputParam, IOType outputType, string outputParam);
-	int WaitForChildren(int parentPid);
+	int WaitForChildren(vector<int>& childrenPids);	
 
 	//For fileSystem manipulation
 	DWORD OurGetFileAttributesA(const string& dirName_in);

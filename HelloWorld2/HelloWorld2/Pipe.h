@@ -10,8 +10,8 @@ private:
 	deque<char> contentBuffer;
 	atomic_int startIndex;
 	atomic_int endIndex;
-	atomic_bool inputClosed;
-	atomic_bool outputClosed;
+	atomic_bool entryClosed;
+	atomic_bool exitClosed;
 	atomic_bool readerSleeping;
 	thread reader;
 	mutex _mutex;
@@ -23,6 +23,6 @@ public:
 	~Pipe();
 	bool PushChar(char c);
 	char PopChar(bool& success);
-	void CloseInputSide();
-	void CloseOutputSide();
+	void CloseEntry();
+	void CloseExit();
 };

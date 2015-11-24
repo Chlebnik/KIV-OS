@@ -7,6 +7,8 @@ private:
 	bool showHelp;
 	bool showAll;
 	int pathIndex;
+	void write_line(string line);
+	string read_line();
 	string getTime(FILETIME time);
 	int list_dir(string path);
 
