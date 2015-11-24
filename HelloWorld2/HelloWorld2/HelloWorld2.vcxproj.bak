@@ -164,7 +164,6 @@
     <ClInclude Include="Kernel.h" />
     <ClInclude Include="StandardOutput.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Struct.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="WordCount.h" />
