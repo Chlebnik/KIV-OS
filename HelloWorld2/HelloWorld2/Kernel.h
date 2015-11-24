@@ -24,12 +24,12 @@ private:
 	
 	Pipe* GetPipe(int pipeIndex);
 	AbstractProcess* CreateProcessClass(string programName, int parentPid);
-	AbstractInput* CreateInputClass(IOType type, string param);
 	AbstractOutput* CreateOutputClass(IOType type, string param);
 	int CreatePipe(bool closedEntry, bool closedExit);
 
 public:
 	Kernel();
+	AbstractInput* CreateInputClass(IOType type, string param);
 	//int PrintToMonitor(string output);
 	string ReadFromKeyboard();
 	string ReadLineFromKeyboard(bool& success);
