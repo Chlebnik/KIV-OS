@@ -100,9 +100,10 @@ int Dir::list_dir(string path) {
 		wstr = Utils::StringToWchar(path);
 	}
 
-	StringCchLength(wstr, MAX_PATH, &length_of_arg);
+	//StringCchLength(wstr, MAX_PATH, &length_of_arg);
 
-	if (length_of_arg > (MAX_PATH - 3))
+
+	if (lstrlen(wstr) > (MAX_PATH - 3))
 	{
 		output->WriteLine("\nDirectory path is too long.\n");
 		return (-3);
@@ -115,9 +116,12 @@ int Dir::list_dir(string path) {
 
 	// Prepare string for use with FindFile functions.  First, copy the
 	// string to a buffer, then append '\*' to the directory name.
+	
 
-	StringCchCopy(szDir, MAX_PATH, wstr);
-	StringCchCat(szDir, MAX_PATH, TEXT("\\*"));
+	lstrcpy(szDir, wstr);
+	//StringCchCopy(szDir, MAX_PATH, wstr);
+	lstrcat(szDir, TEXT("\\*"));
+	//StringCchCat(szDir, MAX_PATH, TEXT("\\*"));
 
 	// Find the first file in the directory.
 

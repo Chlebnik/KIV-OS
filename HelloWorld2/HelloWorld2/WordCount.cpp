@@ -21,7 +21,7 @@ bool WordCount::HasValidParameters()
 				showHelp = true;
 				valid = true;
 			}
-			else if (i == 0 && *it == "-c") {
+			else if (i == 0 && *it == "-c" && parameters.size() < 3) {
 				valid = true;
 				countBytes = true;
 				countWords = false;
@@ -41,7 +41,7 @@ bool WordCount::HasValidParameters()
 				countLines = true;
 				showHelp = false;
 			}else if(parameters.size() == 2 && (countBytes || countWords || countLines)){
-				fromFile = true;				
+				fromFile = true;
 			}
 			i++;
 		}
@@ -50,55 +50,65 @@ bool WordCount::HasValidParameters()
 	return valid;
 }
 
+void WordCount::getCount(AbstractInput* processInput) {
+	bool success = true;
+	string line;
+	while (processInput->HasNext()) {
+		line = processInput->ReadLine(success);
+		if (success) {
+			if (countBytes) {
+				std::vector<char> bytes(line.begin(), line.end());
+				bytes.push_back('\0');
+				count += static_cast<int>(bytes.size());
+			}
+			else if (countWords) {
+				istringstream iss(line);
+				vector<string> words{ istream_iterator<string>{iss},
+					istream_iterator<string>{} };
+				count += static_cast<int>(words.size());
+			}
+			else if (countLines) {
+				count += 1;
+			}
+		}
+	}
+
+	if (countBytes) {
+		output->WriteLine("Bytes count is :" + to_string(count));
+	}
+	else if (countWords) {
+		output->WriteLine("Words count is :" + to_string(count));
+	}
+	else if (countLines) {
+		output->WriteLine("Lines count is :" + to_string(count));
+	}
+}
 
 int WordCount::RunProcess()
 {
 	if (showHelp) {
 		output->WriteLine(GetHelpContent());
-	}else{
-		if (fromFile) {
+	}else if (fromFile) {
+			AbstractInput* fileFromParam = NULL;
 			ifstream fileInput(parameters[1]);
 			if (!fileInput.is_open())
 			{
 				return -1;
-			} 
-			AbstractInput* tmp_input = new FileInput(fileInput, kernel);
-			this->input = tmp_input;
-		}
-		bool success = true;
-		string line;
-		while (input->HasNext()) {
-			line = input->ReadLine(success);
-			if(success){
-				if (countBytes) {				
-					std::vector<char> bytes(line.begin(), line.end());
-					bytes.push_back('\0');
-					count += bytes.size();
-				}else if (countWords) {
-					istringstream iss(line);
-					vector<string> words{ istream_iterator<string>{iss},
-						istream_iterator<string>{} };
-					count += words.size();
-				}
-				else if (countLines) {
-					count += 1;
-				}
-			}
-		}
+			}			
+			fileFromParam = new FileInput(fileInput, kernel);
 
-		if (countBytes) {
-			output->WriteLine("Bytes count is :" + to_string(count));
-		}
-		else if (countWords) {
-			output->WriteLine("Words count is :" + to_string(count));
-		}
-		else if (countLines) {
-			output->WriteLine("Lines count is :" + to_string(count));
-		}
-
-		output->Close();
-		input->Close();
+			getCount(fileFromParam);
+			fileFromParam->Close();
 	}
-	
+	else {
+		getCount(input);
+	}
+		
+
+
+
+	output->Close();
+	input->Close();	
+
 	return 0;
 }

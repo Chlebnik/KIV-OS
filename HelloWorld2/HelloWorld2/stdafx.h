@@ -21,9 +21,9 @@
 #include <deque>
 #include <map>
 #include <windows.h>
-#include <strsafe.h>
 
-#include "targetver.h"
+
+//#include "targetver.h"
 #include "Utils.h"
 
 #include "Pipe.h"
