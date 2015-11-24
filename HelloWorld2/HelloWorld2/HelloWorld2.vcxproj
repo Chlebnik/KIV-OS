@@ -152,8 +152,11 @@
     <ClInclude Include="ChangeDirectory.h" />
     <ClInclude Include="Dir.h" />
     <ClInclude Include="Echo.h" />
+    <ClInclude Include="ErrorCodes.h" />
+    <ClInclude Include="File.h" />
     <ClInclude Include="FileInput.h" />
     <ClInclude Include="FileOutput.h" />
+    <ClInclude Include="FileSystem.h" />
     <ClInclude Include="Pipe.h" />
     <ClInclude Include="PipeInput.h" />
     <ClInclude Include="PipeOutput.h" />
@@ -173,8 +176,10 @@
     <ClCompile Include="ChangeDirectory.cpp" />
     <ClCompile Include="Dir.cpp" />
     <ClCompile Include="Echo.cpp" />
+    <ClCompile Include="File.cpp" />
     <ClCompile Include="FileInput.cpp" />
     <ClCompile Include="FileOutput.cpp" />
+    <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="HelloWorld2.cpp" />
     <ClCompile Include="Kernel.cpp" />
     <ClCompile Include="AbstractInput.cpp" />
