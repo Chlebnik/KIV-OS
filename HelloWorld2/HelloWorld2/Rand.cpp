@@ -31,26 +31,10 @@ string Rand::convertFloatToString(float number) {
 	return buff.str();
 }
 
-void Rand::write_line(string line) {
-	output->WriteLine(line);
-
-}
-
-string Rand::read_line() {
-	string line;
-	bool success = true;
-
-	line = input->ReadLine(success);
-
-	if (success) {
-		return line;
-	}
-}
-
 int Rand::RunProcess()
 {
 	if (showHelp) {
-		write_line(GetHelpContent());
+		output->WriteLine(GetHelpContent());
 	}
 	else {
 		stop = false;
@@ -90,7 +74,7 @@ void Rand::Loop()
 	while (!stop)
 	{
 		line = convertFloatToString(dice());
-		write_line(line);
+		output->WriteLine(line);
 		Sleep(1000);
 	}
 

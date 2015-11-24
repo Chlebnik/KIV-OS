@@ -43,22 +43,6 @@ bool ChangeDirectory::HasValidParameters()
 	return valid;
 }
 
-void ChangeDirectory::write_line(string line) {	
-	output->WriteLine(line);
-	
-}
-
-string ChangeDirectory::read_line() {
-	string line;
-	bool success = true;
-
-	line = input->ReadLine(success);
-
-	if (success) {
-		return line;
-	}		
-}
-
 bool ChangeDirectory::dirExists(const string& dirName_in)
 {
 	DWORD ftyp = kernel->OurGetFileAttributesA(dirName_in);
@@ -76,7 +60,7 @@ int ChangeDirectory::RunProcess()
 {
 	int retrunValue;
 	if (showHelp) {
-		write_line(GetHelpContent());
+		output->WriteLine(GetHelpContent());
 	}
 	else {
 		retrunValue = changePath(parameters[pathIndex]);
@@ -101,13 +85,13 @@ bool ChangeDirectory::changePath(string new_path) {
 		if (!SetCurrentDirectory(wstr))
 		{
 			string error = "SetCurrentDirectory failed " + GetLastError();
-			write_line(error);
+			output->WriteLine(error);
 		}
 		system("Dir");
 		delete[] wstr;
 	}
 	else {
-		write_line("Given path doesn't exist!");
+		output->WriteLine("Given path doesn't exist!");
 	}
 
 	return success;

@@ -25,28 +25,12 @@ bool Echo::HasValidParameters()
 	return valid;
 }
 
-void Echo::write_line(string line) {
-	output->WriteLine(line);
-
-}
-
-string Echo::read_line() {
-	string line;
-	bool success = true;
-
-	line = input->ReadLine(success);
-
-	if (success) {
-		return line;
-	}
-}
-
 int Echo::RunProcess() {
 	if (showHelp) {
-		write_line(GetHelpContent());
+		output->WriteLine(GetHelpContent());
 	}
 	else {
-		write_line(parameters[0]);
+		output->WriteLine(parameters[0]);
 	}
 
 	return 0;

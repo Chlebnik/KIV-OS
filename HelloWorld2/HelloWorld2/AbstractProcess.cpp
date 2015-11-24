@@ -29,7 +29,7 @@ void AbstractProcess::setParameters(string parameters)
 		params.push_back(new_param);
 	}
 
-	this->parameters = vector<string>();
+	this->parameters = params;
 }
 
 AbstractProcess::AbstractProcess(int pid, int parentPid, Kernel* kernel) : pid{ pid }, parentPid{ pid }, kernel{ kernel }, pipeIdLast{ -1 }

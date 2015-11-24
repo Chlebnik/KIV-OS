@@ -12,6 +12,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <iterator>
 #include <algorithm>
 #include <random>
 #include <atomic>
@@ -21,7 +22,6 @@
 #include <map>
 #include <unordered_map>
 #include <windows.h>
-#include <strsafe.h>
 
 #include "targetver.h"
 
@@ -52,5 +52,6 @@
 #include "ChangeDirectory.h"
 #include "Dir.h"
 #include "Echo.h"
+#include "WordCount.h"
 
 // TODO: reference additional headers your program requires here
