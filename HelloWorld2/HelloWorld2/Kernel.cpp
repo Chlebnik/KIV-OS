@@ -114,13 +114,13 @@ int Kernel::WriteToPipe(int pipeIndex, char c)
 void Kernel::ClosePipeInput(int pipeIndex)
 {
 	Pipe* pipe = GetPipe(pipeIndex);
-	pipe->CloseInputSide();
+	pipe->CloseEntry();
 }
 
 void Kernel::ClosePipeOutput(int pipeIndex)
 {
 	Pipe* pipe = GetPipe(pipeIndex);
-	pipe->CloseOutputSide();
+	pipe->CloseExit();
 }
 
 Pipe* Kernel::GetPipe(int pipeIndex)
@@ -160,17 +160,18 @@ int Kernel::Execute(int parentPid, string path, string programName, string param
 		return ERROR_UNKNOWN_COMMAND; // unknown command
 	}
 
-	AbstractInput* input = CreateInputClass(inputType, inputParam);
-	AbstractOutput* output = CreateOutputClass(outputType, outputParam);
-
+	AbstractInput* input = CreateInputClass(inputType, inputParam, parentPid);
+	AbstractOutput* output = CreateOutputClass(outputType, outputParam, parentPid);
+	process->Init(input, output, new StandardOutput(this), parameters);
 
 	
-	return 0;
+	return process->GetPid();
 }
 
-AbstractInput* Kernel::CreateInputClass(IOType type, string param)
+AbstractInput* Kernel::CreateInputClass(IOType type, string param, int parentPid)
 {
 	AbstractInput* input;
+	int pipeId;
 	switch (type)
 	{
 	case STANDARD_TYPE:
@@ -180,11 +181,13 @@ AbstractInput* Kernel::CreateInputClass(IOType type, string param)
 		input = new FileInput(ifstream(param), this);
 		break;
 	case PIPE_SINGLE_TYPE:
-		int pipeId = CreatePipe(true, false);
+		pipeId = CreatePipe(true, false, parentPid);
 		input = new PipeInput(pipeId, this);		
 		break;
 	case PIPE_BOTH_TYPE:
-		// TODO find proper pipe		
+		// find proper pipe		
+		pipeId = processMap[parentPid]->GetPipeIdLast();
+		input = new PipeInput(pipeId, this);
 		break;
 	default:
 		input = NULL;
@@ -193,9 +196,10 @@ AbstractInput* Kernel::CreateInputClass(IOType type, string param)
 	return input;
 }
 
-AbstractOutput* Kernel::CreateOutputClass(IOType type, string param)
+AbstractOutput* Kernel::CreateOutputClass(IOType type, string param, int parentPid)
 {
 	AbstractOutput* output;
+	int pipeId;
 	switch (type)
 	{
 	case STANDARD_TYPE:
@@ -205,11 +209,11 @@ AbstractOutput* Kernel::CreateOutputClass(IOType type, string param)
 		output = new FileOutput(ofstream(param), this);
 		break;
 	case PIPE_SINGLE_TYPE:
-		int pipeId = CreatePipe(false, true);
+		pipeId = CreatePipe(false, true, parentPid);
 		output = new PipeOutput(pipeId, this);
 		break;
 	case PIPE_BOTH_TYPE:
-		int pipeId = CreatePipe(false, false);
+		pipeId = CreatePipe(false, false, parentPid);
 		output = new PipeOutput(pipeId, this);
 		break;
 	default:
@@ -221,7 +225,7 @@ AbstractOutput* Kernel::CreateOutputClass(IOType type, string param)
 	return NULL;
 }
 
-int Kernel::CreatePipe(bool closedEntry, bool closedExit)
+int Kernel::CreatePipe(bool closedEntry, bool closedExit, int parentPid)
 {
 	unique_lock<mutex> locker(pipeMutex);
 	int pipeId = ++pipeCounter;
@@ -235,7 +239,19 @@ int Kernel::CreatePipe(bool closedEntry, bool closedExit)
 	{
 		pipe->CloseExit();
 	}
+
 	locker.unlock();
+	
+	if (!closedEntry && !closedExit)
+	{
+		//register new pipe for further program
+		processMap[parentPid]->SetPipeIdLast(pipeId);
+	}
+	else
+	{
+		// remove any pipe from controller
+		processMap[parentPid]->SetPipeIdLast(-1);
+	}
 	return pipeId;
 }
 
@@ -280,7 +296,21 @@ AbstractProcess* Kernel::CreateProcessClass(string programName, int parentPid)
 	
 }
 
-int Kernel::WaitForChildren(int parentPid)
+int Kernel::WaitForChildren(vector<int>& childrenPids)
 {
+	for (vector<int>::iterator iterator = childrenPids.begin(); iterator != childrenPids.end(); ++iterator)
+	{
+		// waiting for child to finish its run
+		processMap[*iterator]->Join();
+		unique_lock<mutex> locker(mutexProcess);
+		// calling destructors
+		map<int, AbstractProcess*>::iterator itr = processMap.find(*iterator);
+		if (itr != processMap.end())
+		{
+			delete itr->second;
+			processMap.erase(itr->first);
+		}		
+		locker.unlock();
+	}
 	return 0;
 }

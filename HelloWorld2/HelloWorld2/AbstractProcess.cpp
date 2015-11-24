@@ -32,7 +32,7 @@ void AbstractProcess::setParameters(string parameters)
 	this->parameters = vector<string>();
 }
 
-AbstractProcess::AbstractProcess(int pid, int parentPid, Kernel* kernel) : pid {pid} , parentPid {pid} , kernel {kernel}
+AbstractProcess::AbstractProcess(int pid, int parentPid, Kernel* kernel) : pid{ pid }, parentPid{ pid }, kernel{ kernel }, pipeIdLast{ -1 }
 {
 }
 
@@ -89,5 +89,15 @@ void AbstractProcess::Join()
 void AbstractProcess::SetThread(thread* t)
 {
 	this->t = t;
+}
+
+void AbstractProcess::SetPipeIdLast(int pipeIdLast)
+{
+	this->pipeIdLast = pipeIdLast;
+}
+
+int AbstractProcess::GetPipeIdLast()
+{
+	return pipeIdLast;
 }
 
