@@ -7,9 +7,9 @@ Echo - DONE
 Cd - DONE
 Dir - DONE
 Md
-Type
+Type - DONE
 Sort
-Ranr - DONE (twice)
+Ranr - DONE
 Fraq - DONE
 ---------------------------------------------------------------------------
 I/O - DONE
