@@ -5,6 +5,9 @@ using namespace std;
 
 class AbstractProcess
 {
+private:
+	thread* t;
+
 protected:
 	AbstractInput* input;
 	AbstractOutput* output;
@@ -15,7 +18,6 @@ protected:
 	vector<string> parameters;
 	void setParameters(string parameters);
 	string path;
-
 
 public:
 	AbstractProcess(int pid, int parentPid, Kernel* kernel);
@@ -33,4 +35,6 @@ public:
 	void SetPath(string path);
 	int GetPid();
 	int GetParentPid();
+	void Join();
+	void SetThread(thread* t);
 };

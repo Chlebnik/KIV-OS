@@ -81,3 +81,13 @@ int AbstractProcess::GetParentPid()
 	return parentPid;
 }
 
+void AbstractProcess::Join()
+{
+	t->join();
+}
+
+void AbstractProcess::SetThread(thread* t)
+{
+	this->t = t;
+}
+
