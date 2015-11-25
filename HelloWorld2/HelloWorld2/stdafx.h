@@ -20,6 +20,7 @@
 #include <mutex>
 #include <deque>
 #include <map>
+#include <regex>
 #include <unordered_map>
 #include <windows.h>
 

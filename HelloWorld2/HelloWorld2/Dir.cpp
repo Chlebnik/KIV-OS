@@ -1,7 +1,5 @@
 #include "stdafx.h"
 
-#define BUFSIZE MAX_PATH
-
 
 
 string Dir::GetHelpContent()
@@ -33,6 +31,7 @@ bool Dir::HasValidParameters()
 			else if (i == 0 && parameters.size() == 1) {
 				showHelp = false;
 				showAll = false;
+				valid = true;
 				pathIndex = i;
 
 			}
@@ -61,71 +60,17 @@ string Dir::getTime(FILETIME time) {
 }
 
 
-int Dir::list_dir(string path) {
+int Dir::listDir(string path) {
 
 	WIN32_FIND_DATA ffd;
 	LARGE_INTEGER filesize;
-	TCHAR szDir[MAX_PATH];
-	size_t length_of_arg;
 	HANDLE hFind = INVALID_HANDLE_VALUE;
 	DWORD dwError = 0;
-	DWORD dwRet;
 	string line;
-
-	TCHAR Buffer[BUFSIZE];
-	wchar_t* wstr;
-
-	if (path.size() == 0) {
-		dwRet = kernel->OurGetCurrentDirectory(BUFSIZE, Buffer);
-		if (dwRet == 0)
-		{
-			line = "GetCurrentDirectory failed (";
-			line += to_string(GetLastError());
-			line += ")\n";
-			output->WriteLine(line);
-			return -1;
-		}
-		if (dwRet > BUFSIZE)
-		{
-			line = "Buffer too small; need ";
-			line += to_string(dwRet);
-			line += " characters\n";
-			output->WriteLine(line);
-			return -2;
-		}
-		wstr = Buffer;
-
-	}
-	else {
-		wstr = Utils::StringToWchar(path);
-	}
-
-	//StringCchLength(wstr, MAX_PATH, &length_of_arg);
-
-
-	if (lstrlen(wstr) > (MAX_PATH - 3))
-	{
-		output->WriteLine("\nDirectory path is too long.\n");
-		return (-3);
-	}
-
-	line = "\nTarget directory is ";
-	line += Utils::WcharToString(wstr) + "\n";
-	output->WriteLine(line);
-
-
-	// Prepare string for use with FindFile functions.  First, copy the
-	// string to a buffer, then append '\*' to the directory name.
-	
-
-	lstrcpy(szDir, wstr);
-	//StringCchCopy(szDir, MAX_PATH, wstr);
-	lstrcat(szDir, TEXT("\\*"));
-	//StringCchCat(szDir, MAX_PATH, TEXT("\\*"));
 
 	// Find the first file in the directory.
 
-	hFind = kernel->OurFindFirstFile(szDir, &ffd);
+	hFind = kernel->OurFindFirstFile(path, &ffd);
 
 	if (INVALID_HANDLE_VALUE == hFind)
 	{
@@ -190,10 +135,10 @@ int Dir::RunProcess()
 		output->WriteLine(GetHelpContent());
 	}
 	else if(pathIndex > 0){
-		returnValue = list_dir(parameters[pathIndex]);
+		returnValue = listDir(parameters[pathIndex]);
 	}
 	else {
-		returnValue = list_dir("");
+		returnValue = listDir("");
 	}
 	return returnValue;
 }

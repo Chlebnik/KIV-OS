@@ -8,7 +8,7 @@ private:
 	bool fromFile;
 	bool fromRegex;
 	int count;
-	string getBasename(string filepath);
+	int listDir(string path, string regexFile);
 	void proccesFile(string filepath);
 	void printFileContent(AbstractInput* printInput);
 

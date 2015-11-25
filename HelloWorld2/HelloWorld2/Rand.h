@@ -10,8 +10,6 @@ private:
 	atomic_bool stop;
 	void Loop();
 	string convertFloatToString(float number);
-	string read_line();
-	void write_line(string line);
 
 public:
 	// Inherited form Abstract process

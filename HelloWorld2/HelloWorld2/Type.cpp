@@ -41,35 +41,55 @@ void Type::printFileContent(AbstractInput * printInput)
 	}
 }
 
-string Type::getBasename(string filepath) {
-	char drive[_MAX_DRIVE];
-	char dir[_MAX_DIR];
-	char fname[_MAX_FNAME];
-	char ext[_MAX_EXT];
-	
-	const char* path = filepath.c_str();
-
-	_splitpath_s(path, drive, dir, fname, ext);
-
-	string filename(fname);
-	string fileext(ext);
-
-	return filename + fileext;
-}
-
 void Type::proccesFile(string filepath) {
+	string basename = kernel->SplitPath(filepath, "basename");
 	AbstractInput* fileFromParam = NULL;
 	ifstream fileInput(filepath);
 	if (!fileInput.is_open())
 	{
-		output->WriteLine("\nCould not open " + getBasename(filepath) + "\n");
+		output->WriteLine("\nCould not open " + basename + "\n");
 		return;
 	}
 	fileFromParam = new FileInput(fileInput, kernel);
 
-	output->WriteLine("\n" + getBasename(filepath) + "\n");
+	output->WriteLine("\n" + basename + "\n");
 	printFileContent(fileFromParam);
 	fileFromParam->Close();
+}
+
+int Type::listDir(string path, string regexFile) {
+	WIN32_FIND_DATA ffd;
+	HANDLE hFind = INVALID_HANDLE_VALUE;
+	DWORD dwError = 0;
+
+	hFind = kernel->OurFindFirstFile(path, &ffd);
+
+	// List all the files in the directory with some info about them.
+	do
+	{
+		string line;
+		if (!(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+		{
+			string fileName = Utils::WcharToString(ffd.cFileName);
+			regex findFiles = regex(regexFile);
+			if (regex_match(fileName, findFiles)) {
+				string filePath = path + "/" +  fileName;
+				proccesFile(filePath);
+			}
+		}
+
+	} while (kernel->OurFindNextFile(hFind, &ffd) != 0);
+
+	dwError = GetLastError();
+
+	if (dwError != ERROR_NO_MORE_FILES)
+	{
+		output->WriteLine("FindFirstFile");
+		FindClose(hFind);
+	}
+
+	return 0;
+
 }
 
 int Type::RunProcess()
@@ -82,7 +102,18 @@ int Type::RunProcess()
 			string filepath = *it;
 			
 			if (filepath.find("*") != (filepath.npos)) {
-				//TODO
+				string tmp_regex = filepath.substr((filepath.rfind('/')+1), filepath.size());
+				string regexPattern = "";
+				if (tmp_regex.find("*") > 0) {
+					regexPattern = "(" + tmp_regex.substr(0, tmp_regex.find("*")) + ")";
+				}
+				regexPattern += "(.*)";
+				if (tmp_regex.find("*") < tmp_regex.size()) {
+					regexPattern += "(" + tmp_regex.substr((tmp_regex.find("*") + 1), tmp_regex.size()) + ")";
+				}
+				
+				string dirPath = filepath.substr(0, filepath.rfind('/'));
+				listDir(dirPath, regexPattern);
 			}
 			else {
 				proccesFile(filepath);
