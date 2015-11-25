@@ -53,5 +53,5 @@
 #include "Dir.h"
 #include "Echo.h"
 #include "WordCount.h"
-
+#include "Type.h"
 // TODO: reference additional headers your program requires here

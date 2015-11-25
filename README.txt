@@ -8,10 +8,10 @@ Cd - DONE
 Dir - DONE
 Wc - DONE
 Md
-Type
-Sort - DONE
-Rand - DONE
-Fraq 
+Type - DONE
+Sort
+Ranr - DONE
+Fraq - DONE
 ---------------------------------------------------------------------------
 I/O - DONE
 Pipes - DONE
