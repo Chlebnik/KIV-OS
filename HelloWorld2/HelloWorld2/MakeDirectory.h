@@ -1,16 +1,11 @@
 #pragma once
-
-
-
-class ChangeDirectory : public AbstractProcess
+class MakeDirectory : public AbstractProcess
 {
 	using AbstractProcess::AbstractProcess;
 private:
 	bool showHelp;
-	bool changeDrive;
-	int pathIndex;
 	bool dirExists(const string& dirName_in);
-	int changePath(string new_path);
+	int processDirs(string drive, vector<string> sepDirs);
 
 public:
 	// Inherited form Abstract process

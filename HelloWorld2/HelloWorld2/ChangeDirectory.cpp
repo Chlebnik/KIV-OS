@@ -76,22 +76,23 @@ int ChangeDirectory::RunProcess()
 
 
 
-bool ChangeDirectory::changePath(string new_path) {
-	bool success = false;
+int ChangeDirectory::changePath(string new_path) {
+	int success = 0;
 
 	if (dirExists(new_path)) {
 		wchar_t* wstr = Utils::StringToWchar(new_path);
 
 		if (!SetCurrentDirectory(wstr))
 		{
-			string error = "SetCurrentDirectory failed " + GetLastError();
-			output->WriteLine(error);
+			//"SetCurrentDirectory failed " + GetLastError()
+			success = -1;
 		}
 		system("Dir");
 		delete[] wstr;
 	}
 	else {
-		output->WriteLine("Given path doesn't exist!");
+		//"Given path doesn't exist!"
+		success = -2;
 	}
 
 	return success;

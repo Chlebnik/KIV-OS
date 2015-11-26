@@ -7,11 +7,12 @@ Echo - DONE
 Cd - DONE
 Dir - DONE
 Wc - DONE
-Md
+Md - DONE
+Rd
 Type - DONE
-Sort
+Sort - DONE
 Ranr - DONE
-Fraq - DONE
+Fraq - 
 ---------------------------------------------------------------------------
 I/O - DONE
 Pipes - DONE
