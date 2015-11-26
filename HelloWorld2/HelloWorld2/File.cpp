@@ -2,7 +2,7 @@
 
 using namespace std;
 
-File::File(FileAttribute fileAttribute) : fileAttribute{ fileAttribute }, content { "" }{}
+File::File(FileAttribute fileAttribute, File* parent) : fileAttribute{ fileAttribute }, parent{parent}, content { "" } {}
 
 int File::OpenReader(FileInput* reader)
 {
@@ -20,8 +20,6 @@ int File::OpenWriter(FileOutput* writer)
 		writers.push_back(writer);
 	}
 	locker.unlock();
-	// TODO
-	//iterator = content.begin();
 	return 0;
 }
 
@@ -36,7 +34,7 @@ int File::CloseWriter(FileOutput* writer)
 int File::CloseReader(FileInput* reader)
 {
 	unique_lock<mutex> locker(mutexIO);
-	if (readerMap.find(reader) != readerMap.end())
+	if (VerifyReader(reader))
 	{
 		readerMap.erase(reader);
 	}
@@ -47,9 +45,8 @@ int File::CloseReader(FileInput* reader)
 int File::Write(FileOutput* writer, string additionalContent)
 {
 	unique_lock<mutex> locker(mutexIO);
-	// TODO
-	locker.unlock();
 	content.append(additionalContent);
+	locker.unlock();
 	return 0;
 }
 
@@ -58,6 +55,12 @@ bool File::VerifyWriter(FileOutput* writer)
 	return find(writers.begin(), writers.end(), writer) != writers.end();
 }
 
+bool File::VerifyReader(FileInput* reader)
+{
+	return readerMap.find(reader) != readerMap.end();
+}
+
+
 int File::RemoveContent(FileOutput* writer)
 {
 	int retVal = 0;
@@ -65,6 +68,10 @@ int File::RemoveContent(FileOutput* writer)
 	if (VerifyWriter(writer))
 	{
 		content.clear();
+		for (auto iterator = readerMap.begin(); iterator != readerMap.end(); ++iterator)
+		{
+			iterator->second = 0;
+		}
 	}
 	else
 	{
@@ -85,13 +92,81 @@ bool File::IsFolder()
 	return fileAttribute == FOLDER_ATT;
 }
 
-int File::GetSize()
+size_t File::GetSize()
 {
 	return content.length();
 }
 
 char File::ReadChar(FileInput* reader, bool& success)
 {
+	char value = EOF;
 	unique_lock<mutex> locker(mutexIO);
+	if (VerifyReader(reader))
+	{
+		size_t offset = readerMap[reader];
+		if (offset < content.length())
+		{
+			string::iterator iterator = content.begin() + offset;
+			value = *iterator;
+			readerMap[reader] = offset + 1;
+			success = true;
+		}
+		else
+		{
+			success = false;
+		}
+	}
+	else
+	{
+		success = false;
+	}
 	locker.unlock();
+	return value;
+}
+
+string File::GetAbsolutePath()
+{
+	if (parent == NULL)
+	{
+		return name + ":";
+	}
+	else
+	{
+		return parent->GetAbsolutePath() + FILE_SEPARATOR + name;
+	}
+}
+
+string File::GetName()
+{
+	return name;
+}
+
+File* File::GetParent()
+{
+	return parent;
+}
+
+int File::AddChild(File* f)
+{
+	if (!IsFolder())
+	{
+		//TODO error - file is not folder
+		return 3;
+	}
+	int retVal = 0;
+	unique_lock<mutex> locker(mutexIO);
+	children.push_back(f);
+	locker.unlock();
+
+
+	return retVal;
+}
+
+vector<File*> File::GetChildren()
+{
+	vector<File*> retVal;
+	unique_lock<mutex> locker(mutexIO);
+	retVal = children;
+	locker.unlock();
+	return retVal;
 }

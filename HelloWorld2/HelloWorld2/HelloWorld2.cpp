@@ -12,9 +12,9 @@ int main()
 	AbstractOutput* output = new StandardOutput(kernel);
 	AbstractOutput* errorOutput = new StandardOutput(kernel);
 	
-	AbstractProcess* cd = new Type(1, 0, kernel);
-	cd->Init(input, output, errorOutput, "D:/t*.txt");
-	cd->Run();
+	//AbstractProcess* cd = new Type(1, 0, kernel);
+	//cd->Init(input, output, errorOutput, "D:/t*.txt");
+	//cd->Run();
 
 	//ifstream fileInput("C:/testData/test.txt");
 	//if (!fileInput)
