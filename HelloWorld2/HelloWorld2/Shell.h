@@ -2,9 +2,10 @@
  #include "stdafx.h"
  #include "Struct.h"
  
- class Shell : public AbstractProcess
+ class Shell : public AbstractProcess {
 	using AbstractProcess::AbstractProcess;
- {
+
+ public:
  	string GetHelpContent();
  	bool HasValidParameters();
  	int RunProcess();
