@@ -1,13 +1,14 @@
 #include "stdafx.h"
 using namespace std;
 
-FileInput::FileInput(ifstream& inputFile, Kernel* kernel) : AbstractInput(kernel), inputFile{ inputFile }, closed(false)
+FileInput::FileInput(shared_ptr<ifstream> inputFile, Kernel* kernel) : AbstractInput(kernel), inputFile{ inputFile }, closed(false)
 {	
 	
 }
 
 int FileInput::Close()
 {
+	inputFile->close();
 	closed = true;
 	return 0;
 }
@@ -22,7 +23,7 @@ string FileInput::Read()
 }
 string FileInput::ReadLine(bool& success)
 {
-	string line = GetKernel()->ReadLineFromFile(inputFile, success);
+	string line = GetKernel()->ReadLineFromFile(*inputFile, success);
 	
 	closed = !success;
 	return line;	

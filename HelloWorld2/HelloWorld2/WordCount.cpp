@@ -90,8 +90,8 @@ int WordCount::RunProcess()
 		output->WriteLine(GetHelpContent());
 	}else if (fromFile) {
 			AbstractInput* fileFromParam = NULL;
-			ifstream fileInput(parameters[1]);
-			if (!fileInput.is_open())
+			shared_ptr<ifstream> fileInput(new ifstream(parameters[1]));
+			if (!*fileInput)
 			{
 				return -1;
 			}			

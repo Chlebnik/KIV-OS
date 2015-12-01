@@ -36,6 +36,15 @@ AbstractProcess::AbstractProcess(int pid, int parentPid, Kernel* kernel) : pid{ 
 {
 }
 
+AbstractProcess::~AbstractProcess() {
+	input->Close();
+	errorOutput->Close();
+	output->Close();
+
+	delete(input);
+	delete(output);
+	delete(errorOutput);
+}
 void AbstractProcess::Init(AbstractInput* input, AbstractOutput* output, AbstractOutput* errorOutput, string parameters)
 {
 	this->input = input;

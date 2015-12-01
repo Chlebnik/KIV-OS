@@ -8,24 +8,27 @@ int main()
 	Kernel kernelInstance;
 	Kernel *kernel = &kernelInstance;
 	
-	AbstractInput* input = new StandardInput(kernel);
+	//AbstractInput* input = new StandardInput(kernel);
 	AbstractOutput* output = new StandardOutput(kernel);
 	AbstractOutput* errorOutput = new StandardOutput(kernel);
 	
-	//AbstractProcess* cd = new Type(1, 0, kernel);
-	//cd->Init(input, output, errorOutput, "D:/t*.txt");
-	//cd->Run();
+	shared_ptr<ofstream> fileOutput(new ofstream("D:/testOut.txt"));
+	AbstractOutput* outputFile = new FileOutput(fileOutput, kernel);
 
-	//ifstream fileInput("C:/testData/test.txt");
-	//if (!fileInput)
-	//{
+	shared_ptr<ifstream> fileInput(new ifstream("D:/test.txt"));
+	if (!fileInput)
+	{
 		// todo error 
-	//	exit(1);
-	//}
-	//AbstractInput* input2 = new FileInput(fileInput, kernel);
+		exit(1);
+	}
+	AbstractInput* input = new FileInput(fileInput, kernel);
 
-	//fstream fileOutput("C:/testData/testOut.txt");
-	//bstractOutput* outputFile = new FileOutput(fileOutput, kernel);
+
+	AbstractProcess* cd = new Sort(1, 0, kernel);
+	cd->Init(input, output, errorOutput, "");
+	cd->Run();
+
+	//
 
 	/*AbstractProcess* shell = new Shell(0, kernel);
 	shell->Init(input2, output, errorOutput, {});

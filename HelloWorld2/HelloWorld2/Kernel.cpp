@@ -244,6 +244,13 @@ DWORD Kernel::OurFindNextFile(_In_ HANDLE hFind, _Out_ LPWIN32_FIND_DATAW ffd) {
 	return FindNextFile(hFind, ffd);
 }
 
+BOOL Kernel::QueryLowMemoryStatus() {
+	PBOOL lowMemory = NULL;
+	QueryMemoryResourceNotification(CreateMemoryResourceNotification(LowMemoryResourceNotification), lowMemory);
+
+	return (bool)lowMemory;
+}
+
 int Kernel::Execute(int parentPid, string path, string programName, string parameters, IOType inputType, string inputParam, IOType outputType, string outputParam)
 {
 	AbstractProcess* process = CreateProcessClass(programName, parentPid);
@@ -270,7 +277,7 @@ AbstractInput* Kernel::CreateInputClass(IOType type, string param, int parentPid
 		input = new StandardInput(this);
 		break;
 	case FILE_TYPE:
-		input = new FileInput(ifstream(param), this);
+		input = new FileInput(shared_ptr<ifstream>(new ifstream(param)), this);
 		break;
 	case PIPE_SINGLE_TYPE:
 		pipeId = CreatePipe(true, false, parentPid);
@@ -298,7 +305,7 @@ AbstractOutput* Kernel::CreateOutputClass(IOType type, string param, int parentP
 		output = new StandardOutput(this);
 		break;
 	case FILE_TYPE:
-		output = new FileOutput(ofstream(param), this);
+		output = new FileOutput(shared_ptr<ofstream>(new ofstream(param)), this);
 		break;
 	case PIPE_SINGLE_TYPE:
 		pipeId = CreatePipe(false, true, parentPid);

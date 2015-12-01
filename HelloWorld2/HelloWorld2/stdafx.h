@@ -28,6 +28,7 @@
 
 #include "ErrorCodes.h"
 #include "Utils.h"
+#include "FirstLineFromFile.h"
 
 #include "Pipe.h"
 #include "File.h"

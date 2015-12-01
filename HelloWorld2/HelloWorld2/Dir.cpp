@@ -49,11 +49,15 @@ bool Dir::HasValidParameters()
 
 string Dir::getTime(FILETIME time) {
 	SYSTEMTIME stUTC, stLocal;
+	char buffer[11];
+	int n;
 
 	FileTimeToSystemTime(&time, &stUTC);
 	SystemTimeToTzSpecificLocalTime(NULL, &stUTC, &stLocal);
-
-	string localTime = to_string(stLocal.wMonth) + "/" + to_string(stLocal.wDay) + "/" + to_string(stLocal.wYear) + "  " + to_string(stLocal.wHour) + ":" + to_string(stLocal.wMinute);
+	
+	n = sprintf_s(buffer, "%02d/%02d/%04d", stLocal.wMonth, stLocal.wDay, stLocal.wYear);
+	string localTime = (buffer);
+	//string localTime = to_string(stLocal.wMonth) + "/" + to_string(stLocal.wDay) + "/" + to_string(stLocal.wYear) + "  " + to_string(stLocal.wHour) + ":" + to_string(stLocal.wMinute);
 
 
 	return localTime;
@@ -64,6 +68,8 @@ int Dir::listDir(string path) {
 
 	WIN32_FIND_DATA ffd;
 	LARGE_INTEGER filesize;
+	int size;
+	string sizeType = "";
 	HANDLE hFind = INVALID_HANDLE_VALUE;
 	DWORD dwError = 0;
 	string line;
@@ -93,7 +99,7 @@ int Dir::listDir(string path) {
 	{
 		if (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 		{
-			line = " <DIR> ";
+			line = " <DIR>  ";
 
 		}
 		else
@@ -103,14 +109,36 @@ int Dir::listDir(string path) {
 
 		filesize.LowPart = ffd.nFileSizeLow;
 		filesize.HighPart = ffd.nFileSizeHigh;
+		if (filesize.QuadPart == 0) {
+			size = filesize.QuadPart;
+			sizeType = "  ";
+		} else if (filesize.QuadPart < 1024) {
+			size = filesize.QuadPart;
+			sizeType = "b ";
+		}else if (filesize.QuadPart < (1024 * 1024)) {
+			size = filesize.QuadPart / 1024;
+			sizeType = "kb";
+		}
+		else if (filesize.QuadPart < (1024 * 1024 * 1024)) {
+			size = filesize.QuadPart / (1024 * 1024);
+			sizeType = "Mb";
+		}
+		else {
+			size = filesize.QuadPart / (1024 * 1024 * 1024);
+			sizeType = "Gb";
+		}
+		
 
 		if (showAll) {
-			line += to_string(ffd.dwFileAttributes) + " ";
-			line += getTime(ffd.ftCreationTime) + " ";
-			line += to_string(filesize.QuadPart) + " ";
+			line += to_string(ffd.dwFileAttributes) + "    ";
+			line += getTime(ffd.ftCreationTime) + "    ";		
+			char buffer[50];			
+			sprintf_s(buffer, "%5d", size);
+			line += buffer;
+			line += " " + sizeType + "  ";
 		}
 		line += Utils::WcharToString(ffd.cFileName);
-
+		
 		output->WriteLine(line);
 
 	} while (kernel->OurFindNextFile(hFind, &ffd) != 0);
@@ -130,6 +158,8 @@ int Dir::listDir(string path) {
 
 int Dir::RunProcess()
 {
+	setlocale(LC_ALL, "");
+	
 	int returnValue = 0;
 	if (showHelp) {
 		output->WriteLine(GetHelpContent());
