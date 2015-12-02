@@ -2,7 +2,7 @@
 using namespace std;
 
 
-FileOutput::FileOutput(shared_ptr<ofstream> outputFile, Kernel* kernel) : AbstractOutput(kernel), outputFile{ outputFile }{}
+FileOutput::FileOutput(shared_ptr<ofstream> outputFile, shared_ptr<Kernel> kernel) : AbstractOutput(kernel), outputFile{ outputFile }{}
 
 int FileOutput::Write(string s)
 {

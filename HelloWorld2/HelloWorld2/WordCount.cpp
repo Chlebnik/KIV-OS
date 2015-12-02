@@ -50,7 +50,7 @@ bool WordCount::HasValidParameters()
 	return valid;
 }
 
-void WordCount::getCount(AbstractInput* processInput) {
+void WordCount::getCount(shared_ptr<AbstractInput> processInput) {
 	bool success;
 	string line;
 	while (processInput->HasNext()) {
@@ -89,13 +89,13 @@ int WordCount::RunProcess()
 	if (showHelp) {
 		output->WriteLine(GetHelpContent());
 	}else if (fromFile) {
-			AbstractInput* fileFromParam = NULL;
+			shared_ptr<AbstractInput> fileFromParam = NULL;
 			shared_ptr<ifstream> fileInput(new ifstream(parameters[1]));
 			if (!*fileInput)
 			{
 				return -1;
 			}			
-			fileFromParam = new FileInput(fileInput, kernel);
+			fileFromParam = shared_ptr<AbstractInput>(new FileInput(fileInput, kernel));
 
 			getCount(fileFromParam);
 			fileFromParam->Close();

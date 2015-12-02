@@ -32,7 +32,7 @@ void AbstractProcess::setParameters(string parameters)
 	this->parameters = params;
 }
 
-AbstractProcess::AbstractProcess(int pid, int parentPid, Kernel* kernel) : pid{ pid }, parentPid{ pid }, kernel{ kernel }, pipeIdLast{ -1 }
+AbstractProcess::AbstractProcess(int pid, int parentPid, shared_ptr<Kernel> kernel) : pid{ pid }, parentPid{ pid }, kernel{ kernel }, pipeIdLast{ -1 }
 {
 }
 
@@ -41,11 +41,8 @@ AbstractProcess::~AbstractProcess() {
 	errorOutput->Close();
 	output->Close();
 
-	delete(input);
-	delete(output);
-	delete(errorOutput);
 }
-void AbstractProcess::Init(AbstractInput* input, AbstractOutput* output, AbstractOutput* errorOutput, string parameters)
+void AbstractProcess::Init(shared_ptr<AbstractInput> input, shared_ptr<AbstractOutput> output, shared_ptr<AbstractOutput> errorOutput, string parameters)
 {
 	this->input = input;
 	this->output = output;
@@ -87,7 +84,7 @@ string AbstractProcess::GetPath()
 
 int AbstractProcess::GetParentPid()
 {
-	return parentPid;
+ return parentPid;
 }
 
 void AbstractProcess::Join()

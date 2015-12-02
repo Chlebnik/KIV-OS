@@ -12,7 +12,7 @@ private:
 	bool closed;
 
 public:
-	FileInput(shared_ptr<ifstream> inputFile, Kernel* kernel);
+	FileInput(shared_ptr<ifstream> inputFile, shared_ptr<Kernel> kernel);
 	int Close();
 	bool HasNext();
 	string Read();

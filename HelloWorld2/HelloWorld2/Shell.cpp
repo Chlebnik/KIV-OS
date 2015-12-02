@@ -73,7 +73,8 @@ int Shell::ExecuteCommands(vector<process_data> commands) {
 				// TODO jednosmerna pipe
 				outputType = PIPE_BOTH_TYPE;
 			}
-		}
+		}		
+		
 		kernel->Execute(pid, "", process.process_name, params, inputType, inputParam, outputType, outputParam);
 	}
 	return 0;

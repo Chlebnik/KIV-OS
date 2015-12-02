@@ -14,11 +14,11 @@ private:
 	int pipeIdLast;
 
 protected:
-	AbstractInput* input;
-	AbstractOutput* output;
-	AbstractOutput* errorOutput;
+	shared_ptr<AbstractInput> input;
+	shared_ptr<AbstractOutput> output;
+	shared_ptr<AbstractOutput> errorOutput;
 	vector<int> childrenPids;
-	Kernel* kernel;
+	shared_ptr<Kernel> kernel;
 	int pid;
 	int parentPid;
 	vector<string> parameters;
@@ -26,7 +26,7 @@ protected:
 	string path;
 
 public:
-	AbstractProcess(int pid, int parentPid, Kernel* kernel);
+	AbstractProcess(int pid, int parentPid, shared_ptr<Kernel> kernel);
 	~AbstractProcess();
 	virtual string GetHelpContent()
 	{
@@ -35,7 +35,7 @@ public:
 	virtual bool HasValidParameters() = 0;
 	virtual int RunProcess() = 0;
 	
-	void Init(AbstractInput* input, AbstractOutput* output, AbstractOutput* errorOutput, string parameters);
+	void Init(shared_ptr<AbstractInput> input, shared_ptr<AbstractOutput> output, shared_ptr<AbstractOutput> errorOutput, string parameters);
 	int Run();
 	void WriteHelp();
 	string GetPath();

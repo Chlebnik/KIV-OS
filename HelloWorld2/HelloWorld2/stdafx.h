@@ -19,6 +19,7 @@
 #include <thread>
 #include <mutex>
 #include <deque>
+#include <memory>
 #include <map>
 #include <regex>
 #include <unordered_map>

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 using namespace std;
 
-FileInput::FileInput(shared_ptr<ifstream> inputFile, Kernel* kernel) : AbstractInput(kernel), inputFile{ inputFile }, closed(false)
+FileInput::FileInput(shared_ptr<ifstream> inputFile, shared_ptr<Kernel> kernel) : AbstractInput(kernel), inputFile{ inputFile }, closed(false)
 {	
 	
 }

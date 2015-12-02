@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-FirstLineFromFile::FirstLineFromFile(int index, string path, Kernel* kernel) {
+FirstLineFromFile::FirstLineFromFile(int index, string path, shared_ptr<Kernel> kernel) {
 	bool succes;
 
 	this->index = index;
@@ -10,7 +10,7 @@ FirstLineFromFile::FirstLineFromFile(int index, string path, Kernel* kernel) {
 		exit(1);
 	}
 
-	this->input = new FileInput(fileInput, kernel);
+	this->input = shared_ptr<AbstractInput>(new FileInput(fileInput, kernel));
 	this->line = input->ReadLine(succes);
 }
 

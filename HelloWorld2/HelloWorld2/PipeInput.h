@@ -11,7 +11,7 @@ private:
 	bool closed;
 
 public:
-	PipeInput(int pipeIndex, Kernel* kernel);
+	PipeInput(int pipeIndex, shared_ptr<Kernel> kernel);
 	int Close();
 	bool HasNext();
 	string Read();

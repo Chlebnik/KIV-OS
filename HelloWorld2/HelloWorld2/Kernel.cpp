@@ -253,75 +253,78 @@ BOOL Kernel::QueryLowMemoryStatus() {
 
 int Kernel::Execute(int parentPid, string path, string programName, string parameters, IOType inputType, string inputParam, IOType outputType, string outputParam)
 {
-	AbstractProcess* process = CreateProcessClass(programName, parentPid);
+	shared_ptr<AbstractProcess> process = CreateProcessClass(programName, parentPid);
 	if (process == NULL)
 	{
 		return ERROR_UNKNOWN_COMMAND; // unknown command
 	}
 
-	AbstractInput* input = CreateInputClass(inputType, inputParam, parentPid);
-	AbstractOutput* output = CreateOutputClass(outputType, outputParam, parentPid);
-	process->Init(input, output, new StandardOutput(this), parameters);
-
+	shared_ptr<AbstractInput> input = CreateInputClass(inputType, inputParam, parentPid);
+	shared_ptr<AbstractOutput> output = CreateOutputClass(outputType, outputParam, parentPid);
+	process->Init(input, output, shared_ptr<AbstractOutput>(new StandardOutput(this->shared_from_this())), parameters);
+	process->Run();
 	
 	return process->GetPid();
 }
 
-AbstractInput* Kernel::CreateInputClass(IOType type, string param, int parentPid)
+shared_ptr<AbstractInput> Kernel::CreateInputClass(IOType type, string param, int parentPid)
 {
 	AbstractInput* input;
 	int pipeId;
 	switch (type)
 	{
 	case STANDARD_TYPE:
-		input = new StandardInput(this);
+		input = new StandardInput(this->shared_from_this());
 		break;
 	case FILE_TYPE:
-		input = new FileInput(shared_ptr<ifstream>(new ifstream(param)), this);
+		input = new FileInput(shared_ptr<ifstream>(new ifstream(param)), this->shared_from_this());
 		break;
 	case PIPE_SINGLE_TYPE:
 		pipeId = CreatePipe(true, false, parentPid);
-		input = new PipeInput(pipeId, this);		
+		input = new PipeInput(pipeId, this->shared_from_this());
 		break;
 	case PIPE_BOTH_TYPE:
 		// find proper pipe		
 		pipeId = processMap[parentPid]->GetPipeIdLast();
-		input = new PipeInput(pipeId, this);
+		input = new PipeInput(pipeId, this->shared_from_this());
 		break;
 	default:
 		input = NULL;
 		break;
 	}
-	return input;
+	shared_ptr<AbstractInput> inputSh(input);
+	//delete(input);
+
+	return inputSh;
 }
 
-AbstractOutput* Kernel::CreateOutputClass(IOType type, string param, int parentPid)
+shared_ptr<AbstractOutput> Kernel::CreateOutputClass(IOType type, string param, int parentPid)
 {
 	AbstractOutput* output;
 	int pipeId;
 	switch (type)
 	{
 	case STANDARD_TYPE:
-		output = new StandardOutput(this);
+		output = new StandardOutput(this->shared_from_this());
 		break;
 	case FILE_TYPE:
-		output = new FileOutput(shared_ptr<ofstream>(new ofstream(param)), this);
+		output = new FileOutput(shared_ptr<ofstream>(new ofstream(param)), this->shared_from_this());
 		break;
 	case PIPE_SINGLE_TYPE:
 		pipeId = CreatePipe(false, true, parentPid);
-		output = new PipeOutput(pipeId, this);
+		output = new PipeOutput(pipeId, this->shared_from_this());
 		break;
 	case PIPE_BOTH_TYPE:
 		pipeId = CreatePipe(false, false, parentPid);
-		output = new PipeOutput(pipeId, this);
+		output = new PipeOutput(pipeId, this->shared_from_this());
 		break;
 	default:
 		output = NULL;
 		break;
 	}
-	return output;
+	shared_ptr<AbstractOutput>outputSh(output);
 
-	return NULL;
+	return outputSh;
 }
 
 int Kernel::CreatePipe(bool closedEntry, bool closedExit, int parentPid)
@@ -354,45 +357,48 @@ int Kernel::CreatePipe(bool closedEntry, bool closedExit, int parentPid)
 	return pipeId;
 }
 
-AbstractProcess* Kernel::CreateProcessClass(string programName, int parentPid)
+shared_ptr<AbstractProcess> Kernel::CreateProcessClass(string programName, int parentPid)
 {
 	AbstractProcess* process;
 	switch (PROGRAM_NAMES[programName])
 	{
 	case RAND:
-		process = new Rand(++pidCounter, parentPid, this);
+		process = new Rand(++pidCounter, parentPid, this->shared_from_this());
 		break;
 	case SORT:
-		process = new Sort(++pidCounter, parentPid, this);
+		process = new Sort(++pidCounter, parentPid, this->shared_from_this());
 		break;
 	case CD:
-		process = new ChangeDirectory(++pidCounter, parentPid, this);
+		process = new ChangeDirectory(++pidCounter, parentPid, this->shared_from_this());
 		break;
 	case DIR:
-		process = new Dir(++pidCounter, parentPid, this);
+		process = new Dir(++pidCounter, parentPid, this->shared_from_this());
 		break;
 	case MD:
-		return NULL;
+		process = NULL;
 		break;
 	case RD:
-		return NULL;
+		process = NULL;
 		break;
 	case WC:
-		return NULL;
+		process = NULL;
 		break;
 	case TYPE:
-		return NULL;
+		process = NULL;
 		break;
 	case ECHO:
-		return NULL;
+		process = NULL;
 		break;
 	case FREQ:
-		return NULL;
+		process = NULL;
 		break;
 	default:
-		return NULL; // unknown command
+		process = NULL; // unknown command
 	}
-	
+
+	shared_ptr<AbstractProcess> processSh(process);
+	//delete(process);
+	return processSh;
 }
 
 int Kernel::WaitForChildren(vector<int>& childrenPids)

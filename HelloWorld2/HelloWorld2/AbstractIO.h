@@ -6,12 +6,12 @@ class AbstractIO
 {
 	
 private:
-	Kernel* kernel;
+	shared_ptr<Kernel> kernel;
 
 public:
-	AbstractIO(Kernel* kernel);
+	AbstractIO(shared_ptr<Kernel> kernel);
 
-	Kernel* GetKernel();
+	shared_ptr<Kernel> GetKernel();
 
 	virtual int Close() = 0;
 };

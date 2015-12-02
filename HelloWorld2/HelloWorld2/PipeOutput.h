@@ -11,7 +11,7 @@ private:
 	bool closed;
 
 public:
-	PipeOutput(int pipeIndex, Kernel* kernel);
+	PipeOutput(int pipeIndex, shared_ptr<Kernel> kernel);
 	int Close();
 	int Write(string s);
 	int WriteLine(string s);

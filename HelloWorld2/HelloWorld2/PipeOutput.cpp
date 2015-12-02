@@ -1,7 +1,7 @@
 #include "stdafx.h"
 using namespace std;
 
-PipeOutput::PipeOutput(int pipeIndex, Kernel* kernel) : AbstractOutput(kernel), pipeIndex{ pipeIndex }, closed(false)
+PipeOutput::PipeOutput(int pipeIndex, shared_ptr<Kernel> kernel) : AbstractOutput(kernel), pipeIndex{ pipeIndex }, closed(false)
 {
 
 }

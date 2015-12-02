@@ -6,7 +6,7 @@ using namespace std;
 #define EOF 26
 enum IOType {PIPE_SINGLE_TYPE, PIPE_BOTH_TYPE, FILE_TYPE, STANDARD_TYPE};
 
-class Kernel
+class Kernel : public enable_shared_from_this<Kernel>
 {	
 
 private:
@@ -22,13 +22,13 @@ private:
 	mutex pipeMutex;
 	
 	Pipe* GetPipe(int pipeIndex);
-	AbstractProcess* CreateProcessClass(string programName, int parentPid);
-	AbstractOutput* CreateOutputClass(IOType type, string param, int parentPid);
+	shared_ptr<AbstractProcess> CreateProcessClass(string programName, int parentPid);
+	shared_ptr<AbstractOutput> CreateOutputClass(IOType type, string param, int parentPid);
 	int CreatePipe(bool closedEntry, bool closedExit, int parentPid);
 
 public:
 	Kernel();
-	AbstractInput* CreateInputClass(IOType type, string param, int parendPid);
+	shared_ptr<AbstractInput> CreateInputClass(IOType type, string param, int parendPid);
 	//int PrintToMonitor(string output);
 	string ReadFromKeyboard();
 	string ReadLineFromKeyboard(bool& success);

@@ -45,13 +45,13 @@ int Sort::ProcessAray(vector<string>* array) {
 		return -5;
 	}
 
-	AbstractOutput* temp_out = new FileOutput(fileOutput, kernel);
+	shared_ptr<AbstractOutput> temp_out(new FileOutput(fileOutput, kernel));
 	while (array->size() > 0) {
 		temp_out->WriteLine(array->back());
 		array->pop_back();
 	}
 	temp_out->Close();
-	delete temp_out;
+
 
 	firstLinesOfOpenFiles.push_back(FirstLineFromFile(firstLinesOfOpenFiles.size(), path, kernel));
 

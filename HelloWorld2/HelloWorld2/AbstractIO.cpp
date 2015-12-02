@@ -1,10 +1,10 @@
 #include "stdafx.h"
 
-AbstractIO::AbstractIO(Kernel* kernel) : kernel{ kernel }
+AbstractIO::AbstractIO(shared_ptr<Kernel> kernel) : kernel{ kernel }
 {
 
 }
 
-Kernel* AbstractIO::GetKernel() {
+shared_ptr<Kernel> AbstractIO::GetKernel() {
 	return kernel;
 }

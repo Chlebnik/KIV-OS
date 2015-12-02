@@ -9,7 +9,7 @@ private:
 	bool countLines;
 	bool fromFile;
 	int count;
-	void WordCount::getCount(AbstractInput* processInput);
+	void WordCount::getCount(shared_ptr<AbstractInput> processInput);
 
 public:
 	// Inherited form Abstract process

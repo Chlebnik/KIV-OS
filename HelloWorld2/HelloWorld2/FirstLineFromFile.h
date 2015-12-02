@@ -9,12 +9,12 @@ using namespace std;
 class FirstLineFromFile
 {
 private:
-	AbstractInput* input;
+	shared_ptr<AbstractInput> input;
 	string line;
 	int index;
 
 public:
-	FirstLineFromFile(int index, string path, Kernel* kernel);
+	FirstLineFromFile(int index, string path, shared_ptr<Kernel> kernel);
 	~FirstLineFromFile();
 	int GetIndex();
 	string GetLine(bool& succes);

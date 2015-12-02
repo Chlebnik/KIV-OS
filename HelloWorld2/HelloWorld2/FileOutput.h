@@ -10,7 +10,7 @@ private:
 	shared_ptr<ofstream> outputFile;
 
 public:
-	FileOutput(shared_ptr<ofstream> outputFile, Kernel* kernel);
+	FileOutput(shared_ptr<ofstream> outputFile, shared_ptr<Kernel> kernel);
 
 	int Write(string s);
 	int WriteLine(string s);
