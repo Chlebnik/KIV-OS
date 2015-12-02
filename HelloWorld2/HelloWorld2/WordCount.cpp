@@ -51,7 +51,7 @@ bool WordCount::HasValidParameters()
 }
 
 void WordCount::getCount(AbstractInput* processInput) {
-	bool success = true;
+	bool success;
 	string line;
 	while (processInput->HasNext()) {
 		line = processInput->ReadLine(success);

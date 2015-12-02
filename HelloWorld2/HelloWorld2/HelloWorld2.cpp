@@ -24,7 +24,7 @@ int main()
 	AbstractInput* input = new FileInput(fileInput, kernel);
 
 
-	AbstractProcess* cd = new Sort(1, 0, kernel);
+	AbstractProcess* cd = new Freq(1, 0, kernel);
 	cd->Init(input, output, errorOutput, "");
 	cd->Run();
 

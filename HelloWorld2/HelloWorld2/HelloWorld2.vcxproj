@@ -157,6 +157,8 @@
     <ClInclude Include="FileInput.h" />
     <ClInclude Include="FileOutput.h" />
     <ClInclude Include="FileSystem.h" />
+    <ClInclude Include="FirstLineFromFile.h" />
+    <ClInclude Include="Freq.h" />
     <ClInclude Include="Pipe.h" />
     <ClInclude Include="PipeInput.h" />
     <ClInclude Include="PipeOutput.h" />
@@ -182,6 +184,8 @@
     <ClCompile Include="FileInput.cpp" />
     <ClCompile Include="FileOutput.cpp" />
     <ClCompile Include="FileSystem.cpp" />
+    <ClCompile Include="FirstLineFromFile.cpp" />
+    <ClCompile Include="Freq.cpp" />
     <ClCompile Include="HelloWorld2.cpp" />
     <ClCompile Include="Kernel.cpp" />
     <ClCompile Include="AbstractInput.cpp" />
