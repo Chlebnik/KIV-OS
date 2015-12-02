@@ -1,13 +1,13 @@
 #include "stdafx.h"
 
-void AbstractProcess::setParameters(string parameters)
+void AbstractProcess::SetParameters(string parameters)
 {
 	vector<string> params;
 	bool comma = false;
 	int startPos = 0;
 	int curentPos = 0;
 	for (char& c : parameters) {
-		if (c == '"' || c == '\'') {
+		if (c == '\'') {
 			if (comma) {
 				comma = false;
 			}
@@ -15,7 +15,7 @@ void AbstractProcess::setParameters(string parameters)
 				comma = true;
 			}			
 		}else if(isspace(c) && !comma && startPos != (curentPos + 1)){
-			string new_param = parameters.substr(startPos,(curentPos-startPos));
+			string new_param = parameters.substr(startPos + 1,(curentPos-startPos - 2));
 			params.push_back(new_param);
 			startPos = curentPos + 1;
 		}
@@ -25,7 +25,7 @@ void AbstractProcess::setParameters(string parameters)
 		curentPos++;
 	}
 	if (curentPos != startPos) {
-		string new_param = parameters.substr(startPos, (curentPos - startPos));
+		string new_param = parameters.substr(startPos + 1, (curentPos - startPos - 2));
 		params.push_back(new_param);
 	}
 
@@ -50,7 +50,7 @@ void AbstractProcess::Init(AbstractInput* input, AbstractOutput* output, Abstrac
 	this->input = input;
 	this->output = output;
 	this->errorOutput = errorOutput;
-	setParameters(parameters);
+	SetParameters(parameters);
 }
 
 int AbstractProcess::Run()
@@ -64,6 +64,7 @@ int AbstractProcess::Run()
 		return 10;
 	}
 }
+
 
 void AbstractProcess::WriteHelp()
 {

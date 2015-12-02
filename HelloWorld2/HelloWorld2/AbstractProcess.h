@@ -22,7 +22,7 @@ protected:
 	int pid;
 	int parentPid;
 	vector<string> parameters;
-	void setParameters(string parameters);
+	void SetParameters(string parameters);
 	string path;
 
 public:

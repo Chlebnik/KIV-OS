@@ -44,8 +44,8 @@ void Type::printFileContent(AbstractInput * printInput)
 void Type::proccesFile(string filepath) {
 	string basename = kernel->SplitPath(filepath, "basename");
 	AbstractInput* fileFromParam = NULL;
-	ifstream fileInput(filepath);
-	if (!fileInput.is_open())
+	shared_ptr<ifstream> fileInput(new ifstream(filepath));
+	if (!*fileInput)
 	{
 		output->WriteLine("\nCould not open " + basename + "\n");
 		return;

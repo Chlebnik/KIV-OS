@@ -258,11 +258,13 @@ int Kernel::Execute(int parentPid, string path, string programName, string param
 	{
 		return ERROR_UNKNOWN_COMMAND; // unknown command
 	}
-
+	processMap[parentPid] = process;
 	AbstractInput* input = CreateInputClass(inputType, inputParam, parentPid);
 	AbstractOutput* output = CreateOutputClass(outputType, outputParam, parentPid);
+
 	process->Init(input, output, new StandardOutput(this), parameters);
 	process->Run();
+
 	
 	return process->GetPid();
 }
@@ -371,22 +373,22 @@ AbstractProcess* Kernel::CreateProcessClass(string programName, int parentPid)
 		process = new Dir(++pidCounter, parentPid, this);
 		break;
 	case MD:
-		process = NULL;
+		process = new MakeDirectory(++pidCounter, parentPid, this);
 		break;
 	case RD:
 		process = NULL;
 		break;
 	case WC:
-		process = NULL;
+		process = new WordCount(++pidCounter, parentPid, this);
 		break;
 	case TYPE:
-		process = NULL;
+		process = new Type(++pidCounter, parentPid, this);
 		break;
 	case ECHO:
-		process = NULL;
+		process = new Echo(++pidCounter, parentPid, this);
 		break;
 	case FREQ:
-		process = NULL;
+		process = new Freq(++pidCounter, parentPid, this);
 		break;
 	default:
 		process = NULL; // unknown command

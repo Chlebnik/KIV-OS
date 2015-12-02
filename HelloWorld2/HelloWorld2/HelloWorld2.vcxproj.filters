@@ -102,6 +102,12 @@
     <ClInclude Include="FirstLineFromFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Type.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MakeDirectory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -180,6 +186,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FirstLineFromFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MakeDirectory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Type.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
