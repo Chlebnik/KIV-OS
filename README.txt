@@ -2,7 +2,7 @@ Git repozitory for KIV/OS.
 If is something missing or status is different from this, please change it.
 ---------------------------------------------------------------------------
 Kernel - DONE
-Shell - DONE
+Shell - DONE / Fail when >> input given
 Echo - DONE
 Cd - DONE
 Dir - DONE
@@ -15,6 +15,6 @@ Ranr - DONE
 Fraq - DONE
 ---------------------------------------------------------------------------
 I/O - DONE
-Pipes - DONE
+Pipes - DONE / Not working
 ---------------------------------------------------------------------------
 Ramdisk - DONE / Needs to be checked
