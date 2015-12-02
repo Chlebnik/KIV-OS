@@ -262,7 +262,7 @@ int Kernel::Execute(int parentPid, string path, string programName, string param
 	AbstractInput* input = CreateInputClass(inputType, inputParam, parentPid);
 	AbstractOutput* output = CreateOutputClass(outputType, outputParam, parentPid);
 	process->Init(input, output, new StandardOutput(this), parameters);
-
+	process->Run();
 	
 	return process->GetPid();
 }
@@ -321,7 +321,6 @@ AbstractOutput* Kernel::CreateOutputClass(IOType type, string param, int parentP
 	}
 	return output;
 
-	return NULL;
 }
 
 int Kernel::CreatePipe(bool closedEntry, bool closedExit, int parentPid)
@@ -372,27 +371,28 @@ AbstractProcess* Kernel::CreateProcessClass(string programName, int parentPid)
 		process = new Dir(++pidCounter, parentPid, this);
 		break;
 	case MD:
-		return NULL;
+		process = NULL;
 		break;
 	case RD:
-		return NULL;
+		process = NULL;
 		break;
 	case WC:
-		return NULL;
+		process = NULL;
 		break;
 	case TYPE:
-		return NULL;
+		process = NULL;
 		break;
 	case ECHO:
-		return NULL;
+		process = NULL;
 		break;
 	case FREQ:
-		return NULL;
+		process = NULL;
 		break;
 	default:
-		return NULL; // unknown command
+		process = NULL; // unknown command
 	}
 	
+	return process;
 }
 
 int Kernel::WaitForChildren(vector<int>& childrenPids)

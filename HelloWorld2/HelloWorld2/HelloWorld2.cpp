@@ -8,7 +8,7 @@ int main()
 	Kernel kernelInstance;
 	Kernel *kernel = &kernelInstance;
 	
-	//AbstractInput* input = new StandardInput(kernel);
+	AbstractInput* input = new StandardInput(kernel);
 	AbstractOutput* output = new StandardOutput(kernel);
 	AbstractOutput* errorOutput = new StandardOutput(kernel);
 	
@@ -21,10 +21,10 @@ int main()
 		// todo error 
 		exit(1);
 	}
-	AbstractInput* input = new FileInput(fileInput, kernel);
+	//AbstractInput* input = new FileInput(fileInput, kernel);
 
 
-	AbstractProcess* cd = new Freq(1, 0, kernel);
+	AbstractProcess* cd = new Shell(1, 0, kernel);
 	cd->Init(input, output, errorOutput, "");
 	cd->Run();
 
