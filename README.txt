@@ -12,9 +12,9 @@ Rd
 Type - DONE
 Sort - DONE
 Ranr - DONE
-Fraq - 
+Fraq - DONE
 ---------------------------------------------------------------------------
 I/O - DONE
 Pipes - DONE
 ---------------------------------------------------------------------------
-Ramdisk
+Ramdisk - DONE / Needs to be checked
