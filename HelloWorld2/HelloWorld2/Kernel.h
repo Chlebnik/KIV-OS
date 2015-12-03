@@ -10,7 +10,7 @@ class Kernel
 {	
 
 private:
-	FileSystem* fileSystem;
+	
 	map<int, Pipe*> pipeMap;
 	atomic_int pipeCounter;
 	map<int, AbstractProcess*> processMap;
@@ -31,7 +31,7 @@ public:
 	Kernel();
 	AbstractInput* CreateInputClass(IOType type, string param, int parendPid);
 	AbstractOutput* CreateOutputClass(IOType type, string param, int parendPid);
-
+	FileSystem* fileSystem;
 	//int PrintToMonitor(string output);
 	string ReadFromKeyboard();
 	string ReadLineFromKeyboard(bool& success);
