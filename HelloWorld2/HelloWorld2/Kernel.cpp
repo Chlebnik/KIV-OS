@@ -437,3 +437,8 @@ File* Kernel::LoadFileSystem()
 	File* drive = fileSystem->CreateNewFile("c", FOLDER_ATT, NULL, response);
 	return drive;
 }
+
+File* Kernel::GetFile(string path, File* sourceFile, int& response)
+{
+	return fileSystem->GetFile(path, sourceFile, response);
+}

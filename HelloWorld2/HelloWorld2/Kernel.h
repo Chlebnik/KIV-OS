@@ -58,6 +58,8 @@ public:
 	wchar_t* ValidatePath(_In_ string path, _Out_ int result);
 	string SplitPath(_In_ string path, _In_ string get);
 
+	File* GetFile(string path, File* sourceFile, int& response);
+
 	DWORD OurGetFileAttributesA(const string& dirName_in);
 	DWORD OurGetCurrentDirectory(_In_ DWORD BUFSIZE, _Out_ LPWSTR Buffer);
 	HANDLE OurFindFirstFile(_In_ string path, _Out_ LPWIN32_FIND_DATAW ffd);
