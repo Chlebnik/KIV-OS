@@ -23,7 +23,7 @@ private:
 	bool VerifyReader(FileInput* reader);
 
 public:
-	File(FileAttribute fileAttribute, File* parent);
+	File(string name, FileAttribute fileAttribute, File* parent);
 	int OpenReader(FileInput* reader);
 	int OpenWriter(FileOutput* writer);
 	int CloseReader(FileInput* reader);
@@ -37,7 +37,9 @@ public:
 	string GetName();
 	File* GetParent();
 	int AddChild(File* f);
+	int RemoveChild(File* f);
 	vector<File*> GetChildren();
 	bool IsProcessed();
 	size_t GetSize();
+	bool IsDeletable();
 };

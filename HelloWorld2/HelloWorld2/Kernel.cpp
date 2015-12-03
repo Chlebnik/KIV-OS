@@ -415,3 +415,9 @@ int Kernel::WaitForChildren(vector<int>& childrenPids)
 	}
 	return 0;
 }
+
+void Kernel::LoadFileSystem()
+{
+	fileSystem = new FileSystem();
+	
+}
