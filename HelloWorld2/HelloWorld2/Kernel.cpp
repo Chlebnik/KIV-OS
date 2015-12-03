@@ -242,6 +242,7 @@ HANDLE Kernel::OurFindFirstFile(_In_ string path, _Out_ LPWIN32_FIND_DATAW ffd) 
 
 DWORD Kernel::OurFindNextFile(_In_ HANDLE hFind, _Out_ LPWIN32_FIND_DATAW ffd) {
 	return FindNextFile(hFind, ffd);
+	//a
 }
 
 BOOL Kernel::QueryLowMemoryStatus() {
@@ -258,15 +259,15 @@ int Kernel::Execute(int parentPid, string path, string programName, string param
 	{
 		return ERROR_UNKNOWN_COMMAND; // unknown command
 	}
-	processMap[parentPid] = process;
+	processMap[process->GetPid()] = process;
 	AbstractInput* input = CreateInputClass(inputType, inputParam, parentPid);
 	AbstractOutput* output = CreateOutputClass(outputType, outputParam, parentPid);
 
 	process->Init(input, output, new StandardOutput(this), parameters);
-	process->Run();
+	int returnValue = process->Run();
 
 	
-	return process->GetPid();
+	return returnValue;
 }
 
 AbstractInput* Kernel::CreateInputClass(IOType type, string param, int parentPid)
@@ -358,40 +359,44 @@ int Kernel::CreatePipe(bool closedEntry, bool closedExit, int parentPid)
 AbstractProcess* Kernel::CreateProcessClass(string programName, int parentPid)
 {
 	AbstractProcess* process;
-	switch (PROGRAM_NAMES[programName])
-	{
-	case RAND:
-		process = new Rand(++pidCounter, parentPid, this);
-		break;
-	case SORT:
-		process = new Sort(++pidCounter, parentPid, this);
-		break;
-	case CD:
-		process = new ChangeDirectory(++pidCounter, parentPid, this);
-		break;
-	case DIR:
-		process = new Dir(++pidCounter, parentPid, this);
-		break;
-	case MD:
-		process = new MakeDirectory(++pidCounter, parentPid, this);
-		break;
-	case RD:
+	if (PROGRAM_NAMES.count(programName) == 0) {
 		process = NULL;
-		break;
-	case WC:
-		process = new WordCount(++pidCounter, parentPid, this);
-		break;
-	case TYPE:
-		process = new Type(++pidCounter, parentPid, this);
-		break;
-	case ECHO:
-		process = new Echo(++pidCounter, parentPid, this);
-		break;
-	case FREQ:
-		process = new Freq(++pidCounter, parentPid, this);
-		break;
-	default:
-		process = NULL; // unknown command
+	}else{
+		switch (PROGRAM_NAMES[programName])
+		{
+		case RAND:
+			process = new Rand(++pidCounter, parentPid, this);
+			break;
+		case SORT:
+			process = new Sort(++pidCounter, parentPid, this);
+			break;
+		case CD:
+			process = new ChangeDirectory(++pidCounter, parentPid, this);
+			break;
+		case DIR:
+			process = new Dir(++pidCounter, parentPid, this);
+			break;
+		case MD:
+			process = new MakeDirectory(++pidCounter, parentPid, this);
+			break;
+		case RD:
+			process = NULL;
+			break;
+		case WC:
+			process = new WordCount(++pidCounter, parentPid, this);
+			break;
+		case TYPE:
+			process = new Type(++pidCounter, parentPid, this);
+			break;
+		case ECHO:
+			process = new Echo(++pidCounter, parentPid, this);
+			break;
+		case FREQ:
+			process = new Freq(++pidCounter, parentPid, this);
+			break;
+		default:
+			process = NULL; // unknown command
+		}
 	}
 	
 	return process;

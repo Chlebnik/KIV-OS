@@ -3,12 +3,26 @@ using namespace std;
 
 string Sort::GetHelpContent()
 {
-	return "TODO - sort help";
+	string help = "Sorts input and writes it to output.";
+	return help;
 }
 
 bool Sort::HasValidParameters()
 {
-	return true;
+	bool valid = false;
+
+	if (parameters.size() == 0) {
+		valid = true;
+		showHelp = false;
+
+	}
+	else if (parameters.size() == 1 && parameters[0] == "--help") {
+		valid = true;
+		showHelp = true;
+	}
+
+
+	return valid;
 }
 
 string Sort::GetSortedLine() {
@@ -39,13 +53,7 @@ int Sort::ProcessAray(vector<string>* array) {
 	sort(array->begin(), array->end(), FirstLineFromFile::FirstOperatorString);
 	string path = "tempSort_" + to_string(1 + firstLinesOfOpenFiles.size()) + ".txt";
 
-	shared_ptr<ofstream> fileOutput(new ofstream(path));
-	if (!*fileOutput) {
-		//Can not open file
-		return -5;
-	}
-
-	AbstractOutput* temp_out = new FileOutput(fileOutput, kernel);
+	AbstractOutput* temp_out = kernel->CreateOutputClass(FILE_TYPE, path, this->GetPid());
 	while (array->size() > 0) {
 		temp_out->WriteLine(array->back());
 		array->pop_back();
@@ -53,7 +61,7 @@ int Sort::ProcessAray(vector<string>* array) {
 	temp_out->Close();
 	delete temp_out;
 
-	firstLinesOfOpenFiles.push_back(FirstLineFromFile(firstLinesOfOpenFiles.size(), path, kernel));
+	firstLinesOfOpenFiles.push_back(FirstLineFromFile(firstLinesOfOpenFiles.size(), path, kernel, this->GetPid()));
 
 
 	return 0;
@@ -63,39 +71,46 @@ int Sort::RunProcess()
 {	
 
 	int result = 0;
-	vector<string> array {};
+	if (showHelp) {
+		output->WriteLine(GetHelpContent());
+	}
+	else {
 
-	while (input->HasNext())
-	{
-		string line;
-		bool success = true;
-		line = input->ReadLine(success);
+		vector<string> array {};
 
-		if (success)
+		while (input->HasNext())
 		{
-			array.push_back(line);
+			string line;
+			bool success = true;
+			line = input->ReadLine(success);
 
-			if (kernel->QueryLowMemoryStatus()) {
-				result = ProcessAray(&array);
-				if (result != 0) {
-					return result;
+			if (success)
+			{
+				array.push_back(line);
+
+				if (kernel->QueryLowMemoryStatus()) {
+					result = ProcessAray(&array);
+					if (result != 0) {
+						return result;
+					}
 				}
 			}
-		}		
-	}
-	if (array.size() > 0) {
-		result = ProcessAray(&array);
-		if (result != 0) {
-			return result;
+		}
+		if (array.size() > 0) {
+			result = ProcessAray(&array);
+			if (result != 0) {
+				return result;
+			}
+		}
+
+		if (firstLinesOfOpenFiles.size() > 0) {
+			while (firstLinesOfOpenFiles.size() > 0)
+			{
+				output->WriteLine(GetSortedLine());
+			}
 		}
 	}
 	
-	if (firstLinesOfOpenFiles.size() > 0) {
-		while (firstLinesOfOpenFiles.size() > 0)
-		{
-			output->WriteLine(GetSortedLine());
-		}
-	}
-	
-	return 0;
+	return result;
+	;
 }

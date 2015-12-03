@@ -5,6 +5,7 @@ class Sort : public AbstractProcess
 	using AbstractProcess::AbstractProcess;
 
 private:
+	bool showHelp;
 	vector<FirstLineFromFile> firstLinesOfOpenFiles;
 	int ProcessAray(vector<string>* Array);
 	string GetSortedLine();

@@ -2,7 +2,12 @@
 
 string WordCount::GetHelpContent()
 {
-	string help = "Syntax\n      wc [options]...[file]...\n\n		Options\n\n		- c\n		Print only the byte counts.\n\n		- w\n		Print only the word counts.\n\n		- l\n		Print only the newline counts.";
+	string help = "Syntax:\n"
+				  "wc [options]...[file]...\n\n"
+				  "Options:\n"
+				  "- c	Print only the byte counts.\n\n"
+				  "- w	Print only the word counts.\n\n"
+				  "- l	Print only the newline counts.";
 	return help;
 }
 

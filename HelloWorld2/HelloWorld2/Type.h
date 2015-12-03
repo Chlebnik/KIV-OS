@@ -9,8 +9,8 @@ private:
 	bool fromRegex;
 	int count;
 	int listDir(string path, string regexFile);
-	void proccesFile(string filepath);
-	void printFileContent(AbstractInput* printInput);
+	int proccesFile(string filepath);
+	int printFileContent(AbstractInput* printInput);
 
 public:
 	// Inherited form Abstract process

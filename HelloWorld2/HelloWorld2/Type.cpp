@@ -28,8 +28,10 @@ bool Type::HasValidParameters()
 	return valid;
 }
 
-void Type::printFileContent(AbstractInput * printInput)
+int Type::printFileContent(AbstractInput * printInput)
 {
+	int returnValue = 0;
+
 	bool success = false;
 	string line = "";
 	while (printInput->HasNext()) {
@@ -37,30 +39,32 @@ void Type::printFileContent(AbstractInput * printInput)
 		if (success) {
 			output->WriteLine(line);
 		}
+		else {
+			returnValue = -5;
+			break;
+		}
 		
 	}
+	return returnValue;
 }
 
-void Type::proccesFile(string filepath) {
+int Type::proccesFile(string filepath) {
+	int returnValue = 0;
 	string basename = kernel->SplitPath(filepath, "basename");
-	AbstractInput* fileFromParam = NULL;
-	shared_ptr<ifstream> fileInput(new ifstream(filepath));
-	if (!*fileInput)
-	{
-		output->WriteLine("\nCould not open " + basename + "\n");
-		return;
-	}
-	fileFromParam = new FileInput(fileInput, kernel);
+	AbstractInput* fileFromParam = kernel->CreateInputClass(FILE_TYPE, filepath, this->GetPid());
 
 	output->WriteLine("\n" + basename + "\n");
-	printFileContent(fileFromParam);
+	returnValue = printFileContent(fileFromParam);
 	fileFromParam->Close();
+
+	return returnValue;
 }
 
 int Type::listDir(string path, string regexFile) {
 	WIN32_FIND_DATA ffd;
 	HANDLE hFind = INVALID_HANDLE_VALUE;
 	DWORD dwError = 0;
+	int returnValue = 0;
 
 	hFind = kernel->OurFindFirstFile(path, &ffd);
 
@@ -74,7 +78,10 @@ int Type::listDir(string path, string regexFile) {
 			regex findFiles = regex(regexFile);
 			if (regex_match(fileName, findFiles)) {
 				string filePath = path + "/" +  fileName;
-				proccesFile(filePath);
+				returnValue = proccesFile(filePath);
+				if (returnValue != 0) {
+					return returnValue;
+				}
 			}
 		}
 
@@ -88,12 +95,13 @@ int Type::listDir(string path, string regexFile) {
 		FindClose(hFind);
 	}
 
-	return 0;
+	return returnValue;
 
 }
 
 int Type::RunProcess()
 {
+	int returnValue = 0;
 	if (showHelp) {
 		output->WriteLine(GetHelpContent());
 	}
@@ -113,22 +121,16 @@ int Type::RunProcess()
 				}
 				
 				string dirPath = filepath.substr(0, filepath.rfind('/'));
-				listDir(dirPath, regexPattern);
+				returnValue = listDir(dirPath, regexPattern);
 			}
 			else {
-				proccesFile(filepath);
+				returnValue = proccesFile(filepath);
 			}	
 		}
 	}
 	else {
-		printFileContent(input);
+		returnValue = printFileContent(input);
 	}
 
-
-
-
-	output->Close();
-	input->Close();
-
-	return 0;
+	return returnValue;
 }

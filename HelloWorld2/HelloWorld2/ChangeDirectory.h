@@ -9,8 +9,8 @@ private:
 	bool showHelp;
 	bool changeDrive;
 	int pathIndex;
-	bool dirExists(const string& dirName_in);
-	int changePath(string new_path);
+	bool DirExists(const string& dirName_in);
+	int ChangePath(string new_path);
 
 public:
 	// Inherited form Abstract process

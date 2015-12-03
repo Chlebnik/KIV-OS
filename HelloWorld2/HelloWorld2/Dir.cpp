@@ -57,7 +57,6 @@ string Dir::getTime(FILETIME time) {
 	
 	n = sprintf_s(buffer, "%02d/%02d/%04d", stLocal.wMonth, stLocal.wDay, stLocal.wYear);
 	string localTime = (buffer);
-	//string localTime = to_string(stLocal.wMonth) + "/" + to_string(stLocal.wDay) + "/" + to_string(stLocal.wYear) + "  " + to_string(stLocal.wHour) + ":" + to_string(stLocal.wMinute);
 
 
 	return localTime;
@@ -82,7 +81,7 @@ int Dir::listDir(string path) {
 	{
 		line = "Invalid target directory.";
 		output->WriteLine(line);
-		return -4;
+		return ERROR_INVALID_HANDLE_VALUE;
 	}
 
 	// List all the files in the directory with some info about them.
@@ -147,7 +146,6 @@ int Dir::listDir(string path) {
 
 	if (dwError != ERROR_NO_MORE_FILES)
 	{
-		output->WriteLine("FindFirstFile");
 		FindClose(hFind);
 	}
 

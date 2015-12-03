@@ -1,16 +1,10 @@
 #include "stdafx.h"
 
-FirstLineFromFile::FirstLineFromFile(int index, string path, Kernel* kernel) {
+FirstLineFromFile::FirstLineFromFile(int index, string path, Kernel* kernel, int parentPid) {
 	bool succes;
 
 	this->index = index;
-	shared_ptr<ifstream>fileInput(new ifstream(path));
-	if (!*fileInput)
-	{
-		exit(1);
-	}
-
-	this->input = new FileInput(fileInput, kernel);
+	this->input = kernel->CreateInputClass(FILE_TYPE, path, parentPid);
 	this->line = input->ReadLine(succes);
 }
 

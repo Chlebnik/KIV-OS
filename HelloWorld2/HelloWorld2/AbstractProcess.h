@@ -28,6 +28,7 @@ protected:
 public:
 	AbstractProcess(int pid, int parentPid, Kernel* kernel);
 	~AbstractProcess();
+	void Close();
 	virtual string GetHelpContent()
 	{
 		return "This program or command has no help content.";

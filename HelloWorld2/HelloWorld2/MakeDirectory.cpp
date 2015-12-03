@@ -2,7 +2,21 @@
 
 string MakeDirectory::GetHelpContent()
 {
-	string help = "Creates a directory.\n\nMKDIR [drive:]path\nMD[drive:]path\n\nIf Command Extensions are enabled MKDIR changes as follows :\n\nMKDIR creates any intermediate directories in the path, if needed.\nFor example, assume \a does not exist then :\n\nmkdir \a\b\c\d\n\nis the same as :\n\nmkdir \a\nchdir \a\nmkdir b\nchdir b\nmkdir c\nchdir c\nmkdir d\n\nwhich is what you would have to type if extensions were disabled.";
+	string help = "Creates a directory.\n\n"
+		"MD[drive:]path\n\n"
+		"If Command Extensions are enabled MKDIR changes as follows :\n\n"
+		"MD creates any intermediate directories in the path, if needed.\n"
+		"For example, assume \a does not exist then :\n\n"
+		"md \a\b\c\d\n\n"
+		"is the same as :\n\n"
+		"md \a\n"
+		"cd \a\n"
+		"md b\n"
+		"cd b\n"
+		"md c\n"
+		"cd c\n"
+		"md d\n\n"
+		"which is what you would have to type if extensions were disabled.";
 	return help;
 }
 

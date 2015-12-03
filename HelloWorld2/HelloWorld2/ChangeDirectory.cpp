@@ -3,7 +3,11 @@
 
 string ChangeDirectory::GetHelpContent()
 {
-	string help = "Displays the name of or changes the current directory.\n\nCD[/ D][drive:][path]\nCD[..]\n\n..Specifies that you want to change to the parent directory.\n\nType CD drive : to display the current directory in the specified drive.\nType CD without parameters to display the current drive and directory.\n\nUse the / D switch to change current drive in addition to changing current\ndirectory for a drive.\n\nIf Command Extensions are enabled CHDIR changes as follows :\n\n			The current directory string is converted to use the same case as\n					the on disk names.So CD C : \TEMP would actually set the current\n					directory to C : \Temp if that is the case on disk.";
+	string help = "Displays the name of or changes the current directory.\n\n"
+					"CD[/ D][drive:][path]\nCD[..]\n\n"
+					"..Specifies that you want to change to the parent directory.\n\n"
+					"Type CD drive : to display the current directory in the specified drive.\n"
+					"Type CD without parameters to display the current drive and directory.";
 	return help;
 }
 
@@ -43,7 +47,7 @@ bool ChangeDirectory::HasValidParameters()
 	return valid;
 }
 
-bool ChangeDirectory::dirExists(const string& dirName_in)
+bool ChangeDirectory::DirExists(const string& dirName_in)
 {
 	DWORD ftyp = kernel->OurGetFileAttributesA(dirName_in);
 
@@ -58,41 +62,37 @@ bool ChangeDirectory::dirExists(const string& dirName_in)
 
 int ChangeDirectory::RunProcess()
 {
-	int retrunValue;
+	int returnValue = 0;
 	if (showHelp) {
 		output->WriteLine(GetHelpContent());
 	}
 	else {
-		retrunValue = changePath(parameters[pathIndex]);
+		returnValue = ChangePath(parameters[pathIndex]);
 	}
 
-
-	input->Close();
-	output->Close();
-
-	return retrunValue;
+	return returnValue;
 
 }
 
 
 
-int ChangeDirectory::changePath(string new_path) {
+int ChangeDirectory::ChangePath(string new_path) {
 	int success = 0;
 
-	if (dirExists(new_path)) {
+	if (DirExists(new_path)) {
 		wchar_t* wstr = Utils::StringToWchar(new_path);
 
 		if (!SetCurrentDirectory(wstr))
 		{
 			//"SetCurrentDirectory failed " + GetLastError()
-			success = -1;
+			success = ERROR_INVALID_FILE_ATTRIBUTES;
 		}
 		system("Dir");
 		delete[] wstr;
 	}
 	else {
 		//"Given path doesn't exist!"
-		success = -2;
+		success = ERROR_INVALID_FILE_ATTRIBUTES;
 	}
 
 	return success;

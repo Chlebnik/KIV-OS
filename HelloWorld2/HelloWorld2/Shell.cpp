@@ -34,6 +34,7 @@ int Shell::RunProcess()
 }
 
 int Shell::ExecuteCommands(vector<process_data> commands) {
+	int returnValue = 0;
 	for (int i = 0; i < (int)commands.size(); i++) {
 		process_data process = commands.at(i);
 		string params = "";
@@ -74,9 +75,12 @@ int Shell::ExecuteCommands(vector<process_data> commands) {
 				outputType = PIPE_BOTH_TYPE;
 			}
 		}
-		kernel->Execute(pid, "", process.process_name, params, inputType, inputParam, outputType, outputParam);
+		returnValue = kernel->Execute(pid, "", process.process_name, params, inputType, inputParam, outputType, outputParam);
+		if (returnValue != 0) {
+			output->WriteLine("Error");
+		}
 	}
-	return 0;
+	return returnValue;
 }
 
 int Shell::ProcessInput(string line)

@@ -14,7 +14,7 @@ private:
 	int index;
 
 public:
-	FirstLineFromFile(int index, string path, Kernel* kernel);
+	FirstLineFromFile(int index, string path, Kernel* kernel, int parentPid);
 	~FirstLineFromFile();
 	int GetIndex();
 	string GetLine(bool& succes);
