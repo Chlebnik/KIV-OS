@@ -132,7 +132,7 @@ string File::GetAbsolutePath()
 {
 	if (parent == NULL)
 	{
-		return name + ":";
+		return name + ":" + FILE_SEPARATOR;
 	}
 	else
 	{

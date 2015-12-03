@@ -9,7 +9,7 @@
  	string GetHelpContent();
  	bool HasValidParameters();
  	int RunProcess();
-	int parseInput(std::string input, std::vector<process_data>* commands);
+	int parseInput(std::string input, int& index, std::vector<process_data>* commands);
  
  private:
 	static const char SPACE_CHAR = ' ';

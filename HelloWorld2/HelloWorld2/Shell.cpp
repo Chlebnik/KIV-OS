@@ -29,8 +29,16 @@ int Shell::RunProcess()
 		{
 			break;
 		}
-		if (this->parseInput(line, &commands) == 0) {
+		int index = 0;
+		int return_value = this->parseInput(line, index, &commands);
+		if (return_value == 0) {
 			ExecuteCommands(commands);
+		}
+		else if (return_value == -1) {
+			output->WriteLine("Wrong syntax");
+		}
+		else if (return_value == -2) {
+			output->WriteLine("Unexpected character '" + string(1, line.at(index)) + "' at position " + to_string(index));
 		}
 	}
 	return 0;
@@ -41,13 +49,6 @@ int Shell::ExecuteCommands(vector<process_data> commands) {
 	File* pathFile = GetPathFile();
 	for (int i = 0; i < (int)commands.size(); i++) {
 		process_data process = commands.at(i);
-		string params = "";
-		for (int j = 0; j < (int)process.process_parameters.size(); j++) {
-			if (j > 0) {
-				params = params + " ";
-			}
-			params = params + "'" + (process.process_parameters.at(j)) + "'";
-		}
 		IOType inputType;
 		string inputParam;
 		IOType outputType;
@@ -79,7 +80,7 @@ int Shell::ExecuteCommands(vector<process_data> commands) {
 				outputType = PIPE_BOTH_TYPE;
 			}
 		}
-		returnValue = kernel->Execute(pid, pathFile, process.process_name, params, inputType, inputParam, outputType, outputParam);
+		returnValue = kernel->Execute(pid, pathFile, process.process_name, process.process_parameters, inputType, inputParam, outputType, outputParam);
 		if (returnValue != 0) {
 			output->WriteLine("Error");
 		}
@@ -178,29 +179,28 @@ int Shell::ParseProgram(vector<process_data>* commands, string input, int& index
 
 	while (index < (int)input.length()) {
 		char ch = input.at(index);
-		if ((ch == SPACE_CHAR) || (ch == OUTPUT_REDIRECT) || (ch == INPUT_REDIRECT) || (ch == PIPE)) {
+		if ((ch == SPACE_CHAR)) {
 			break;
+		}
+		else if ((ch == OUTPUT_REDIRECT) || (ch == INPUT_REDIRECT) || (ch == PIPE)) {
+			return -1;
 		}
 		if (((ch >= 'a') && (ch <= 'z')) || ((ch >= 'A') && (ch <= 'Z')) || ((ch >= '0') && (ch <= '9'))) {
 			program_name = program_name + ch;
 			index++;
 		}
-		else {
-			
-			output->WriteLine("Unexpected character " + to_string(input.at(index)) + " at position " + to_string(index));
-			return -1;
+		else {			
+			return -2;
 		}
 	}
-	if (program_name.length() == 0) {
-		output->WriteLine("Unexpected character " + to_string(input.at(index)) + " at position " + to_string(index));
+	if (program_name.length() == 0) {		
 		return -1;
 	}
 
 	process_data.process_name = program_name;
 
 	return_value = ParseArguments(&process_data, input, index);
-	if (return_value != 0) {
-		output->WriteLine("Unexpected character " + to_string(input.at(index)) + " at position " + to_string(index));
+	if (return_value != 0) {		
 		return return_value;
 	}
 	commands->push_back(process_data);
@@ -221,7 +221,10 @@ int Shell::ParseArguments(process_data* command, string input, int& index) {
 			return 0;
 		}
 		else if (return_value == 0) {
-			command->process_parameters.push_back(value);
+			if (command->process_parameters.length() > 0) {
+				command->process_parameters = command->process_parameters + " ";
+			}
+			command->process_parameters = command->process_parameters + "'" + value + "'";
 		}
 		else if (return_value < 0) {
 			return return_value;
@@ -267,14 +270,18 @@ int Shell::ReadValue(process_data* command, string& value, string input, int& in
 				}
 				value = value + ch;
 			}
-			if (index >(int) input.length())
-				return -1;
+			if (index > (int) input.length()) {
+				return -2;
+			}				
 		}
 		else {
 			do {
 				ch = input.at(index);
-				if ((ch == SPACE_CHAR) || (ch == OUTPUT_REDIRECT) || (ch == INPUT_REDIRECT) || (ch == PIPE)) {
+				if ((ch == SPACE_CHAR)) {
 					break;
+				}
+				else if ((ch == OUTPUT_REDIRECT) || (ch == INPUT_REDIRECT) || (ch == PIPE)) {
+					return -1;
 				}
 				value = value + ch;
 				index++;
@@ -294,13 +301,17 @@ int Shell::ParseRedirect(process_data* command, string input, int& index, char r
 	if (index < (int)input.length()) {
 		char ch = input.at(index);
 		if (ch == redirect) {
-			if (index + 1 >= (int)input.length()) {
+			if (index + 2 >= (int)input.length() || input.at(index + 1) != SPACE_CHAR) {	
 				return -1;
 			}
 			index++;
 			string value = "";
-			if (ReadValue(command, value, input, index) != 0) {
-				return -1;
+			int return_value = ReadValue(command, value, input, index);
+			if (return_value != 0) {
+				if (return_value < 0) {
+					return return_value;
+				}
+				return -2;
 			}
 			if (redirect == INPUT_REDIRECT) {
 				process_input input;
@@ -319,10 +330,11 @@ int Shell::ParseRedirect(process_data* command, string input, int& index, char r
 	return 0;
 }
 
-int Shell::parseInput(string input, vector<process_data>* commands) {
-	int index = 0;
+int Shell::parseInput(string input, int& index, vector<process_data>* commands) {
+	
 	int return_value;
-	if (input.empty()) {
+	SkipSpaces(input, index);
+	if (input.empty() || input.length() == index) {
 		return 0;
 	}
 
@@ -336,6 +348,13 @@ int Shell::parseInput(string input, vector<process_data>* commands) {
 			return -1;
 		}
 		index++;
+		if (index >= (int)input.length()) {
+			return -1;
+		}
+		ch = input.at(index);
+		if (ch != SPACE_CHAR) {
+			return -1;
+		}
 		SkipSpaces(input, index);
 		return_value = ParseProgram(commands, input, index);
 		if (return_value != 0) {

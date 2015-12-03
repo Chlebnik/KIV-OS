@@ -23,7 +23,9 @@ Kernel::Kernel() : pipeCounter (0), pidCounter(0) {}
 
 string Kernel::ReadLineFromKeyboard(bool& success)
 {
-	return ReadLine(cin, success);
+	string result = ReadLine(cin, success);
+	cin.clear();
+	return result;
 }
 
 string Kernel::ReadFromKeyboard()
@@ -42,6 +44,7 @@ string Kernel::ReadFromKeyboard()
 		strBuf += tempChar;
 	}
 	cin.ignore();
+	cin.clear();
 	return strBuf;	
 }
 
@@ -436,4 +439,24 @@ File* Kernel::LoadFileSystem()
 	int response = 0;
 	File* drive = fileSystem->CreateNewFile("c", FOLDER_ATT, NULL, response);
 	return drive;
+}
+
+File* Kernel::GetFile(string path, File* sourceFile, int& response)
+{
+	return fileSystem->GetFile(path, sourceFile, response);
+}
+
+File* Kernel::CreateNewFile(string name, FileAttribute fileAttribute, File* parent, int& response)
+{
+	return fileSystem->CreateNewFile(name, fileAttribute, parent, response);
+}
+
+int Kernel::RemoveFile(string path)
+{
+	return fileSystem->RemoveFile(path);
+}
+
+int Kernel::RemoveFile(File* file)
+{
+	return fileSystem->RemoveFile(file);
 }
