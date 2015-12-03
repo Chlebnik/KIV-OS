@@ -270,9 +270,15 @@ int Kernel::Execute(int parentPid, File* pathFile, string programName, string pa
 	process->Init(input, output, new StandardOutput(this), parameters);
 	process->SetPathFile(pathFile);
 	int returnValue = process->Run();
-
+	if (returnValue == 0)
+	{
+		return process->GetPid();
+	}
+	else
+	{
+		return returnValue;
+	}
 	
-	return returnValue;
 }
 
 AbstractInput* Kernel::CreateInputClass(IOType type, string param, int parentPid)
@@ -459,4 +465,14 @@ int Kernel::RemoveFile(string path)
 int Kernel::RemoveFile(File* file)
 {
 	return fileSystem->RemoveFile(file);
+}
+
+bool Kernel::UpdateProcessPathFile(int pid, File* newFilePath)
+{
+	if (processMap.find(pid) != processMap.end())
+	{
+		processMap[pid]->SetPathFile(newFilePath);
+		return true;
+	}
+	return false;
 }

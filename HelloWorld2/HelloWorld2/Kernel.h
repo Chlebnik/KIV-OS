@@ -52,7 +52,8 @@ public:
 	void ClosePipeOutput(int pipeIndex);
 
 	int Execute(int parentPid, File* pathFile, string programName, string parameters, IOType inputType, string inputParam, IOType outputType, string outputParam);
-	int WaitForChildren(vector<int>& childrenPids);	
+	int WaitForChildren(vector<int>& childrenPids);
+	bool UpdateProcessPathFile(int pid, File* newFilePath);
 
 	//For fileSystem manipulation
 	wchar_t* ValidatePath(_In_ string path, _Out_ int result);
