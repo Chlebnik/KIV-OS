@@ -32,7 +32,7 @@ void AbstractProcess::SetParameters(string parameters)
 	this->parameters = params;
 }
 
-AbstractProcess::AbstractProcess(int pid, int parentPid, Kernel* kernel) : pid{ pid }, parentPid{ pid }, kernel{ kernel }, pipeIdLast{ -1 }
+AbstractProcess::AbstractProcess(int pid, int parentPid, Kernel* kernel) : pid{ pid }, parentPid{ parentPid }, kernel{ kernel }, pipeIdLast{ -1 }
 {
 }
 
