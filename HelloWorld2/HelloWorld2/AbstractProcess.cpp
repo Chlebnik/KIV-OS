@@ -75,9 +75,9 @@ void AbstractProcess::WriteHelp()
 	output->WriteLine(this->GetHelpContent());
 }
 
-void AbstractProcess::SetPath(string path)
+void AbstractProcess::SetPathFile(File* pathFile)
 {
-	this->path = path;
+	this->pathFile = pathFile;
 }
 
 int AbstractProcess::GetPid()
@@ -85,9 +85,9 @@ int AbstractProcess::GetPid()
 	return pid;
 }
 
-string AbstractProcess::GetPath()
+File* AbstractProcess::GetPathFile()
 {
-	return path;
+	return pathFile;
 }
 
 int AbstractProcess::GetParentPid()

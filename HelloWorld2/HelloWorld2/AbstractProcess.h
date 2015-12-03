@@ -23,7 +23,7 @@ protected:
 	int parentPid;
 	vector<string> parameters;
 	void SetParameters(string parameters);
-	string path;
+	File* pathFile;
 
 public:
 	AbstractProcess(int pid, int parentPid, Kernel* kernel);
@@ -39,8 +39,8 @@ public:
 	void Init(AbstractInput* input, AbstractOutput* output, AbstractOutput* errorOutput, string parameters);
 	int Run();
 	void WriteHelp();
-	string GetPath();
-	void SetPath(string path);
+	File* GetPathFile();
+	void SetPathFile(File* path);
 	int GetPid();
 	int GetParentPid();
 	void Join();

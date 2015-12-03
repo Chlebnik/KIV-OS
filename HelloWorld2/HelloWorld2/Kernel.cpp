@@ -1,7 +1,7 @@
 #include "stdafx.h"
 using namespace std;
 
-enum Program { CD, DIR, RAND, SORT, MD, RD, TYPE, FREQ, WC, ECHO };
+enum Program { CD, DIR, RAND, SORT, MD, RD, TYPE, FREQ, WC, ECHO, SHELL };
 
 unordered_map<string, Program> PROGRAM_NAMES =
 {
@@ -14,7 +14,8 @@ unordered_map<string, Program> PROGRAM_NAMES =
 	{ "type", TYPE },
 	{ "freq", FREQ },
 	{ "wc", WC },
-	{ "echo", ECHO }
+	{ "echo", ECHO },
+	{ "shell", SHELL }
 };
 
 
@@ -252,7 +253,7 @@ BOOL Kernel::QueryLowMemoryStatus() {
 	return (bool)lowMemory;
 }
 
-int Kernel::Execute(int parentPid, string path, string programName, string parameters, IOType inputType, string inputParam, IOType outputType, string outputParam)
+int Kernel::Execute(int parentPid, File* pathFile, string programName, string parameters, IOType inputType, string inputParam, IOType outputType, string outputParam)
 {
 	AbstractProcess* process = CreateProcessClass(programName, parentPid);
 	if (process == NULL)
@@ -264,6 +265,7 @@ int Kernel::Execute(int parentPid, string path, string programName, string param
 	AbstractOutput* output = CreateOutputClass(outputType, outputParam, parentPid);
 
 	process->Init(input, output, new StandardOutput(this), parameters);
+	process->SetPathFile(pathFile);
 	int returnValue = process->Run();
 
 	
@@ -394,6 +396,13 @@ AbstractProcess* Kernel::CreateProcessClass(string programName, int parentPid)
 		case FREQ:
 			process = new Freq(++pidCounter, parentPid, this);
 			break;
+		case SHELL:
+			// Create shell only if parentPid = 0 - only one initial shell should be running
+			if (parentPid == 0)
+			{
+				process = new Shell(++pidCounter, parentPid, this);
+				break;
+			}
 		default:
 			process = NULL; // unknown command
 		}
@@ -421,8 +430,10 @@ int Kernel::WaitForChildren(vector<int>& childrenPids)
 	return 0;
 }
 
-void Kernel::LoadFileSystem()
+File* Kernel::LoadFileSystem()
 {
 	fileSystem = new FileSystem();
-	
+	int response = 0;
+	File* drive = fileSystem->CreateNewFile("c", FOLDER_ATT, NULL, response);
+	return drive;
 }

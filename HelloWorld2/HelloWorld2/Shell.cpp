@@ -19,7 +19,7 @@ int Shell::RunProcess()
 	while (true)
 	{		
 		commands.clear();
-		output->Write("prompt:>");
+		output->Write(GetPathFile()->GetAbsolutePath() + ">");
 		bool success = true;
 		line = input->ReadLine(success);
 		if (line == "exit")
@@ -35,6 +35,7 @@ int Shell::RunProcess()
 
 int Shell::ExecuteCommands(vector<process_data> commands) {
 	int returnValue = 0;
+	File* pathFile = GetPathFile();
 	for (int i = 0; i < (int)commands.size(); i++) {
 		process_data process = commands.at(i);
 		string params = "";
@@ -75,7 +76,7 @@ int Shell::ExecuteCommands(vector<process_data> commands) {
 				outputType = PIPE_BOTH_TYPE;
 			}
 		}
-		returnValue = kernel->Execute(pid, "", process.process_name, params, inputType, inputParam, outputType, outputParam);
+		returnValue = kernel->Execute(pid, pathFile, process.process_name, params, inputType, inputParam, outputType, outputParam);
 		if (returnValue != 0) {
 			output->WriteLine("Error");
 		}

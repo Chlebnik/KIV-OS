@@ -53,11 +53,16 @@ int main()
 		exit(1);
 	}
 	//AbstractInput* input = new FileInput(fileInput, kernel);
+	File* initialDrive = kernel->LoadFileSystem();
+	int shellPid = kernel->Execute(0, initialDrive, "shell", "", STANDARD_TYPE, "", STANDARD_TYPE, "");
+	vector<int> tmpVector;
+	tmpVector.push_back(shellPid);
+	kernel->WaitForChildren(tmpVector);
 
-	AbstractProcess* cd = new Shell(1, 0, kernel);
+	/*AbstractProcess* cd = new Shell(1, 0, kernel);
 	cd->Init(input, output, errorOutput, "");
 	cd->Run();
-	cd->Join();
+	cd->Join();*/
 	//
 
 	/*AbstractProcess* shell = new Shell(0, kernel);

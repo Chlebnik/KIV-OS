@@ -43,7 +43,7 @@ public:
 	int WriteLineToFile(ofstream& stream, string output);
 	//string ReadFromFile(ifstream& stream);
 	string ReadLineFromFile(ifstream& stream, bool& success);
-	void LoadFileSystem();
+	File* LoadFileSystem();
 
 	int WriteToPipe(int pipeIndex, char c);
 	char ReadFromPipe(int pipeIndex, bool& success);
@@ -51,7 +51,7 @@ public:
 	void ClosePipeInput(int pipeIndex);
 	void ClosePipeOutput(int pipeIndex);
 
-	int Execute(int parentPid, string path, string programName, string parameters, IOType inputType, string inputParam, IOType outputType, string outputParam);
+	int Execute(int parentPid, File* pathFile, string programName, string parameters, IOType inputType, string inputParam, IOType outputType, string outputParam);
 	int WaitForChildren(vector<int>& childrenPids);	
 
 	//For fileSystem manipulation
