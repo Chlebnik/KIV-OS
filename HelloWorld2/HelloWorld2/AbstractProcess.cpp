@@ -59,13 +59,12 @@ int AbstractProcess::Run()
 {
 	if (this->HasValidParameters())
 	{
-		 int value = this->RunProcess();
-		 this->Close();
-		 return value;
+		t = new thread(&AbstractProcess::RunProcess, this);
+		return 0;
 	}
 	else
 	{
-		return 10;
+		return -10;
 	}
 }
 
@@ -98,6 +97,7 @@ int AbstractProcess::GetParentPid()
 void AbstractProcess::Join()
 {
 	t->join();
+	delete t;
 }
 
 void AbstractProcess::SetThread(thread* t)
