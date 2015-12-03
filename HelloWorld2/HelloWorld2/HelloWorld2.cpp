@@ -16,6 +16,17 @@ int main()
 	File* subfolder2 = fs->CreateNewFile("sub2", FOLDER_ATT, subfolder1, response);
 	cout << response << endl;
 	cout << subfolder2->GetAbsolutePath() << endl;
+	File* tmpDrive = fs->GetFile("c:/", NULL, response);
+	cout << response << "tmp drive" << endl;
+	cout << tmpDrive->GetAbsolutePath() << endl;
+
+	vector<File*> files = tmpDrive->GetChildren();
+	for (vector<File*>::iterator iterator = files.begin(); iterator != files.end(); ++iterator)
+	{
+		cout << "*****************" << endl;
+		cout << (*iterator)->GetName() << endl;
+		cout << "*****************" << endl;
+	}
 
 	File* tmp = fs->GetFile("c:/sub1", NULL, response);
 	cout << response << endl;

@@ -59,6 +59,9 @@ public:
 	string SplitPath(_In_ string path, _In_ string get);
 
 	File* GetFile(string path, File* sourceFile, int& response);
+	File* CreateNewFile(string name, FileAttribute fileAttribute, File* parent, int& response);
+	int RemoveFile(string path);
+	int RemoveFile(File* file);
 
 	DWORD OurGetFileAttributesA(const string& dirName_in);
 	DWORD OurGetCurrentDirectory(_In_ DWORD BUFSIZE, _Out_ LPWSTR Buffer);

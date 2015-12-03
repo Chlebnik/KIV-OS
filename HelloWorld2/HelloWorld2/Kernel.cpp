@@ -442,3 +442,18 @@ File* Kernel::GetFile(string path, File* sourceFile, int& response)
 {
 	return fileSystem->GetFile(path, sourceFile, response);
 }
+
+File* Kernel::CreateNewFile(string name, FileAttribute fileAttribute, File* parent, int& response)
+{
+	return fileSystem->CreateNewFile(name, fileAttribute, parent, response);
+}
+
+int Kernel::RemoveFile(string path)
+{
+	return fileSystem->RemoveFile(path);
+}
+
+int Kernel::RemoveFile(File* file)
+{
+	return fileSystem->RemoveFile(file);
+}
