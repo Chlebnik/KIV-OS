@@ -34,10 +34,12 @@ string PipeInput::ReadLine(bool &success)
 		c = GetKernel()->ReadFromPipe(pipeIndex, success);
 		if (!success)
 		{
+			//cout << "closing pipe\n";
 			Close();
 		}
 		else if (c != '\n')
 		{
+			//cout << "reading " << c << " from pipe\n";
 			line << c;
 		}
 

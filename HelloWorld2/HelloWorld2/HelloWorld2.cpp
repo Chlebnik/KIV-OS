@@ -15,19 +15,18 @@ int main()
 	shared_ptr<ofstream> fileOutput(new ofstream("D:/testOut.txt"));
 	AbstractOutput* outputFile = new FileOutput(fileOutput, kernel);
 
-	shared_ptr<ifstream> fileInput(new ifstream("D:/test.txt"));
+	/*shared_ptr<ifstream> fileInput(new ifstream("D:/test.txt"));
 	if (!fileInput)
 	{
 		// todo error 
 		exit(1);
-	}
+	}*/
 	//AbstractInput* input = new FileInput(fileInput, kernel);
-
 
 	AbstractProcess* cd = new Shell(1, 0, kernel);
 	cd->Init(input, output, errorOutput, "");
 	cd->Run();
-
+	cd->Join();
 	//
 
 	/*AbstractProcess* shell = new Shell(0, kernel);

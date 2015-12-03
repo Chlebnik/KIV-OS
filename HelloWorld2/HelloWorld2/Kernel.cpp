@@ -258,7 +258,7 @@ int Kernel::Execute(int parentPid, string path, string programName, string param
 	{
 		return ERROR_UNKNOWN_COMMAND; // unknown command
 	}
-	processMap[parentPid] = process;
+	processMap[process->GetPid()] = process;
 	AbstractInput* input = CreateInputClass(inputType, inputParam, parentPid);
 	AbstractOutput* output = CreateOutputClass(outputType, outputParam, parentPid);
 

@@ -30,7 +30,7 @@ char Pipe::PopChar(bool& success)
 	char value = '\0';
 	if (contentBuffer.size() == 0)
 	{
-		cout << "success falase";
+		//cout << "success false";
 		success = false;
 		entryClosed = true;
 	}
@@ -55,9 +55,9 @@ void Pipe::CloseEntry()
 
 void Pipe::CloseExit()
 {
-	cout << "close output";
+	//cout << "close output";
 	unique_lock<mutex> locker(_mutex);
-	entryClosed = true;
+	exitClosed = true;
 	locker.unlock();
 	cond.notify_all();
 }
