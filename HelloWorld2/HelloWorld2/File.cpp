@@ -2,7 +2,7 @@
 
 using namespace std;
 
-File::File(FileAttribute fileAttribute, File* parent) : fileAttribute{ fileAttribute }, parent{parent}, content { "" } {}
+File::File(string name, FileAttribute fileAttribute, File* parent) : name{ name }, fileAttribute { fileAttribute }, parent{ parent }, content{ "" } {}
 
 int File::OpenReader(FileInput* reader)
 {
@@ -155,11 +155,45 @@ int File::AddChild(File* f)
 	}
 	int retVal = 0;
 	unique_lock<mutex> locker(mutexIO);
-	children.push_back(f);
+	bool exists = false;
+	for (vector<File*>::iterator iterator = children.begin(); iterator != children.end(); ++iterator)
+	{
+		if (f->GetName() == (*iterator)->GetName())
+		{
+			exists = true;
+			retVal = 4; // ERROR already exists
+			break;
+		}
+	}
+	if (!exists)
+	{
+		children.push_back(f);
+	}
 	locker.unlock();
 
 
 	return retVal;
+}
+
+int File::RemoveChild(File* f)
+{
+	bool exists = false;
+	
+	unique_lock<mutex> locker(mutexIO);
+	for (vector<File*>::iterator iterator = children.begin(); iterator != children.end(); ++iterator)
+	{
+		if (f->GetName() == (*iterator)->GetName())
+		{
+			exists = true;
+			children.erase(iterator);
+			break;
+		}
+	
+	}
+	locker.unlock();
+
+	// TODO error code for 11 - not found - should not happen
+	return exists ? 0 : 11;
 }
 
 vector<File*> File::GetChildren()
@@ -169,4 +203,14 @@ vector<File*> File::GetChildren()
 	retVal = children;
 	locker.unlock();
 	return retVal;
+}
+
+bool File::IsProcessed()
+{
+	return !readerMap.empty() || !writers.empty();
+}
+
+bool File::IsDeletable()
+{
+	return children.empty() && !IsProcessed();
 }

@@ -10,16 +10,18 @@ class Kernel
 {	
 
 private:
-	string Read(istream& stream);
-	string ReadLine(istream& stream, bool& success);
-	int Write(ostream& stream, string output);
-	int WriteLine(ostream& stream, string output);
+	FileSystem* fileSystem;
 	map<int, Pipe*> pipeMap;
 	atomic_int pipeCounter;
 	map<int, AbstractProcess*> processMap;
 	atomic_int pidCounter;
 	mutex mutexProcess;
 	mutex pipeMutex;
+	
+	string Read(istream& stream);
+	string ReadLine(istream& stream, bool& success);
+	int Write(ostream& stream, string output);
+	int WriteLine(ostream& stream, string output);
 	
 	Pipe* GetPipe(int pipeIndex);
 	AbstractProcess* CreateProcessClass(string programName, int parentPid);
@@ -41,6 +43,7 @@ public:
 	int WriteLineToFile(ofstream& stream, string output);
 	//string ReadFromFile(ifstream& stream);
 	string ReadLineFromFile(ifstream& stream, bool& success);
+	void LoadFileSystem();
 
 	int WriteToPipe(int pipeIndex, char c);
 	char ReadFromPipe(int pipeIndex, bool& success);

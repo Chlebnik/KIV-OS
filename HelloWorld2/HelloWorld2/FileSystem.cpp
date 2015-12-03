@@ -2,12 +2,74 @@
 
 File* FileSystem::CreateNewFile(string name, FileAttribute fileAttribute, string callerPath, int& response)
 {
-	return NULL;
+	File* parent;
+	if (callerPath.length() == 0)
+	{
+		// This will create new drive in combination of folder file attribute
+		parent = NULL;
+	}
+	else
+	{
+		parent = GetFile(callerPath, NULL, response);
+		if (response != 0)
+		{
+			// TODO error
+			return NULL;
+		}
+	}
+	
+	return CreateNewFile(name, fileAttribute, parent, response);
 }
 
 File* FileSystem::CreateNewFile(string name, FileAttribute fileAttribute, File* parent, int& response)
 {
-	return NULL;
+	File* f = NULL;
+
+	if (parent == NULL)
+	{
+		if (fileAttribute == FOLDER_ATT)
+		{
+			// create drive
+			bool exists = false;
+			for (vector<File*>::iterator iterator = drives.begin(); iterator != drives.end(); ++iterator)
+			{
+				if (name == (*iterator)->GetName())
+				{
+					// already exists
+					exists = true;
+					break;
+				}
+			}
+			if (!exists)
+			{
+				f = new File(name, fileAttribute, NULL);
+				drives.push_back(f);
+				response = 0;
+			}
+			else
+			{
+				// TODO error code
+				response = 5;
+			}
+		}
+		else
+		{
+			// todo error - drive must be a folder
+		}
+	}
+	else
+	{
+		f = new File(name, fileAttribute, parent);
+		response = parent->AddChild(f);
+		
+		// todo more error handling
+		if (response != 0)
+		{
+			delete f;
+			f = NULL;
+		}		
+	}
+	return f;
 }
 
 File* FileSystem::GetFile(string path, File* sourceFile, int& response)
@@ -34,6 +96,14 @@ File* FileSystem::GetFile(string path, File* sourceFile, int& response)
 							f = *iterator;
 							break;
 						}
+					}
+
+					// drive not found
+					if (f == NULL)
+					{
+						// TODO error code
+						response = 8;
+						goto endOfElementIteration;
 					}
 				}
 				else
@@ -102,11 +172,41 @@ File* FileSystem::GetFile(string path, File* sourceFile, int& response)
 
 int FileSystem::RemoveFile(string path)
 {
-	return 0;
+	int response;
+	File* f = GetFile(path, NULL, response);
+	if (response == 0)
+	{
+		return RemoveFile(f);
+	}
+	else
+	{
+		return response;
+	}
 }
 
 int FileSystem::RemoveFile(File* file)
 {
+	if (!file->IsDeletable())
+	{
+		return 21; // TODO error - cannot be deleted
+	}
+	File* parent = file->GetParent();
+	if (parent == NULL)
+	{
+		// TODO Deleting drive
+	}
+	else
+	{
+		int response = parent->RemoveChild(file);
+		if (response == 0)
+		{
+			delete file;
+			file = NULL;
+		}
+		else {
+			return response;
+		}
+	}
 	return 0;
 }
 

@@ -5,6 +5,37 @@ using namespace std;
 
 int main()
 {
+	FileSystem* fs = new FileSystem();
+	int response = 0;
+	File* drive = fs->CreateNewFile("c", FOLDER_ATT, NULL, response);
+	cout << response << endl;
+	cout << drive->GetAbsolutePath() << endl;
+	File* subfolder1 = fs->CreateNewFile("sub1", FOLDER_ATT, drive, response);
+	cout << response << endl;
+	cout << subfolder1->GetAbsolutePath() << endl;
+	File* subfolder2 = fs->CreateNewFile("sub2", FOLDER_ATT, subfolder1, response);
+	cout << response << endl;
+	cout << subfolder2->GetAbsolutePath() << endl;
+
+	File* tmp = fs->GetFile("c:/sub1", NULL, response);
+	cout << response << endl;
+	cout << tmp->GetAbsolutePath() << endl;
+
+	File* tmp2 = fs->GetFile("c:/sub1/sub2", NULL, response);
+	cout << response << endl;
+	cout << tmp2->GetAbsolutePath() << endl;
+
+	response = fs->RemoveFile(tmp2);
+	cout << response << endl;
+	if (tmp2 != NULL)
+	{
+		cout << "Weird" << endl;
+	}
+	else
+	{
+		cout << "OK" << endl;
+	}
+
 	Kernel kernelInstance;
 	Kernel *kernel = &kernelInstance;
 	
@@ -23,11 +54,10 @@ int main()
 	}
 	//AbstractInput* input = new FileInput(fileInput, kernel);
 
-
 	AbstractProcess* cd = new Shell(1, 0, kernel);
 	cd->Init(input, output, errorOutput, "");
 	cd->Run();
-
+	cd->Join();
 	//
 
 	/*AbstractProcess* shell = new Shell(0, kernel);

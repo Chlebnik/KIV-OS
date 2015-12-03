@@ -30,7 +30,6 @@ char Pipe::PopChar(bool& success)
 	char value = '\0';
 	if (contentBuffer.size() == 0)
 	{
-
 		success = false;
 		exitClosed = true;
 	}
@@ -59,9 +58,8 @@ void Pipe::CloseEntry()
 
 void Pipe::CloseExit()
 {
-
 	unique_lock<mutex> locker(_mutex);
-	entryClosed = true;
+	exitClosed = true;
 	locker.unlock();
 	cond.notify_all();
 }
