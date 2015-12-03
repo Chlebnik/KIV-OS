@@ -57,7 +57,7 @@ int main()
 	AbstractProcess* cd = new Shell(1, 0, kernel);
 	cd->Init(input, output, errorOutput, "");
 	cd->Run();
-	cd->Join();
+	//cd->Join();
 	//
 
 	/*AbstractProcess* shell = new Shell(0, kernel);
