@@ -78,15 +78,17 @@ int ChangeDirectory::RunProcess()
 
 int ChangeDirectory::ChangePath(string new_path) {
 	int success = 0;
+	int response = 0;
 
-	if (DirExists(new_path)) {
-		wchar_t* wstr = Utils::StringToWchar(new_path);
+	File* file = kernel->fileSystem->GetFile(new_path, this->GetPathFile(), response);
 
-		if (!SetCurrentDirectory(wstr))
-		{
-			//"SetCurrentDirectory failed " + GetLastError()
-			success = ERROR_INVALID_FILE_ATTRIBUTES;
-		}
+	if (response != 0) {
+		return response;
+	}
+	
+	if (file->IsFolder()) {
+		
+
 		system("Dir");
 		delete[] wstr;
 	}

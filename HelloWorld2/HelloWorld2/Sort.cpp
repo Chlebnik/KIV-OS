@@ -31,7 +31,7 @@ string Sort::GetSortedLine() {
 	
 	sort(sortedLines.begin(), sortedLines.end(), FirstLineFromFile::FirstOperator);
 	bool succes;
-	line = sortedLines.back().GetLine(succes);
+	line = firstLinesOfOpenFiles.at(sortedLines.back().GetIndex()).GetLine(succes);
 
 	if (!succes) {
 		vector<FirstLineFromFile> tmp;

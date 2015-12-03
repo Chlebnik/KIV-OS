@@ -37,8 +37,7 @@ bool Dir::HasValidParameters()
 			}
 			else if (i == 1 && parameters.size() == 2) {
 				pathIndex = i;
-				showHelp = false;
-				valid = true;
+				showHelp = false;				
 			}
 			i++;
 		}
@@ -47,112 +46,80 @@ bool Dir::HasValidParameters()
 	return valid;
 }
 
-string Dir::getTime(FILETIME time) {
-	SYSTEMTIME stUTC, stLocal;
-	char buffer[11];
-	int n;
+string Dir::getTime(const time_t* time) {
+	struct tm timeinfo;
+	char buffer[80];
 
-	FileTimeToSystemTime(&time, &stUTC);
-	SystemTimeToTzSpecificLocalTime(NULL, &stUTC, &stLocal);
+	localtime_s(&timeinfo, time);
 	
-	n = sprintf_s(buffer, "%02d/%02d/%04d", stLocal.wMonth, stLocal.wDay, stLocal.wYear);
+	strftime(buffer, 80, "%F %T", &timeinfo);
+
 	string localTime = (buffer);
 
 
 	return localTime;
 }
 
-
 int Dir::listDir(string path) {
-
-	WIN32_FIND_DATA ffd;
-	LARGE_INTEGER filesize;
-	int size;
-	string sizeType = "";
-	HANDLE hFind = INVALID_HANDLE_VALUE;
-	DWORD dwError = 0;
 	string line;
+	int size;
+	string sizeType;
 
-	// Find the first file in the directory.
-
-	hFind = kernel->OurFindFirstFile(path, &ffd);
-
-	if (INVALID_HANDLE_VALUE == hFind)
-	{
-		line = "Invalid target directory.";
-		output->WriteLine(line);
-		return ERROR_INVALID_HANDLE_VALUE;
-	}
-
-	// List all the files in the directory with some info about them.
 	line = " TYPE	";
 	if (showAll) {
-		line += "ATTRS ";
-		line += "CREATION_TIME ";
+		line += "CREATION_TIME       ";
 		line += "FILE_SIZE ";
 	}
 	line += "NAME";
 
 	output->WriteLine(line);
-	do
-	{
-		if (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-		{
+	int response;
+	File* filepath = kernel->fileSystem->GetFile(path, this->GetPathFile(), response);
+	vector<File*> files = filepath->GetChildren();
+	for (File* file : files) {
+		if (file->IsFolder()){
 			line = " <DIR>  ";
-
-		}
-		else
-		{
+			size = 0;
+			sizeType = " - ";
+		}else{
 			line = " <FILE>	";
-		}
-
-		filesize.LowPart = ffd.nFileSizeLow;
-		filesize.HighPart = ffd.nFileSizeHigh;
-		if (filesize.QuadPart == 0) {
-			size = filesize.QuadPart;
-			sizeType = "  ";
-		} else if (filesize.QuadPart < 1024) {
-			size = filesize.QuadPart;
-			sizeType = "b ";
-		}else if (filesize.QuadPart < (1024 * 1024)) {
-			size = filesize.QuadPart / 1024;
-			sizeType = "kb";
-		}
-		else if (filesize.QuadPart < (1024 * 1024 * 1024)) {
-			size = filesize.QuadPart / (1024 * 1024);
-			sizeType = "Mb";
-		}
-		else {
-			size = filesize.QuadPart / (1024 * 1024 * 1024);
-			sizeType = "Gb";
+			size = file->GetSize();
+			if (size == 0) {
+				sizeType = "  ";
+			}
+			else if (size < 1024) {
+				sizeType = "b ";
+			}
+			else if (size < (1024 * 1024)) {
+				size = size / 1024;
+				sizeType = "kb";
+			}
+			else if (size < (1024 * 1024 * 1024)) {
+				size = size / (1024 * 1024);
+				sizeType = "Mb";
+			}
+			else {
+				size = size / (1024 * 1024 * 1024);
+				sizeType = "Gb";
+			}
 		}
 		
-
 		if (showAll) {
-			line += to_string(ffd.dwFileAttributes) + "    ";
-			line += getTime(ffd.ftCreationTime) + "    ";		
-			char buffer[50];			
-			sprintf_s(buffer, "%5d", size);
-			line += buffer;
+			line += getTime(file->GetCreationTime()) + " ";
+			if (size == 0) {
+				line += "-";
+			}else{
+				line += size;
+			}			
 			line += " " + sizeType + "  ";
 		}
-		line += Utils::WcharToString(ffd.cFileName);
-		
+		line += file->GetName();
+
 		output->WriteLine(line);
-
-	} while (kernel->OurFindNextFile(hFind, &ffd) != 0);
-
-	dwError = GetLastError();
-
-	if (dwError != ERROR_NO_MORE_FILES)
-	{
-		FindClose(hFind);
 	}
 
 	return 0;
-
 }
-
 
 int Dir::RunProcess()
 {
@@ -162,11 +129,11 @@ int Dir::RunProcess()
 	if (showHelp) {
 		output->WriteLine(GetHelpContent());
 	}
-	else if(pathIndex > 0){
+	else if(pathIndex > -1){
 		returnValue = listDir(parameters[pathIndex]);
 	}
 	else {
-		returnValue = listDir("");
+		returnValue = listDir(this->GetPathFile()->GetAbsolutePath());
 	}
 	return returnValue;
 }

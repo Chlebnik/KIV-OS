@@ -12,6 +12,7 @@ private:
 	int size;
 	File* parent;
 	string content;
+	time_t creationTime;
 	vector<File*> children;
 	FileAttribute fileAttribute;
 	string name;
@@ -36,6 +37,7 @@ public:
 	string GetAbsolutePath();
 	string GetName();
 	File* GetParent();
+	const time_t* GetCreationTime();
 	int AddChild(File* f);
 	int RemoveChild(File* f);
 	vector<File*> GetChildren();
