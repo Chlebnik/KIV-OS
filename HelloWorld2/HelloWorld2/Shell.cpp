@@ -22,6 +22,9 @@ int Shell::RunProcess()
 		output->Write(GetPathFile()->GetAbsolutePath() + ">");
 		bool success = true;
 		line = input->ReadLine(success);
+		if(!success ){
+			break;
+		}
 		if (line == "exit")
 		{
 			break;

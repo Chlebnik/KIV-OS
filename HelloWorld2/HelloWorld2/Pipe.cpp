@@ -38,7 +38,7 @@ char Pipe::PopChar(bool& success)
 		success = true;
 		value = contentBuffer.front();
 		contentBuffer.pop_front();
-		if (contentBuffer.size() == 0)
+		if (contentBuffer.size() == 0 && entryClosed)
 		{
 			exitClosed = true;
 		}
