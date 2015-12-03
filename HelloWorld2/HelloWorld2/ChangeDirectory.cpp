@@ -74,8 +74,9 @@ int ChangeDirectory::ChangePath(string new_path) {
 	
 	if (file->IsFolder()) {
 		
-		
-		this->SetPathFile(file);
+		if (!kernel->UpdateProcessPathFile(parentPid, file)) {
+			return -1;
+		}
 
 	}
 	else {

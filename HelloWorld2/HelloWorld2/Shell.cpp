@@ -81,7 +81,7 @@ int Shell::ExecuteCommands(vector<process_data> commands) {
 			}
 		}
 		returnValue = kernel->Execute(pid, pathFile, process.process_name, process.process_parameters, inputType, inputParam, outputType, outputParam);
-		if (returnValue != 0) {
+		if (returnValue < 0) {
 			output->WriteLine("Error");
 		}
 	}
