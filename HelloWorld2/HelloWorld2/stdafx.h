@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <tchar.h>
+#include <time.h> 
 #include <string>
 #include <iostream>
 #include <fstream>

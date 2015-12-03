@@ -2,7 +2,7 @@
 
 using namespace std;
 
-File::File(string name, FileAttribute fileAttribute, File* parent) : name{ name }, fileAttribute { fileAttribute }, parent{ parent }, content{ "" } {}
+File::File(string name, FileAttribute fileAttribute, File* parent) : name{ name }, fileAttribute{ fileAttribute }, parent{ parent }, content{ "" }, creationTime{ time(&creationTime) } {}
 
 int File::OpenReader(FileInput* reader)
 {
@@ -90,6 +90,10 @@ bool File::IsRoot()
 bool File::IsFolder()
 {
 	return fileAttribute == FOLDER_ATT;
+}
+
+const time_t* File::GetCreationTime() {
+	return &creationTime;
 }
 
 size_t File::GetSize()

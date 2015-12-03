@@ -7,9 +7,8 @@ private:
 	bool showHelp;
 	bool showAll;
 	int pathIndex;
-	string getTime(FILETIME time);
+	string getTime(const time_t* time);
 	int listDir(string path);
-
 
 public:
 	// Inherited form Abstract process

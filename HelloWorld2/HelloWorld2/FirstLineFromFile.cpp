@@ -18,8 +18,8 @@ int FirstLineFromFile::GetIndex() {
 }
 
 string FirstLineFromFile::GetLine(bool& succes) {
-	string tmp_line = line;
-	line = input->ReadLine(succes);
+	string tmp_line = this->line;
+	this->line = input->ReadLine(succes);
 
 	if (!succes) {
 		input->Close();
