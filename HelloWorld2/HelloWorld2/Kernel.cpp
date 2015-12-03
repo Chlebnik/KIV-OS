@@ -138,15 +138,6 @@ Pipe* Kernel::GetPipe(int pipeIndex)
 	return NULL;
 }
 
-
-DWORD Kernel::OurGetFileAttributesA(const string& dirName_in) {
-	return GetFileAttributesA(dirName_in.c_str());
-}
-
-DWORD Kernel::OurGetCurrentDirectory(_In_ DWORD BUFSIZE, _Out_ LPWSTR Buffer) {
-	return GetCurrentDirectory(BUFSIZE, Buffer);
-}
-
 string Kernel::SplitPath(string path, string get){//, char* drive, char* dir, char* fname, char* ext) {
 	char drive[_MAX_DRIVE];
 	char dir[_MAX_DIR];
@@ -177,78 +168,7 @@ string Kernel::SplitPath(string path, string get){//, char* drive, char* dir, ch
 	}
 
 }
-
-wchar_t* Kernel::ValidatePath(string path, int result) {
-	string line;
-	TCHAR Buffer[MAX_PATH];
-	DWORD dwRet;
-	wchar_t* wstr = NULL;
-
-	if (path.size() == 0) {
-		dwRet = OurGetCurrentDirectory(MAX_PATH, Buffer);
-		if (dwRet == 0)
-		{
-			//GetCurrentDirectory faile;
-			result = -1;
-			return wstr;
-		}
-		if (dwRet > MAX_PATH)
-		{
-			//line = "Buffer too small; need more characters";
-			result = -2;
-			return wstr;
-		}
-		wstr = Buffer;
-	}
-	else {
-		wstr = Utils::StringToWchar(path);
-	}
-
-
-	if (lstrlen(wstr) > (MAX_PATH - 3))
-	{
-		//output->WriteLine("\nDirectory path is too long.\n");
-		result = -3;
-		return wstr;
-	}
-
-	return wstr;
-}
-
-HANDLE Kernel::OurFindFirstFile(_In_ string path, _Out_ LPWIN32_FIND_DATAW ffd) {
-
-	TCHAR szDir[MAX_PATH];
-	HANDLE hFind = INVALID_HANDLE_VALUE;
-
-	int result = 0;
-	wchar_t* wstr;
-
-	wstr = ValidatePath(path, result);
-
-	if (result != 0) {
-		return hFind;
-	}
-
-	lstrcpy(szDir, wstr);
-	lstrcat(szDir, TEXT("\\*"));
-
-	hFind = FindFirstFile(szDir, ffd);
-
-	if (INVALID_HANDLE_VALUE == hFind)
-	{
-		//"Invalid target directory.";
-		return hFind;
-	}
-
-
-	return hFind;
-}
-
-DWORD Kernel::OurFindNextFile(_In_ HANDLE hFind, _Out_ LPWIN32_FIND_DATAW ffd) {
-	return FindNextFile(hFind, ffd);
-	//a
-}
-
+	
 BOOL Kernel::QueryLowMemoryStatus() {
 	PBOOL lowMemory = NULL;
 	QueryMemoryResourceNotification(CreateMemoryResourceNotification(LowMemoryResourceNotification), lowMemory);

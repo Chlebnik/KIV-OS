@@ -55,7 +55,6 @@ public:
 	int WaitForChildren(vector<int>& childrenPids);	
 
 	//For fileSystem manipulation
-	wchar_t* ValidatePath(_In_ string path, _Out_ int result);
 	string SplitPath(_In_ string path, _In_ string get);
 
 	File* GetFile(string path, File* sourceFile, int& response);
@@ -63,9 +62,5 @@ public:
 	int RemoveFile(string path);
 	int RemoveFile(File* file);
 
-	DWORD OurGetFileAttributesA(const string& dirName_in);
-	DWORD OurGetCurrentDirectory(_In_ DWORD BUFSIZE, _Out_ LPWSTR Buffer);
-	HANDLE OurFindFirstFile(_In_ string path, _Out_ LPWIN32_FIND_DATAW ffd);
-	DWORD OurFindNextFile(_In_ HANDLE hFind, _Out_ LPWIN32_FIND_DATAW ffd);
 	BOOL QueryLowMemoryStatus();
 };

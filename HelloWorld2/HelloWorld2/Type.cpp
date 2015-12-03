@@ -66,8 +66,8 @@ int Type::listDir(string path, string regexFile) {
 	DWORD dwError = 0;
 	int returnValue = 0;
 
-	hFind = kernel->OurFindFirstFile(path, &ffd);
-
+//	hFind = kernel->OurFindFirstFile(path, &ffd);
+	/*
 	// List all the files in the directory with some info about them.
 	do
 	{
@@ -85,7 +85,7 @@ int Type::listDir(string path, string regexFile) {
 			}
 		}
 
-	} while (kernel->OurFindNextFile(hFind, &ffd) != 0);
+	} while (true);
 
 	dwError = GetLastError();
 
@@ -94,7 +94,7 @@ int Type::listDir(string path, string regexFile) {
 		output->WriteLine("FindFirstFile");
 		FindClose(hFind);
 	}
-
+	*/
 	return returnValue;
 
 }

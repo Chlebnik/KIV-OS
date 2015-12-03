@@ -5,18 +5,20 @@ using namespace std;
 
 int main()
 {
-	FileSystem* fs = new FileSystem();
+	Kernel kernelInstance;
+	Kernel *kernel = &kernelInstance;
+
 	int response = 0;
-	File* drive = fs->CreateNewFile("c", FOLDER_ATT, NULL, response);
+	File* initialDrive = kernel->LoadFileSystem();
 	cout << response << endl;
-	cout << drive->GetAbsolutePath() << endl;
-	File* subfolder1 = fs->CreateNewFile("sub1", FOLDER_ATT, drive, response);
+	cout << initialDrive->GetAbsolutePath() << endl;
+	File* subfolder1 = kernel->CreateNewFile("sub1", FOLDER_ATT, initialDrive, response);
 	cout << response << endl;
 	cout << subfolder1->GetAbsolutePath() << endl;
-	File* subfolder2 = fs->CreateNewFile("sub2", FOLDER_ATT, subfolder1, response);
+	File* subfolder2 = kernel->CreateNewFile("sub2", FOLDER_ATT, subfolder1, response);
 	cout << response << endl;
 	cout << subfolder2->GetAbsolutePath() << endl;
-	File* tmpDrive = fs->GetFile("c:/", NULL, response);
+	File* tmpDrive = kernel->GetFile("c:/", NULL, response);
 	cout << response << "tmp drive" << endl;
 	cout << tmpDrive->GetAbsolutePath() << endl;
 
@@ -28,15 +30,15 @@ int main()
 		cout << "*****************" << endl;
 	}
 
-	File* tmp = fs->GetFile("c:/sub1", NULL, response);
+	File* tmp = kernel->GetFile("c:/sub1", NULL, response);
 	cout << response << endl;
 	cout << tmp->GetAbsolutePath() << endl;
 
-	File* tmp2 = fs->GetFile("c:/sub1/sub2", NULL, response);
+	File* tmp2 = kernel->GetFile("c:/sub1/sub2", NULL, response);
 	cout << response << endl;
 	cout << tmp2->GetAbsolutePath() << endl;
 
-	response = fs->RemoveFile(tmp2);
+	response = kernel->RemoveFile(tmp2);
 	cout << response << endl;
 	if (tmp2 != NULL)
 	{
@@ -46,9 +48,6 @@ int main()
 	{
 		cout << "OK" << endl;
 	}
-
-	Kernel kernelInstance;
-	Kernel *kernel = &kernelInstance;
 	
 	AbstractInput* input = new StandardInput(kernel);
 	AbstractOutput* output = new StandardOutput(kernel);
@@ -64,7 +63,7 @@ int main()
 		exit(1);
 	}
 	//AbstractInput* input = new FileInput(fileInput, kernel);
-	File* initialDrive = kernel->LoadFileSystem();
+	
 	int shellPid = kernel->Execute(0, initialDrive, "shell", "", STANDARD_TYPE, "", STANDARD_TYPE, "");
 	vector<int> tmpVector;
 	tmpVector.push_back(shellPid);

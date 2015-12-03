@@ -47,19 +47,6 @@ bool ChangeDirectory::HasValidParameters()
 	return valid;
 }
 
-bool ChangeDirectory::DirExists(const string& dirName_in)
-{
-	DWORD ftyp = kernel->OurGetFileAttributesA(dirName_in);
-
-	if (ftyp == INVALID_FILE_ATTRIBUTES)
-		return false;  //something is wrong with your path!
-
-	if (ftyp & FILE_ATTRIBUTE_DIRECTORY)
-		return true;   // this is a directory!
-
-	return false;    // this is not a directory!
-}
-
 int ChangeDirectory::RunProcess()
 {
 	int returnValue = 0;
@@ -75,12 +62,11 @@ int ChangeDirectory::RunProcess()
 }
 
 
-
 int ChangeDirectory::ChangePath(string new_path) {
 	int success = 0;
 	int response = 0;
 
-	File* file = kernel->fileSystem->GetFile(new_path, this->GetPathFile(), response);
+	File* file = kernel->GetFile(new_path, this->GetPathFile(), response);
 
 	if (response != 0) {
 		return response;
@@ -88,9 +74,9 @@ int ChangeDirectory::ChangePath(string new_path) {
 	
 	if (file->IsFolder()) {
 		
+		
+		this->SetPathFile(file);
 
-		system("Dir");
-		delete[] wstr;
 	}
 	else {
 		//"Given path doesn't exist!"

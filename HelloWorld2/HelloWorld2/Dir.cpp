@@ -74,7 +74,7 @@ int Dir::listDir(string path) {
 
 	output->WriteLine(line);
 	int response;
-	File* filepath = kernel->fileSystem->GetFile(path, this->GetPathFile(), response);
+	File* filepath = kernel->GetFile(path, this->GetPathFile(), response);
 	vector<File*> files = filepath->GetChildren();
 	for (File* file : files) {
 		if (file->IsFolder()){

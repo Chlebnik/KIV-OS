@@ -44,31 +44,24 @@ bool MakeDirectory::HasValidParameters()
 int MakeDirectory::processDirs(string drive, vector<string> sepDirs) {
 	int result = 0;
 	string tmp_path = drive;
+	string tmp_parent;
 	for (std::vector<string>::reverse_iterator it = sepDirs.rbegin(); it != sepDirs.rend(); ++it) {		
+		tmp_parent = tmp_path;
 		tmp_path += '/' + *it;
-		if (!dirExists(tmp_path)) {
-			wchar_t* wchar_dir = Utils::StringToWchar(tmp_path);
-			if (CreateDirectory(wchar_dir, NULL) == 0) {
-				result = -1;
+		int response = 0;
+		File* tmpParentFile = kernel->GetFile(tmp_parent, this->GetPathFile(), response);
+		File* tmp = kernel->GetFile(tmp_path, this->GetPathFile(), response);
+		if (!response) {
+			int response = 0;
+			kernel->CreateNewFile(*it, FOLDER_ATT, tmpParentFile,response);
+			if (response != 0) {
+				result = response;
 				return result;
 			}
 		}
 	}
 
 	return result;
-}
-
-bool MakeDirectory::dirExists(const string& dirName_in)
-{
-	DWORD ftyp = kernel->OurGetFileAttributesA(dirName_in);
-
-	if (ftyp == INVALID_FILE_ATTRIBUTES)
-		return false;  //something is wrong with your path!
-
-	if (ftyp & FILE_ATTRIBUTE_DIRECTORY)
-		return true;   // this is a directory!
-
-	return false;    // this is not a directory!
 }
 
 int MakeDirectory::RunProcess()
@@ -94,12 +87,6 @@ int MakeDirectory::RunProcess()
 
 			
 	}
-
-
-
-
-	output->Close();
-	input->Close();
 
 	return result;
 };
