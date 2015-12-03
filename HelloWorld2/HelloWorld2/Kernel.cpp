@@ -23,7 +23,9 @@ Kernel::Kernel() : pipeCounter (0), pidCounter(0) {}
 
 string Kernel::ReadLineFromKeyboard(bool& success)
 {
-	return ReadLine(cin, success);
+	string result = ReadLine(cin, success);
+	cin.clear();
+	return result;
 }
 
 string Kernel::ReadFromKeyboard()
@@ -42,6 +44,7 @@ string Kernel::ReadFromKeyboard()
 		strBuf += tempChar;
 	}
 	cin.ignore();
+	cin.clear();
 	return strBuf;	
 }
 
