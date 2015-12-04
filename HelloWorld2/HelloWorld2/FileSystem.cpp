@@ -59,6 +59,9 @@ File* FileSystem::CreateNewFile(string name, FileAttribute fileAttribute, File* 
 	}
 	else
 	{
+		if (!ValidateFileName(name)) {
+			return NULL;
+		}
 		f = new File(name, fileAttribute, parent);
 		response = parent->AddChild(f);
 		
@@ -198,6 +201,7 @@ int FileSystem::RemoveFile(File* file)
 	if (parent == NULL)
 	{
 		// TODO Deleting drive
+		return 29;
 	}
 	else
 	{
@@ -221,5 +225,31 @@ bool FileSystem::ValidatePath(string path)
 
 bool FileSystem::ValidateFileName(string path)
 {
-	return true;
+	char ch;
+	if ((int)path.length() < 1) {
+		return false;
+	}
+	for (int i = 0; i < (int)path.length(); i++) {
+		ch = path.at(i);
+		if (ch == DOT_CHAR) {
+			// two dots are invalid.
+			if ((int)path.length() > i + 1) {
+				if (path.at(i + 1) == DOT_CHAR) {
+					return false;
+				}			
+			}
+			else {
+				// the file name may not end with a dot.
+				return false;
+			}
+			continue;
+
+		}
+		for (int j = 0; j < INVALID_CHARACTERS_COUNT; j++) {
+			if (ch == invalidFileNameCharacters[j]) {
+				return false;
+			}
+		}
+	}
+	return true; 
 }

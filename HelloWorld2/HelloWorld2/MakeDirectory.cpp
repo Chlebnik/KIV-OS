@@ -127,6 +127,9 @@ int MakeDirectory::RunProcess()
 		{
 			element = pathElements[j];
 			f = kernel->CreateNewFile(element, FOLDER_ATT, f, response);
+			if (f == NULL) {
+				errorOutput->WriteLine("Wrong file name.");
+			}
 		}
 	}
 
