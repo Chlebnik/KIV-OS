@@ -55,6 +55,7 @@ public:
 	int Execute(int parentPid, File* pathFile, string programName, string parameters, IOType inputType, string inputParam, IOType outputType, string outputParam);
 	int WaitForChildren(vector<int>& childrenPids);
 	bool UpdateProcessPathFile(int pid, File* newFilePath);
+	bool CheckProcessPath(int pid, File* newFilePath);
 
 	//For fileSystem manipulation
 	string SplitPath(_In_ string path, _In_ string get);

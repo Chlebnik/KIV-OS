@@ -528,3 +528,19 @@ bool Kernel::UpdateProcessPathFile(int pid, File* newFilePath)
 	}
 	return false;
 }
+bool Kernel::CheckProcessPath(int pid, File* newFilePath) {
+	if (processMap.find(pid) != processMap.end())
+	{
+		
+		string parent = processMap[pid]->GetPathFile()->GetAbsolutePath();
+		string newFile = newFilePath->GetAbsolutePath();
+		if (parent == newFile) {
+			return true;
+		}
+		else {
+			return false;
+		}
+		
+	}
+	return false;
+}

@@ -54,6 +54,10 @@ bool Remove::HasValidParameters()
 bool Remove::RemoveFile(File* file) 
 {
 	
+	// case, when trying delete Shells current folder	
+	if (kernel->CheckProcessPath(parentPid, file)) {
+		return false;
+	}
 	// case, when we can immediately remove the file
 	if (file->IsDeletable())
 	{
