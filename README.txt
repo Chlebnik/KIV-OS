@@ -1,20 +1,21 @@
 Git repozitory for KIV/OS.
+Its fucking perfect!
 If is something missing or status is different from this, please change it.
 ---------------------------------------------------------------------------
 Kernel - DONE
-Shell - DONE / Fail when >> input given
+Shell - DONE
 Echo - DONE
 Cd - DONE
 Dir - DONE
 Wc - DONE
 Md - DONE
-Rd
+Rd- DONE
 Type - DONE
 Sort - DONE
 Ranr - DONE
 Fraq - DONE
 ---------------------------------------------------------------------------
 I/O - DONE
-Pipes - DONE / Not working
+Pipes - DONE
 ---------------------------------------------------------------------------
-Ramdisk - DONE / Needs to be checked
+Ramdisk - DONE 
