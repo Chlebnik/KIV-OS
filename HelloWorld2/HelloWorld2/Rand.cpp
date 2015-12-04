@@ -49,7 +49,7 @@ int Rand::RunProcess()
 			cin.get(inputChar);
 		}
 		cin.ignore();
-
+		cin.clear();
 		// Kill thread
 		stop = true;
 		t1.join();
