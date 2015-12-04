@@ -42,6 +42,7 @@ int Rand::RunProcess()
 		thread t1(&Rand::Loop, this);
 
 		// until EOF is reached read from STDIN
+		
 		char inputChar;
 		cin.clear();
 		while (cin)

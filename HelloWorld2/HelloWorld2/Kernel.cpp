@@ -268,7 +268,7 @@ AbstractInput* Kernel::CreateInputClass(IOType type, string param, int parentPid
 		}
 		break;
 	case PIPE_SINGLE_TYPE:
-		pipeId = CreatePipe(true, false, parentPid);
+		pipeId = CreatePipe(true, true, parentPid);
 		input = new PipeInput(pipeId, this);		
 		break;
 	case PIPE_BOTH_TYPE:

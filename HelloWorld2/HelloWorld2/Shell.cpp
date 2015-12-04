@@ -55,7 +55,7 @@ int Shell::RunProcess()
 }
 
 int Shell::ExecuteCommands(vector<process_data> commands) {
-	int return_value = 0;
+	int returnValue = 0;
 	File* pathFile = GetPathFile();
 	vector<int> child_ids;
 	child_ids.clear();
@@ -104,12 +104,20 @@ int Shell::ExecuteCommands(vector<process_data> commands) {
 				}
 			}
 		}
-		return_value = kernel->Execute(pid, pathFile, process.process_name, process.process_parameters, inputType, inputParam, outputType, outputParam);
-		if (return_value < 0) {
-			output->WriteLine("Error");
+		returnValue = kernel->Execute(pid, pathFile, process.process_name, process.process_parameters, inputType, inputParam, outputType, outputParam);
+		if (returnValue < 0) {
+			switch (returnValue)
+			{
+			case ERROR_UNKNOWN_COMMAND:
+				output->WriteLine("Error: Unknown command.");
+				break;
+			default:
+				output->WriteLine("Error " + returnValue);
+				break;
+			}
 			break;
 		}
-		child_ids.push_back(return_value);
+		child_ids.push_back(returnValue);
 	}
 	kernel->WaitForChildren(child_ids);
 	return 0;
