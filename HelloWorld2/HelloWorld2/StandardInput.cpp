@@ -23,6 +23,7 @@ string StandardInput::Read()
 	string s(1, c);
 	return s;
 }
+
 string StandardInput::ReadLine(bool& success)
 {	
 	string line = GetKernel()->ReadLineFromKeyboard(success);

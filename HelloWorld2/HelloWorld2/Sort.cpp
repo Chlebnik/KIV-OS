@@ -61,7 +61,7 @@ int Sort::ProcessAray(vector<string>* array) {
 	temp_out->Close();
 	delete temp_out;
 
-	firstLinesOfOpenFiles.push_back(FirstLineFromFile(firstLinesOfOpenFiles.size(), path, kernel, this->GetPid()));
+	firstLinesOfOpenFiles.push_back(FirstLineFromFile(firstLinesOfOpenFiles.size(), path, kernel, this->GetPid(), this->GetPathFile()));
 
 
 	return 0;

@@ -1,11 +1,14 @@
 #include "stdafx.h"
 
-FirstLineFromFile::FirstLineFromFile(int index, string path, Kernel* kernel, int parentPid) {
-	bool succes;
+using namespace std;
+
+FirstLineFromFile::FirstLineFromFile(int index, string path, Kernel* kernel, int parentPid, File* sourceFile)
+{
+	bool success;
 	int response = 0;
 	this->index = index;
-	this->input = kernel->CreateInputClass(FILE_TYPE, path, parentPid, NULL, response);
-	this->line = input->ReadLine(succes);
+	this->input = kernel->CreateInputClass(FILE_TYPE, path, parentPid, sourceFile, response);
+	this->line = input->ReadLine(success);
 }
 
 FirstLineFromFile::~FirstLineFromFile() {

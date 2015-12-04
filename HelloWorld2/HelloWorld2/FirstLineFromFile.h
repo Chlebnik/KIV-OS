@@ -6,6 +6,8 @@ class AbstractInput;
 
 using namespace std;
 
+class File;
+
 class FirstLineFromFile
 {
 private:
@@ -14,7 +16,7 @@ private:
 	int index;
 
 public:
-	FirstLineFromFile(int index, string path, Kernel* kernel, int parentPid);
+	FirstLineFromFile(int index, string path, Kernel* kernel, int parentPid, File* sourceFile);
 	~FirstLineFromFile();
 	int GetIndex();
 	string GetLine(bool& succes);
