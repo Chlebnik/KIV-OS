@@ -8,7 +8,7 @@ int main()
 	Kernel kernelInstance;
 	Kernel *kernel = &kernelInstance;
 
-	File* initialDrive = kernel->CreateFileSystem("c");
+	File* initialDrive = kernel->LoadFileSystem();
 
 	
 	/*cout << response << endl;

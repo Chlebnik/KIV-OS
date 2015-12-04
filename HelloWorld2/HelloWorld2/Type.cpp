@@ -39,10 +39,6 @@ int Type::printFileContent(AbstractInput * printInput)
 		if (success) {
 			output->WriteLine(line);
 		}
-		else {
-			returnValue = -5;
-			break;
-		}
 		
 	}
 	return returnValue;
@@ -61,40 +57,24 @@ int Type::proccesFile(string filepath) {
 }
 
 int Type::listDir(string path, string regexFile) {
-	WIN32_FIND_DATA ffd;
-	HANDLE hFind = INVALID_HANDLE_VALUE;
-	DWORD dwError = 0;
 	int returnValue = 0;
 
-//	hFind = kernel->OurFindFirstFile(path, &ffd);
-	/*
-	// List all the files in the directory with some info about them.
-	do
-	{
-		string line;
-		if (!(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+	File* file = kernel->GetFile(path, this->GetPathFile(), returnValue);
+	if (returnValue == 0) {
+		for(File* child: file->GetChildren())
 		{
-			string fileName = Utils::WcharToString(ffd.cFileName);
+			string fileName = child->GetName();
 			regex findFiles = regex(regexFile);
-			if (regex_match(fileName, findFiles)) {
-				string filePath = path + "/" +  fileName;
+			if(regex_match(fileName, findFiles)) {
+				string filePath = path + "/" + fileName;
 				returnValue = proccesFile(filePath);
 				if (returnValue != 0) {
 					return returnValue;
 				}
 			}
 		}
-
-	} while (true);
-
-	dwError = GetLastError();
-
-	if (dwError != ERROR_NO_MORE_FILES)
-	{
-		output->WriteLine("FindFirstFile");
-		FindClose(hFind);
 	}
-	*/
+
 	return returnValue;
 
 }

@@ -353,6 +353,7 @@ File* Kernel::PrepareFileOutput(string path, File* sourceFile, int& response)
 	File* parent = GetFile(folderPath, sourceFile, tmpResponse);
 	if (tmpResponse == 0)
 	{
+		response = tmpResponse;
 		return CreateNewFile(fileName, FILE_ATT, parent, tmpResponse);
 	}
 	else
@@ -367,6 +368,7 @@ File* Kernel::PrepareFileOutput(string path, File* sourceFile, int& response)
 		File* parent = GetFile(folderPath, sourceFile, tmpResponse);
 		if (tmpResponse == 0)
 		{
+			response = tmpResponse;
 			return CreateNewFile(fileName, FILE_ATT, parent, response);
 		}
 		else
@@ -518,11 +520,12 @@ int Kernel::WaitForChildren(vector<int>& childrenPids)
 	return 0;
 }
 
-File* Kernel::CreateFileSystem(string driveName)
+File* Kernel::LoadFileSystem()
 {
 	fileSystem = new FileSystem();
 	int response = 0;
-	File* drive = fileSystem->CreateNewFile(driveName, FOLDER_ATT, NULL, response);
+	fileSystem->CreateNewFile("_system", FOLDER_ATT, NULL, response);
+	File* drive = fileSystem->CreateNewFile("c", FOLDER_ATT, NULL, response);
 	return drive;
 }
 

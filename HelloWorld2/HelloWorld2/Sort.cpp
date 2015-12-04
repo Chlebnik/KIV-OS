@@ -25,7 +25,7 @@ bool Sort::HasValidParameters()
 	return valid;
 }
 
-string Sort::GetSortedLine() {
+string Sort::GetSortedLine(int& response) {
 	vector<FirstLineFromFile> sortedLines = firstLinesOfOpenFiles;
 	string line;
 	
@@ -43,6 +43,13 @@ string Sort::GetSortedLine() {
 		}
 		firstLinesOfOpenFiles.clear();
 		firstLinesOfOpenFiles = tmp;
+		string path = "_system:/tempSort_" + to_string(sortedLines.back().GetIndex()+1) + ".txt";
+		tmp.clear();
+		sortedLines.clear();
+		response = kernel->RemoveFile(path);
+	}
+	else {
+		response = 0;
 	}
 
 
@@ -51,7 +58,7 @@ string Sort::GetSortedLine() {
 
 int Sort::ProcessAray(vector<string>* array) {
 	sort(array->begin(), array->end(), FirstLineFromFile::FirstOperatorString);
-	string path = "tempSort_" + to_string(1 + firstLinesOfOpenFiles.size()) + ".txt";
+	string path = "_system:/tempSort_" + to_string(1 + firstLinesOfOpenFiles.size()) + ".txt";
 	int response = 0;
 	AbstractOutput* temp_out = kernel->CreateOutputClass(FILE_TYPE, path, this->GetPid(), GetPathFile(), response);
 	while (array->size() > 0) {
@@ -105,8 +112,13 @@ int Sort::RunProcess()
 
 		if (firstLinesOfOpenFiles.size() > 0) {
 			while (firstLinesOfOpenFiles.size() > 0)
-			{
-				output->WriteLine(GetSortedLine());
+			{	
+				int response;
+				string line = GetSortedLine(response);
+				if (response != 0) {
+					return response;
+				}
+				output->WriteLine(line);
 			}
 		}
 	}

@@ -52,7 +52,7 @@ string Dir::getTime(const time_t* time) {
 
 	localtime_s(&timeinfo, time);
 	
-	strftime(buffer, 80, "%F %T", &timeinfo);
+	strftime(buffer, sizeof(buffer), "%F %T", &timeinfo);
 
 	string localTime = (buffer);
 
@@ -106,12 +106,10 @@ int Dir::listDir(string path) {
 		
 		if (showAll) {
 			line += getTime(file->GetCreationTime()) + " ";
-			if (size == 0) {
-				line += "-";
-			}else{
-				line += size;
-			}			
-			line += " " + sizeType + "  ";
+			char buffer[80];
+			snprintf(buffer, sizeof(buffer), "%6d", size);
+			line += buffer;
+			line += " " + sizeType + " ";
 		}
 		line += file->GetName();
 

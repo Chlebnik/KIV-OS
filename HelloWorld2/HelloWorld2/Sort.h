@@ -8,7 +8,7 @@ private:
 	bool showHelp;
 	vector<FirstLineFromFile> firstLinesOfOpenFiles;
 	int ProcessAray(vector<string>* Array);
-	string GetSortedLine();
+	string GetSortedLine(int& response);
 	int maxByteSize = 1;
 public:
 	// Inherited form Abstract process

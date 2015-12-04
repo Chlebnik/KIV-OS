@@ -44,7 +44,7 @@ public:
 	int WriteLineToFile(FileOutput* fileOutput, string content);
 	char ReadFromFile(FileInput* fileInput, bool& success);
 	string ReadLineFromFile(FileInput* fileInput, bool& success);
-	File* CreateFileSystem(string driverName);
+	File* LoadFileSystem();
 
 	int WriteToPipe(int pipeIndex, char c);
 	char ReadFromPipe(int pipeIndex, bool& success);
