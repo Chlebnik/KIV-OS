@@ -544,3 +544,26 @@ bool Kernel::CheckProcessPath(int pid, File* newFilePath) {
 	}
 	return false;
 }
+
+bool Kernel::SetEchoStatus(int pid, bool status) {
+	if (processMap.find(pid) != processMap.end())
+	{
+		int response;
+		processMap[pid]->SetEchoStatus(status, response);
+		if (response == 0) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Kernel::CheckEchoStatus(int pid, int& succes) {
+	if (processMap.find(pid) != processMap.end())
+	{
+		bool status = processMap[pid]->GetEchoStatus(succes);
+		if (succes == 0) {
+			return status;
+		}
+	}
+	return false;
+}

@@ -60,4 +60,6 @@
 #include "MakeDirectory.h"
 #include "Freq.h"
 #include "Remove.h"
+
+#define SHELLS_PID 1
 // TODO: reference additional headers your program requires here

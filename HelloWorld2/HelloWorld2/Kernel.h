@@ -56,6 +56,8 @@ public:
 	int WaitForChildren(vector<int>& childrenPids);
 	bool UpdateProcessPathFile(int pid, File* newFilePath);
 	bool CheckProcessPath(int pid, File* newFilePath);
+	bool SetEchoStatus(int pid, bool status);
+	bool CheckEchoStatus(int pid, int& succes);
 
 	//For fileSystem manipulation
 	string SplitPath(_In_ string path, _In_ string get);
