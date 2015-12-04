@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+using namespace std;
+
 string MakeDirectory::GetHelpContent()
 {
 	string help = "Creates a directory.\n\n"
@@ -39,29 +41,6 @@ bool MakeDirectory::HasValidParameters()
 	}
 
 	return valid;
-}
-
-int MakeDirectory::processDirs(string drive, vector<string> sepDirs) {
-	int result = 0;
-	string tmp_path = drive;
-	string tmp_parent;
-	for (std::vector<string>::reverse_iterator it = sepDirs.rbegin(); it != sepDirs.rend(); ++it) {		
-		tmp_parent = tmp_path;
-		tmp_path += '/' + *it;
-		int response = 0;
-		File* tmpParentFile = kernel->GetFile(tmp_parent, this->GetPathFile(), response);
-		File* tmp = kernel->GetFile(tmp_path, this->GetPathFile(), response);
-		if (!response) {
-			int response = 0;
-			kernel->CreateNewFile(*it, FOLDER_ATT, tmpParentFile,response);
-			if (response != 0) {
-				result = response;
-				return result;
-			}
-		}
-	}
-
-	return result;
 }
 
 int MakeDirectory::RunProcess()
@@ -146,22 +125,6 @@ int MakeDirectory::RunProcess()
 			element = pathElements[j];
 			f = kernel->CreateNewFile(element, FOLDER_ATT, f, response);
 		}
-
-		/*string drive = kernel->SplitPath(parameters[0], "drive");
-		string currentDir = kernel->SplitPath(parameters[0], "filename");		
-		string parentDir = kernel->SplitPath(parameters[0], "dir");
-		string tmp_path = "";
-		vector<string> sepDirs;
-		while (currentDir != "") {
-			sepDirs.push_back(currentDir);			
-			tmp_path = drive + parentDir.substr(0, (parentDir.size()-1));
-			currentDir = kernel->SplitPath(tmp_path, "filename");
-			parentDir = kernel->SplitPath(tmp_path, "dir");
-		}
-
-		result = processDirs(drive, sepDirs);*/
-
-			
 	}
 
 	return result;
