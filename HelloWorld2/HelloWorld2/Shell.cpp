@@ -323,6 +323,9 @@ int Shell::ReadValue(process_data* command, string& value, string input, int& in
 				else if ((ch == OUTPUT_REDIRECT) || (ch == INPUT_REDIRECT) || (ch == PIPE)) {
 					return -1;
 				}
+				else if ((ch == QUOTATION)) {
+					return -2;
+				}
 				value = value + ch;
 				index++;
 			} while (index < (int)input.length());

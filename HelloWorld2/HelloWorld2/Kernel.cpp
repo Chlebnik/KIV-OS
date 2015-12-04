@@ -244,12 +244,16 @@ int Kernel::Execute(int parentPid, File* pathFile, string programName, string pa
 	processMap[process->GetPid()] = process;
 	int response = 0;
 	AbstractInput* input = CreateInputClass(inputType, inputParam, parentPid, pathFile, response);
-	// TODO handling error
-	response = 0;
+	if (response != 0) {
+		delete process;
+		return -35;
+	}
 	AbstractOutput* output = CreateOutputClass(outputType, outputParam, parentPid, pathFile, response);
-	// TODO handling error
-
-
+	if (response != 0) {
+		delete input;
+		delete process;
+		return -35;
+	}
 	process->Init(input, output, new StandardOutput(this), parameters);
 	process->SetPathFile(pathFile);
 	int returnValue = process->Run();
@@ -266,7 +270,7 @@ int Kernel::Execute(int parentPid, File* pathFile, string programName, string pa
 
 AbstractInput* Kernel::CreateInputClass(IOType type, string param, int parentPid, File* pathFile, int& response)
 {
-	AbstractInput* input;
+	AbstractInput* input = NULL;
 	int pipeId;
 	shared_ptr<File> file;
 	switch (type)
@@ -288,10 +292,6 @@ AbstractInput* Kernel::CreateInputClass(IOType type, string param, int parentPid
 				input = new FileInput(file, this);
 				response = 0;
 			}
-		}
-		else
-		{
-			input = NULL;
 		}
 		break;
 	case PIPE_SINGLE_TYPE:
