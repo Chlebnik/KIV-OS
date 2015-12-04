@@ -58,6 +58,6 @@ int Echo::RunProcess() {
 	else {
 		output->WriteLine(parameters[0]);
 	}
-
+	output->Close();
 	return 0;
 }

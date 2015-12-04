@@ -34,7 +34,7 @@ public:
 	AbstractOutput* CreateOutputClass(IOType type, string param, int parendPid, File* pathFile, int& response);
 	FileSystem* fileSystem;
 	//int PrintToMonitor(string output);
-	string ReadFromKeyboard();
+	char ReadFromKeyboard(bool& success);
 	string ReadLineFromKeyboard(bool& success);
 	int WriteOnMonitor(string output);
 	int WriteLineOnMonitor(string output);

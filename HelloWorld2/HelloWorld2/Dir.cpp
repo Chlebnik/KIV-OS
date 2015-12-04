@@ -135,6 +135,7 @@ int Dir::RunProcess()
 	else {
 		returnValue = listDir(this->GetPathFile()->GetAbsolutePath());
 	}
+	output->Close();
 	return returnValue;
 }
 

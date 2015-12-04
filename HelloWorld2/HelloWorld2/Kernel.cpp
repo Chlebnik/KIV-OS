@@ -28,24 +28,23 @@ string Kernel::ReadLineFromKeyboard(bool& success)
 	return result;
 }
 
-string Kernel::ReadFromKeyboard()
+char Kernel::ReadFromKeyboard(bool& success)
 {
 	string strBuf;
 		
 	char tempChar;
-	cin.clear();
-	while (cin) 
+	cin.get(tempChar);
+	if (cin)
 	{
-		cin.get(tempChar);
-		if (tempChar == EOF)
-		{
-			return strBuf;
-		}
-		strBuf += tempChar;
+		success = true;
 	}
-	cin.ignore();
-	cin.clear();
-	return strBuf;	
+	else
+	{
+		cin.clear();
+		success = false;
+	}
+	
+	return tempChar;	
 }
 
 int Kernel::WriteOnMonitor(string output)

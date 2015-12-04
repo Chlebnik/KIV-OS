@@ -110,7 +110,6 @@ int Sort::RunProcess()
 			}
 		}
 	}
-	
+	output->Close();
 	return result;
-	;
 }

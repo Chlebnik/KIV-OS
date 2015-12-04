@@ -45,11 +45,14 @@ bool MakeDirectory::HasValidParameters()
 
 int MakeDirectory::RunProcess()
 {
+	input->Close();
 	int result = 0;
 	if (showHelp) {
 		output->WriteLine(GetHelpContent());
+		output->Close();
 	}	
 	else {
+		output->Close();
 		vector<string> pathElements = Utils::Split(parameters[0], FILE_SEPARATOR);
 
 		string element = pathElements[0];

@@ -50,16 +50,18 @@ bool ChangeDirectory::HasValidParameters()
 
 int ChangeDirectory::RunProcess()
 {
+	input->Close();
 	int returnValue = 0;
 	if (showHelp) {
 		output->WriteLine(GetHelpContent());
+		output->Close();
 	}
 	else {
+		output->Close();
 		returnValue = ChangePath(parameters[pathIndex]);
 	}
 
 	return returnValue;
-
 }
 
 
