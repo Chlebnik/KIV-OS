@@ -49,6 +49,6 @@ int Freq::RunProcess() {
 			}
 		}
 	}
-
+	output->Close();
 	return 0;
 }

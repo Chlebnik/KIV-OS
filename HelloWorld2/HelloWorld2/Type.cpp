@@ -131,6 +131,6 @@ int Type::RunProcess()
 	else {
 		returnValue = printFileContent(input);
 	}
-
+	output->Close();
 	return returnValue;
 }

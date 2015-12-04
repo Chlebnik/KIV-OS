@@ -28,13 +28,11 @@ bool Echo::HasValidParameters()
 int Echo::RunProcess() {
 	input->Close();
 	if (showHelp) {
-		output->WriteLine(GetHelpContent());
-		output->Close();
+		output->WriteLine(GetHelpContent());		
 	}
 	else {
 		output->WriteLine(parameters[0]);
-		output->Close();
 	}
-
+	output->Close();
 	return 0;
 }

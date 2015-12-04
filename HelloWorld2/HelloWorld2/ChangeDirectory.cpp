@@ -54,8 +54,10 @@ int ChangeDirectory::RunProcess()
 	int returnValue = 0;
 	if (showHelp) {
 		output->WriteLine(GetHelpContent());
+		output->Close();
 	}
 	else {
+		output->Close();
 		returnValue = ChangePath(parameters[pathIndex]);
 	}
 
