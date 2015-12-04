@@ -33,6 +33,7 @@ string Rand::convertFloatToString(float number) {
 
 int Rand::RunProcess()
 {
+	returnVal = 0;
 	if (showHelp) {
 		output->WriteLine(GetHelpContent());
 	}
@@ -53,9 +54,8 @@ int Rand::RunProcess()
 		t1.join();
 	}
 		
-	output->Close();
-	input->Close();
-	return 0;
+	this->Close();
+	return returnVal;
 }
 
 void Rand::Loop()

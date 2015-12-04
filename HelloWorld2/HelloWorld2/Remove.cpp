@@ -97,20 +97,23 @@ bool Remove::RemoveFile(File* file)
 
 int Remove::RunProcess()
 {
-	input->Close();
+	returnVal = 0;
 	if (showHelp) {
 		output->WriteLine(GetHelpContent());
-		output->Close();
 	}
-	else {
-		output->Close();
+	else {	
 		int response = 0;
 		File* file = kernel->GetFile(parameters[pathIndex], this->GetPathFile(), response);
-		if (response != 0) {
-			return response;
+		if (response == 0) {
+			returnVal = RemoveFile(file);			
 		}
-		return RemoveFile(file);
+		else {
+			returnVal = response;
+		}
+		
 	}
 
-	return 0;
+	this->Close();
+	return returnVal;
+	
 }

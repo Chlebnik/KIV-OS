@@ -77,7 +77,7 @@ int Sort::ProcessAray(vector<string>* array) {
 int Sort::RunProcess()
 {	
 
-	int result = 0;
+	returnVal = 0;
 	if (showHelp) {
 		output->WriteLine(GetHelpContent());
 	}
@@ -96,32 +96,34 @@ int Sort::RunProcess()
 				array.push_back(line);
 
 				if (kernel->QueryLowMemoryStatus()) {
-					result = ProcessAray(&array);
-					if (result != 0) {
-						return result;
+					returnVal = ProcessAray(&array);
+					if (returnVal != 0) {
+						this->Close();
+						return returnVal;
 					}
 				}
 			}
 		}
 		if (array.size() > 0) {
-			result = ProcessAray(&array);
-			if (result != 0) {
-				return result;
+			returnVal = ProcessAray(&array);
+			if (returnVal != 0) {
+				this->Close();
+				return returnVal;
 			}
 		}
 
 		if (firstLinesOfOpenFiles.size() > 0) {
 			while (firstLinesOfOpenFiles.size() > 0)
 			{	
-				int response;
-				string line = GetSortedLine(response);
-				if (response != 0) {
-					return response;
+				string line = GetSortedLine(returnVal);
+				if (returnVal != 0) {
+					this->Close();
+					return returnVal;
 				}
 				output->WriteLine(line);
 			}
 		}
 	}
-	output->Close();
-	return result;
+	this->Close();
+	return returnVal;
 }

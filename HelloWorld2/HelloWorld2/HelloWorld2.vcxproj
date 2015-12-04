@@ -17,12 +17,21 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="res|Win32">
+      <Configuration>res</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="res|x64">
+      <Configuration>res</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DED7D7EF-1A04-401C-9D35-3332CD2F4F1B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>HelloWorld2</RootNamespace>
+    <RootNamespace>kivos</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>kivos</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -50,6 +59,12 @@
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='res|Win32'">
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='res|x64'">
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -189,7 +204,7 @@
     <ClCompile Include="FileSystem.cpp" />
     <ClCompile Include="FirstLineFromFile.cpp" />
     <ClCompile Include="Freq.cpp" />
-    <ClCompile Include="HelloWorld2.cpp" />
+    <ClCompile Include="kivos.cpp" />
     <ClCompile Include="Kernel.cpp" />
     <ClCompile Include="AbstractInput.cpp" />
     <ClCompile Include="AbstractProcess.cpp" />

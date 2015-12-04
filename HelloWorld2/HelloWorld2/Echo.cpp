@@ -32,6 +32,7 @@ bool Echo::HasValidParameters()
 }
 
 int Echo::RunProcess() {
+	returnVal = 0;
 	if (showHelp) {
 		output->WriteLine(GetHelpContent());
 	}
@@ -46,18 +47,19 @@ int Echo::RunProcess() {
 			output->WriteLine("ECHO is " + result);
 		}
 		else {
-			return -1;
+			returnVal = -1;
 		}
 	}
 	else if (setEchoStatus != -1) {
 		bool succes = kernel->SetEchoStatus(this->parentPid, setEchoStatus);
 		if (!succes) {
-			return -1;
+			returnVal = -1;
 		}
 	}
 	else {
 		output->WriteLine(parameters[0]);
 	}
-	output->Close();
-	return 0;
+
+	this->Close();
+	return returnVal;
 }

@@ -123,17 +123,17 @@ int Dir::RunProcess()
 {
 	setlocale(LC_ALL, "");
 	
-	int returnValue = 0;
+	returnVal = 0;
 	if (showHelp) {
 		output->WriteLine(GetHelpContent());
 	}
 	else if(pathIndex > -1){
-		returnValue = listDir(parameters[pathIndex]);
+		returnVal = listDir(parameters[pathIndex]);
 	}
 	else {
-		returnValue = listDir(this->GetPathFile()->GetAbsolutePath());
+		returnVal = listDir(this->GetPathFile()->GetAbsolutePath());
 	}
-	output->Close();
-	return returnValue;
+	return returnVal;
+	this->Close();
 }
 

@@ -81,7 +81,7 @@ int Type::listDir(string path, string regexFile) {
 
 int Type::RunProcess()
 {
-	int returnValue = 0;
+	returnVal = 0;
 	if (showHelp) {
 		output->WriteLine(GetHelpContent());
 	}
@@ -101,16 +101,16 @@ int Type::RunProcess()
 				}
 				
 				string dirPath = filepath.substr(0, filepath.rfind('/'));
-				returnValue = listDir(dirPath, regexPattern);
+				returnVal = listDir(dirPath, regexPattern);
 			}
 			else {
-				returnValue = proccesFile(filepath);
+				returnVal = proccesFile(filepath);
 			}	
 		}
 	}
 	else {
-		returnValue = printFileContent(input);
+		returnVal = printFileContent(input);
 	}
-	output->Close();
-	return returnValue;
+	this->Close();
+	return returnVal;
 }

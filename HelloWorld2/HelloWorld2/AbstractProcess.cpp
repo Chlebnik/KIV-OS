@@ -61,7 +61,7 @@ int AbstractProcess::Run()
 	if (this->HasValidParameters())
 	{
 		t = new thread(&AbstractProcess::RunProcess, this);
-		return 0;
+		return returnVal;
 	}
 	else
 	{

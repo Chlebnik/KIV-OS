@@ -24,6 +24,7 @@ bool Freq::HasValidParameters()
 }
 
 int Freq::RunProcess() {
+	returnVal = 0;
 	if (showHelp) {
 		output->WriteLine(GetHelpContent());
 	}
@@ -40,6 +41,11 @@ int Freq::RunProcess() {
 					bytesCount[byte]++;					
 				}
 			}
+			else {
+				returnVal = -1;
+				this->Close();
+				return returnVal;
+			}
 		}
 		for (int i = 0; i < MAXBYTE; i++) {
 			if (bytesCount[i] > 0) {
@@ -49,6 +55,6 @@ int Freq::RunProcess() {
 			}
 		}
 	}
-	output->Close();
-	return 0;
+	this->Close();
+	return returnVal;
 }

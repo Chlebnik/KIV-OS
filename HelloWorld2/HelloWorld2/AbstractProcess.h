@@ -21,6 +21,7 @@ protected:
 	Kernel* kernel;
 	int pid;
 	int parentPid;
+	int returnVal;
 	vector<string> parameters;
 	void SetParameters(string parameters);
 	File* pathFile;

@@ -116,9 +116,6 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HelloWorld2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AbstractInput.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -198,6 +195,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Remove.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="kivos.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

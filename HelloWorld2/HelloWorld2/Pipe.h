@@ -19,8 +19,7 @@ private:
 
 public:
 	Pipe();
-	Pipe(int size);
-	~Pipe();
+	Pipe(int size);	
 	bool PushChar(char c);
 	char PopChar(bool& success);
 	void CloseEntry();
