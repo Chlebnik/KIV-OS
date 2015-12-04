@@ -58,14 +58,15 @@ int Kernel::WriteLineOnMonitor(string output)
 	return WriteLine(cout, output);
 }
 
-int Kernel::WriteToFile(ofstream& stream, string output)
+int Kernel::WriteToFile(FileOutput* output, string content)
 {
-	return Write(stream, output);
+	shared_ptr<File> file = output->GetFile();
+	return file->Write(output, content);
 }
 
-int Kernel::WriteLineToFile(ofstream& stream, string output)
+int Kernel::WriteLineToFile(FileOutput* output, string content)
 {
-	return WriteLine(stream, output);	
+	return WriteToFile(output, content + "\n");
 }
 
 int Kernel::Write(ostream& stream, string output)
@@ -92,9 +93,39 @@ string Kernel::ReadLine(istream& stream, bool& success)
 	return "";
 }
 
-string Kernel::ReadLineFromFile(ifstream& stream, bool& success)
+char Kernel::ReadFromFile(FileInput* input, bool& success)
+{
+	shared_ptr<File> file = input->GetFile();
+	return file->ReadChar(input, success);
+}
+
+string Kernel::ReadLineFromFile(FileInput* input, bool& success)
 {	
-	return ReadLine(stream, success);
+	stringstream line;
+	char c;
+	bool endLoop = false;
+
+
+	while (!endLoop)
+	{
+		c = ReadFromFile(input, success);
+		if (!success)
+		{
+			// Close - but it will be handled in input itself			
+		}
+		else if (c != '\n')
+		{
+			line << c;
+		}
+
+		if (!success || c == '\n')
+		{
+			endLoop = true;
+		}
+
+	}
+
+	return line.str();
 }
 
 char Kernel::ReadFromPipe(int pipeIndex, bool& success)
@@ -184,8 +215,13 @@ int Kernel::Execute(int parentPid, File* pathFile, string programName, string pa
 		return ERROR_UNKNOWN_COMMAND; // unknown command
 	}
 	processMap[process->GetPid()] = process;
-	AbstractInput* input = CreateInputClass(inputType, inputParam, parentPid);
-	AbstractOutput* output = CreateOutputClass(outputType, outputParam, parentPid);
+	int response = 0;
+	AbstractInput* input = CreateInputClass(inputType, inputParam, parentPid, pathFile, response);
+	// TODO handling error
+	response = 0;
+	AbstractOutput* output = CreateOutputClass(outputType, outputParam, parentPid, pathFile, response);
+	// TODO handling error
+
 
 	process->Init(input, output, new StandardOutput(this), parameters);
 	process->SetPathFile(pathFile);
@@ -201,17 +237,35 @@ int Kernel::Execute(int parentPid, File* pathFile, string programName, string pa
 	
 }
 
-AbstractInput* Kernel::CreateInputClass(IOType type, string param, int parentPid)
+AbstractInput* Kernel::CreateInputClass(IOType type, string param, int parentPid, File* pathFile, int& response)
 {
 	AbstractInput* input;
 	int pipeId;
+	shared_ptr<File> file;
 	switch (type)
 	{
 	case STANDARD_TYPE:
 		input = new StandardInput(this);
 		break;
 	case FILE_TYPE:
-		input = new FileInput(shared_ptr<ifstream>(new ifstream(param)), this);
+		file = shared_ptr<File>(fileSystem->GetFile(param, pathFile, response));
+		if (response == 0)
+		{
+			if (file->IsFolder())
+			{
+				response = -10; // file is folder;
+				input = NULL;				
+			}
+			else
+			{
+				input = new FileInput(file, this);
+				response = 0;
+			}
+		}
+		else
+		{
+			input = NULL;
+		}
 		break;
 	case PIPE_SINGLE_TYPE:
 		pipeId = CreatePipe(true, false, parentPid);
@@ -229,17 +283,95 @@ AbstractInput* Kernel::CreateInputClass(IOType type, string param, int parentPid
 	return input;
 }
 
-AbstractOutput* Kernel::CreateOutputClass(IOType type, string param, int parentPid)
+File* Kernel::PrepareFileOutput(string path, File* sourceFile, int& response)
+{
+	if (path.back() == FILE_SEPARATOR)
+	{
+		// TODO error handling code
+		response = -17;
+		return NULL;
+	}
+	vector<string> pathElements = Utils::Split(path, FILE_SEPARATOR);
+	if (pathElements.size() == 0)
+	{
+		response = -15; // TODO error code
+		return NULL;
+	}
+	else
+	{
+		// try, if the file already exists
+		File* file = fileSystem->GetFile(path, sourceFile, response);
+		if (response == 0)
+		{
+			return file;
+		}
+	}
+	if (pathElements.size() == 1)
+	{		
+		File* file = this->CreateNewFile(pathElements[0], FILE_ATT, sourceFile, response);
+		if (response == 0)
+		{
+			return file;
+		}
+		else
+		{
+			return NULL;
+		}
+	}
+	// it should be found - split worked
+	size_t index = path.find_last_of(FILE_SEPARATOR, 500);
+	string folderPath = path.substr(0, index);
+	string fileName = path.substr(index + 1);
+	int tmpResponse = 0;
+	File* parent = GetFile(folderPath, sourceFile, tmpResponse);
+	if (tmpResponse == 0)
+	{
+		return CreateNewFile(fileName, FILE_ATT, parent, tmpResponse);
+	}
+	else
+	{
+		int pid = Execute(0, sourceFile, "md", "'" + folderPath + "'", STANDARD_TYPE, "", STANDARD_TYPE, "");
+		if (pid > 0) 
+		{
+			vector<int> vectorPid;
+			vectorPid.push_back(pid);
+			WaitForChildren(vectorPid);
+		}
+		File* parent = GetFile(folderPath, sourceFile, tmpResponse);
+		if (tmpResponse == 0)
+		{
+			return CreateNewFile(fileName, FILE_ATT, parent, response);
+		}
+		else
+		{
+			response = tmpResponse;
+			return NULL;
+		}
+	}
+}
+
+AbstractOutput* Kernel::CreateOutputClass(IOType type, string param, int parentPid, File* pathFile, int& response)
 {
 	AbstractOutput* output;
 	int pipeId;
+	shared_ptr<File> file;
 	switch (type)
 	{
 	case STANDARD_TYPE:
 		output = new StandardOutput(this);
 		break;
 	case FILE_TYPE:
-		output = new FileOutput(shared_ptr<ofstream>(new ofstream(param)), this);
+		
+		file = shared_ptr<File>(PrepareFileOutput(param, pathFile, response));
+		if (response == 0)
+		{
+			output = new FileOutput(file, this);
+		}
+		else
+		{
+			response = -18;
+			output = NULL;
+		}
 		break;
 	case PIPE_SINGLE_TYPE:
 		pipeId = CreatePipe(false, true, parentPid);

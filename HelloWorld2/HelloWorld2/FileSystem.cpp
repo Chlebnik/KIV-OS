@@ -131,7 +131,7 @@ File* FileSystem::GetFile(string path, File* sourceFile, int& response)
 		// ".."
 		if (element == PARENT_FOLDER)
 		{
-			if(!f->IsRoot())
+			if(f->IsRoot())
 			{
 				// TODO error - no parent folder
 				response = 2;

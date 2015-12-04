@@ -7,12 +7,13 @@ class FileOutput : public AbstractOutput
 	using AbstractOutput::AbstractOutput;
 
 private:
-	shared_ptr<ofstream> outputFile;
+	shared_ptr<File> outputFile;
 
 public:
-	FileOutput(shared_ptr<ofstream> outputFile, Kernel* kernel);
+	FileOutput(shared_ptr<File> outputFile, Kernel* kernel);
 
 	int Write(string s);
 	int WriteLine(string s);
 	int Close();
+	shared_ptr<File> GetFile();
 };

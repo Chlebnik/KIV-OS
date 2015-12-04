@@ -2,9 +2,9 @@
 
 FirstLineFromFile::FirstLineFromFile(int index, string path, Kernel* kernel, int parentPid) {
 	bool succes;
-
+	int response = 0;
 	this->index = index;
-	this->input = kernel->CreateInputClass(FILE_TYPE, path, parentPid);
+	this->input = kernel->CreateInputClass(FILE_TYPE, path, parentPid, NULL, response);
 	this->line = input->ReadLine(succes);
 }
 

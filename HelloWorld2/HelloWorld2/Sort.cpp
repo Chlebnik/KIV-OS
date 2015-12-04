@@ -52,8 +52,8 @@ string Sort::GetSortedLine() {
 int Sort::ProcessAray(vector<string>* array) {
 	sort(array->begin(), array->end(), FirstLineFromFile::FirstOperatorString);
 	string path = "tempSort_" + to_string(1 + firstLinesOfOpenFiles.size()) + ".txt";
-
-	AbstractOutput* temp_out = kernel->CreateOutputClass(FILE_TYPE, path, this->GetPid());
+	int response = 0;
+	AbstractOutput* temp_out = kernel->CreateOutputClass(FILE_TYPE, path, this->GetPid(), GetPathFile(), response);
 	while (array->size() > 0) {
 		temp_out->WriteLine(array->back());
 		array->pop_back();

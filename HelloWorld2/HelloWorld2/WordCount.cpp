@@ -95,12 +95,19 @@ int WordCount::RunProcess()
 		output->WriteLine(GetHelpContent());
 	}else if (fromFile) {
 			AbstractInput* fileFromParam = NULL;
-			shared_ptr<ifstream> fileInput(new ifstream(parameters[1]));
+			int response = 0;
+			shared_ptr<File> file(kernel->GetFile(parameters[1], this->GetPathFile(), response));
+			if (response != 0)
+			{
+				return -1;
+			}
+			
+			/*shared_ptr<ifstream> fileInput(new ifstream(parameters[1]));
 			if (!*fileInput)
 			{
 				return -1;
-			}			
-			fileFromParam = new FileInput(fileInput, kernel);
+			}*/			
+			fileFromParam = new FileInput(file, kernel);
 
 			getCount(fileFromParam);
 			fileFromParam->Close();

@@ -8,13 +8,14 @@ class FileInput : public AbstractInput
 
 
 private:
-	shared_ptr<ifstream> inputFile;
+	shared_ptr<File> inputFile;
 	bool closed;
 
 public:
-	FileInput(shared_ptr<ifstream> inputFile, Kernel* kernel);
+	FileInput(shared_ptr<File> inputFile, Kernel* kernel);
 	int Close();
 	bool HasNext();
 	string Read();
 	string ReadLine(bool& s);
+	shared_ptr<File> GetFile();
 };

@@ -26,11 +26,12 @@ private:
 	Pipe* GetPipe(int pipeIndex);
 	AbstractProcess* CreateProcessClass(string programName, int parentPid);
 	int CreatePipe(bool closedEntry, bool closedExit, int parentPid);
+	File* PrepareFileOutput(string path, File* sourceFile, int& response);
 
 public:
 	Kernel();
-	AbstractInput* CreateInputClass(IOType type, string param, int parendPid);
-	AbstractOutput* CreateOutputClass(IOType type, string param, int parendPid);
+	AbstractInput* CreateInputClass(IOType type, string param, int parendPid, File* pathFile, int& response);
+	AbstractOutput* CreateOutputClass(IOType type, string param, int parendPid, File* pathFile, int& response);
 	FileSystem* fileSystem;
 	//int PrintToMonitor(string output);
 	string ReadFromKeyboard();
@@ -39,10 +40,10 @@ public:
 	int WriteLineOnMonitor(string output);
 
 
-	int WriteToFile(ofstream& stream, string output);
-	int WriteLineToFile(ofstream& stream, string output);
-	//string ReadFromFile(ifstream& stream);
-	string ReadLineFromFile(ifstream& stream, bool& success);
+	int WriteToFile(FileOutput* fileOutput, string content);
+	int WriteLineToFile(FileOutput* fileOutput, string content);
+	char ReadFromFile(FileInput* fileInput, bool& success);
+	string ReadLineFromFile(FileInput* fileInput, bool& success);
 	File* LoadFileSystem();
 
 	int WriteToPipe(int pipeIndex, char c);

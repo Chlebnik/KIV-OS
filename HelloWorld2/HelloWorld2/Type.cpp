@@ -51,7 +51,7 @@ int Type::printFileContent(AbstractInput * printInput)
 int Type::proccesFile(string filepath) {
 	int returnValue = 0;
 	string basename = kernel->SplitPath(filepath, "basename");
-	AbstractInput* fileFromParam = kernel->CreateInputClass(FILE_TYPE, filepath, this->GetPid());
+	AbstractInput* fileFromParam = kernel->CreateInputClass(FILE_TYPE, filepath, this->GetPid(), GetPathFile(), returnValue);
 
 	output->WriteLine("\n" + basename + "\n");
 	returnValue = printFileContent(fileFromParam);
