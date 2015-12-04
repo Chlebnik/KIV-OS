@@ -45,6 +45,7 @@ bool MakeDirectory::HasValidParameters()
 
 int MakeDirectory::RunProcess()
 {
+	input->Close();
 	int result = 0;
 	if (showHelp) {
 		output->WriteLine(GetHelpContent());

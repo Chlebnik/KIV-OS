@@ -93,6 +93,7 @@ bool Remove::RemoveFile(File* file)
 
 int Remove::RunProcess()
 {
+	input->Close();
 	if (showHelp) {
 		output->WriteLine(GetHelpContent());
 	}

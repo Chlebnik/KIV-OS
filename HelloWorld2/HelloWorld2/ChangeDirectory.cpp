@@ -50,6 +50,7 @@ bool ChangeDirectory::HasValidParameters()
 
 int ChangeDirectory::RunProcess()
 {
+	input->Close();
 	int returnValue = 0;
 	if (showHelp) {
 		output->WriteLine(GetHelpContent());
@@ -59,7 +60,6 @@ int ChangeDirectory::RunProcess()
 	}
 
 	return returnValue;
-
 }
 
 
