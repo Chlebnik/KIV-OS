@@ -40,13 +40,18 @@ int Shell::RunProcess()
 		else if (return_value == -2) {
 			output->WriteLine("Unexpected character '" + string(1, line.at(index)) + "' at position " + to_string(index));
 		}
+		else if (return_value == -3) {
+			output->WriteLine("Wrong syntax. Expected character \"");
+		}
 	}
 	return 0;
 }
 
 int Shell::ExecuteCommands(vector<process_data> commands) {
-	int returnValue = 0;
+	int return_value = 0;
 	File* pathFile = GetPathFile();
+	vector<int> child_ids;
+	child_ids.clear();
 	for (int i = 0; i < (int)commands.size(); i++) {
 		process_data process = commands.at(i);
 		IOType inputType;
@@ -62,8 +67,14 @@ int Shell::ExecuteCommands(vector<process_data> commands) {
 				inputType = STANDARD_TYPE;
 			}
 			else {
-				// TODO jednosmerna pipe
-				inputType = PIPE_BOTH_TYPE;
+				// Before pipe must be defined a command.
+				process_data previous_process = commands.at(i - 1);
+				if (previous_process.process_output.type == 1) {
+					inputType = PIPE_SINGLE_TYPE;
+				}
+				else {
+					inputType = PIPE_BOTH_TYPE;
+				}
 			}
 		}
 
@@ -76,16 +87,25 @@ int Shell::ExecuteCommands(vector<process_data> commands) {
 				outputType = STANDARD_TYPE;
 			}
 			else {
-				// TODO jednosmerna pipe
-				outputType = PIPE_BOTH_TYPE;
+				// After pipe must be defined a command.
+				process_data next_process = commands.at(i + 1);
+				if (next_process.process_input.type == 1) {
+					outputType = PIPE_SINGLE_TYPE;
+				}
+				else {
+					outputType = PIPE_BOTH_TYPE;
+				}
 			}
 		}
-		returnValue = kernel->Execute(pid, pathFile, process.process_name, process.process_parameters, inputType, inputParam, outputType, outputParam);
-		if (returnValue < 0) {
+		return_value = kernel->Execute(pid, pathFile, process.process_name, process.process_parameters, inputType, inputParam, outputType, outputParam);
+		if (return_value < 0) {
 			output->WriteLine("Error");
+			break;
 		}
+		child_ids.push_back(return_value);
 	}
-	return returnValue;
+	kernel->WaitForChildren(child_ids);
+	return 0;
 }
 
 int Shell::ProcessInput(string line)
@@ -262,16 +282,18 @@ int Shell::ReadValue(process_data* command, string& value, string input, int& in
 		}
 		if (ch == QUOTATION) {
 			index++;
+			boolean quatation_expected = true;
 			while (index <(int)input.length()) {
 				ch = input.at(index);
 				index++;
 				if (ch == QUOTATION) {
+					quatation_expected = false;
 					break;
 				}
 				value = value + ch;
 			}
-			if (index > (int) input.length()) {
-				return -2;
+			if (quatation_expected) {
+				return -3;
 			}				
 		}
 		else {
