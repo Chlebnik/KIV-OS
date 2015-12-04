@@ -4,6 +4,7 @@ using namespace std;
 
 FileOutput::FileOutput(shared_ptr<File> outputFile, Kernel* kernel) : AbstractOutput(kernel), outputFile{ outputFile }{
 	outputFile->OpenWriter(this);
+	outputFile->RemoveContent(this);
 }
 
 int FileOutput::Write(string s)
