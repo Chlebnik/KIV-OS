@@ -55,13 +55,12 @@ char Kernel::ReadFromKeyboard(bool& success)
 	string strBuf;
 		
 	char tempChar;
-		cin.clear();
+		
 	cin.get(tempChar);
 	bool eofCheck = false;
 	if (tempChar == EOF)
 	{
 		eofCheck = true;
-		//cout << "to me poser";
 	}
 	if (cin && !eofCheck)
 	{
@@ -69,6 +68,7 @@ char Kernel::ReadFromKeyboard(bool& success)
 	}
 	else
 	{
+		cin.clear();
 		success = false;
 	}
 	
