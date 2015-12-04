@@ -4,11 +4,9 @@ using namespace std;
 
 string ChangeDirectory::GetHelpContent()
 {
-	string help = "Displays the name of or changes the current directory.\n\n"
-					"CD[/ D][drive:][path]\nCD[..]\n\n"
-					"..Specifies that you want to change to the parent directory.\n\n"
-					"Type CD drive : to display the current directory in the specified drive.\n"
-					"Type CD without parameters to display the current drive and directory.";
+	string help = "Changes the current directory.\n\n"
+		"CD[drive:][path]\nCD[..]\n\n"
+		"..Specifies that you want to change to the parent directory.\n\n";
 	return help;
 }
 

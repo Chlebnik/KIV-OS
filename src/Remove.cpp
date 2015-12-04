@@ -79,7 +79,7 @@ bool Remove::RemoveFile(File* file)
 		// it would have been already deleted
 		return false;
 	}
-	else
+	else if(force)
 	{
 		vector<File*> children = file->GetChildren();
 		bool success = true;

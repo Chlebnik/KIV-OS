@@ -156,12 +156,8 @@
   </ImportGroup>
 	<ItemDefinitionGroup>
 	  <PostBuildEvent>
-		<Command>MOVE  $(ProjectDir)$(Platform)\$(Configuration)\$(TargetFileName) $(ProjectDir)build\kivos.exe</Command>
-		<Message>Moving kivos.exe</Message>
-		<Command>RD /S /Q $(ProjectDir)$(Platform)</Command>
-		<Message>Deleting rest files after build</Message>
-		<Command>RD /S /Q $(ProjectDir)$(Configuration)</Command>
-		<Message>Deleting rest files after build</Message>
+		<Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOVE $(ProjectDir)$(Platform)\$(Configuration)\$(TargetFileName) $(ProjectDir)build\kivos.exe</Command>
+		<Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MOVE $(ProjectDir)$(Configuration)\$(TargetFileName) $(ProjectDir)build\kivos.exe</Command>		
 	  </PostBuildEvent>
 	</ItemDefinitionGroup>
 <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
