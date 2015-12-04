@@ -8,11 +8,12 @@ int main()
 	Kernel kernelInstance;
 	Kernel *kernel = &kernelInstance;
 
-	File* initialDrive = kernel->LoadFileSystem();
-	int response = 0;
+	File* initialDrive = kernel->CreateFileSystem("c");
+
+	
 	/*cout << response << endl;
 	cout << initialDrive->GetAbsolutePath() << endl;
-	File* subfolder1 = kernel->CreateNewFile("sub1", FOLDER_ATT, initialDrive, response);
+	
 	cout << response << endl;
 	cout << subfolder1->GetAbsolutePath() << endl;
 	File* subfolder2 = kernel->CreateNewFile("sub2", FOLDER_ATT, subfolder1, response);

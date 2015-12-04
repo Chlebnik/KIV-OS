@@ -29,7 +29,7 @@ string Sort::GetSortedLine() {
 	vector<FirstLineFromFile> sortedLines = firstLinesOfOpenFiles;
 	string line;
 	
-	sort(sortedLines.begin(), sortedLines.end(), FirstLineFromFile::FirstOperator);
+	sort(sortedLines.rbegin(), sortedLines.rend(), FirstLineFromFile::FirstOperator);
 	bool succes;
 	line = firstLinesOfOpenFiles.at(sortedLines.back().GetIndex()).GetLine(succes);
 

@@ -490,11 +490,11 @@ int Kernel::WaitForChildren(vector<int>& childrenPids)
 	return 0;
 }
 
-File* Kernel::LoadFileSystem()
+File* Kernel::CreateFileSystem(string driveName)
 {
 	fileSystem = new FileSystem();
 	int response = 0;
-	File* drive = fileSystem->CreateNewFile("c", FOLDER_ATT, NULL, response);
+	File* drive = fileSystem->CreateNewFile(driveName, FOLDER_ATT, NULL, response);
 	return drive;
 }
 
