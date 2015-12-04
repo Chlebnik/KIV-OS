@@ -25,7 +25,9 @@ int Shell::RunProcess()
 		{
 			path = path.substr(0, path.length() - 1);
 		}
-		output->Write(path + ">");
+		if(echoStatus){
+			output->Write(path + ">");
+		}
 		bool success = true;
 		line = input->ReadLine(success);
 		if(!success )
@@ -121,6 +123,7 @@ int Shell::ExecuteCommands(vector<process_data> commands) {
 	}
 	kernel->WaitForChildren(child_ids);
 	return 0;
+
 }
 
 int Shell::ProcessInput(string line)

@@ -53,6 +53,7 @@ void AbstractProcess::Init(AbstractInput* input, AbstractOutput* output, Abstrac
 	this->output = output;
 	this->errorOutput = errorOutput;
 	SetParameters(parameters);
+	this->echoStatus = true;
 }
 
 int AbstractProcess::Run()
@@ -114,4 +115,22 @@ int AbstractProcess::GetPipeIdLast()
 {
 	return pipeIdLast;
 }
+
+bool AbstractProcess::GetEchoStatus(int& response) {
+	response = -1;
+	if(this->pid == SHELLS_PID){
+		response = 0;
+		return this->echoStatus;
+	}
+	return false;
+}
+
+void AbstractProcess::SetEchoStatus(bool status, int& response) {
+	response = -1;
+	if (this->pid == SHELLS_PID) {
+		response = 0;
+		this->echoStatus = status;
+	}
+}
+
 

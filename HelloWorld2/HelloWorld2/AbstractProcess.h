@@ -24,6 +24,7 @@ protected:
 	vector<string> parameters;
 	void SetParameters(string parameters);
 	File* pathFile;
+	bool echoStatus;
 
 public:
 	AbstractProcess(int pid, int parentPid, Kernel* kernel);
@@ -47,4 +48,7 @@ public:
 	void SetThread(thread* t);
 	int GetPipeIdLast();
 	void SetPipeIdLast(int pipeIdLast);
+
+	bool GetEchoStatus(int& response);
+	void SetEchoStatus(bool status, int& response);
 };
