@@ -42,15 +42,12 @@ int Rand::RunProcess()
 		thread t1(&Rand::Loop, this);
 
 		// until EOF is reached read from STDIN
-		
-		char inputChar;
-		cin.clear();
-		while (cin)
+
+		while (input->HasNext())
 		{
-			cin.get(inputChar);
+			input->Read();
 		}
-		cin.ignore();
-		cin.clear();
+
 		// Kill thread
 		stop = true;
 		t1.join();

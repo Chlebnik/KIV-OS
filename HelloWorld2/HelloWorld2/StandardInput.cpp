@@ -3,7 +3,7 @@ using namespace std;
 
 int StandardInput::Close()
 {
-	this->closed = false;
+	this->closed = true;
 	return 0;
 }
 
@@ -13,7 +13,15 @@ bool StandardInput::HasNext()
 }
 string StandardInput::Read()
 {
-	return GetKernel()->ReadFromKeyboard();
+	bool success = true;
+	char c = GetKernel()->ReadFromKeyboard(success);
+	if (!success)
+	{		
+		Close();
+	}
+	
+	string s(1, c);
+	return s;
 }
 string StandardInput::ReadLine(bool& success)
 {	

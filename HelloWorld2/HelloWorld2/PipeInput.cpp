@@ -19,7 +19,14 @@ bool PipeInput::HasNext()
 
 string PipeInput::Read()
 {
-	return "";
+	bool success = true;
+	char c = GetKernel()->ReadFromPipe(pipeIndex, success);
+	if (!success)
+	{
+		Close();
+	}
+	string s(1, c);
+	return s;
 }
 
 string PipeInput::ReadLine(bool &success)
