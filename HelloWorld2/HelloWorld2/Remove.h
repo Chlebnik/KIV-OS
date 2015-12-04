@@ -1,20 +1,18 @@
 #pragma once
-
-
-
-class ChangeDirectory : public AbstractProcess
+class Remove : public AbstractProcess
 {
 	using AbstractProcess::AbstractProcess;
+
 private:
 	bool showHelp;
-	bool changeDrive;
+	bool force;
 	int pathIndex;
-	int ChangePath(string new_path);
-
+	bool RemoveFile(File* file);
+	int maxByteSize = 1;
 public:
-	// Inherited form Abstract process
 	string GetHelpContent();
 	bool HasValidParameters();
 	int RunProcess();
+
 };
 

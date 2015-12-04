@@ -108,6 +108,9 @@
     <ClInclude Include="MakeDirectory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Remove.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -192,6 +195,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Type.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Remove.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

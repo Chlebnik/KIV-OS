@@ -59,4 +59,5 @@
 #include "Type.h"
 #include "MakeDirectory.h"
 #include "Freq.h"
+#include "Remove.h"
 // TODO: reference additional headers your program requires here

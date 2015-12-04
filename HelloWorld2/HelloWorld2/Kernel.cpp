@@ -311,7 +311,7 @@ AbstractProcess* Kernel::CreateProcessClass(string programName, int parentPid)
 			process = new MakeDirectory(++pidCounter, parentPid, this);
 			break;
 		case RD:
-			process = NULL;
+			process = new Remove(++pidCounter, parentPid, this);
 			break;
 		case WC:
 			process = new WordCount(++pidCounter, parentPid, this);

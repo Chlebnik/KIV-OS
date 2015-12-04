@@ -164,6 +164,7 @@
     <ClInclude Include="PipeInput.h" />
     <ClInclude Include="PipeOutput.h" />
     <ClInclude Include="Rand.h" />
+    <ClInclude Include="Remove.h" />
     <ClInclude Include="Shell.h" />
     <ClInclude Include="Sort.h" />
     <ClInclude Include="StandardInput.h" />
@@ -197,6 +198,7 @@
     <ClCompile Include="PipeInput.cpp" />
     <ClCompile Include="PipeOutput.cpp" />
     <ClCompile Include="Rand.cpp" />
+    <ClCompile Include="Remove.cpp" />
     <ClCompile Include="Shell.cpp" />
     <ClCompile Include="Sort.cpp" />
     <ClCompile Include="StandardOutput.cpp" />
