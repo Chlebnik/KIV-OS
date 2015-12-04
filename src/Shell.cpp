@@ -114,7 +114,7 @@ int Shell::ExecuteCommands(vector<process_data> commands) {
 				output->WriteLine("Error: Unknown command.");
 				break;
 			default:
-				output->WriteLine("Error " + returnValue);
+				output->WriteLine("Error " + to_string(returnValue));
 				break;
 			}
 			break;
