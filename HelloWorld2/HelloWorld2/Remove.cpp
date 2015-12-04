@@ -51,28 +51,46 @@ bool Remove::HasValidParameters()
 	return valid;
 }
 
-bool Remove::RemoveFile(File* file) {
-	if(file->IsDeletable()){
-		for (File* child : file->GetChildren()) {
-			if (!force) {
-				if (file->IsDeletable()) {
-					return false;
-				}
-				if (RemoveFile(child)) {
-					file->RemoveChild(child);
-					kernel->RemoveFile(child);
-				}
-				else {
-					return false;
-				}
-
+bool Remove::RemoveFile(File* file) 
+{
+	
+	// case, when we can immediately remove the file
+	if (file->IsDeletable())
+	{
+		int response = kernel->RemoveFile(file);
+		if (response == 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	// case when simple file (not folder is processed)
+	// it cannot be deleted
+	if (!file->IsFolder())
+	{
+		// it would have been already deleted
+		return false;
+	}
+	else
+	{
+		vector<File*> children = file->GetChildren();
+		bool success = true;
+		for (vector<File*>::iterator iterator = children.begin(); iterator != children.end(); ++iterator)
+		{
+			success = RemoveFile(*iterator);
+			if (!success)
+			{
+				return false;
 			}
 		}
-		kernel->RemoveFile(file);
-		return true;
+		return RemoveFile(file);
 	}
-	return false;
 }
+
 int Remove::RunProcess()
 {
 	if (showHelp) {

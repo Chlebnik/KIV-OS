@@ -8,9 +8,9 @@ int main()
 	Kernel kernelInstance;
 	Kernel *kernel = &kernelInstance;
 
-	int response = 0;
 	File* initialDrive = kernel->LoadFileSystem();
-	cout << response << endl;
+	int response = 0;
+	/*cout << response << endl;
 	cout << initialDrive->GetAbsolutePath() << endl;
 	File* subfolder1 = kernel->CreateNewFile("sub1", FOLDER_ATT, initialDrive, response);
 	cout << response << endl;
@@ -61,7 +61,7 @@ int main()
 	{
 		// todo error 
 		exit(1);
-	}
+	}*/
 	//AbstractInput* input = new FileInput(fileInput, kernel);
 	
 	int shellPid = kernel->Execute(0, initialDrive, "shell", "", STANDARD_TYPE, "", STANDARD_TYPE, "");

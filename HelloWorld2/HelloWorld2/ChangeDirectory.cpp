@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+using namespace std;
 
 string ChangeDirectory::GetHelpContent()
 {
@@ -20,7 +21,7 @@ bool ChangeDirectory::HasValidParameters()
 		valid = true;
 		showHelp = true;	
 	}else{
-		for (std::vector<string>::iterator it = parameters.begin(); it != parameters.end(); ++it) {
+		for (vector<string>::iterator it = parameters.begin(); it != parameters.end(); ++it) {
 			if (i == 0 && *it == "--help" && parameters.size() == 1) {
 				showHelp = true;
 				valid = true;

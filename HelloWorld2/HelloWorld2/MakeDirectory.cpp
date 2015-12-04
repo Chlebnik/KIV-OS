@@ -71,7 +71,83 @@ int MakeDirectory::RunProcess()
 		output->WriteLine(GetHelpContent());
 	}	
 	else {
-		string drive = kernel->SplitPath(parameters[0], "drive");
+		vector<string> pathElements = Utils::Split(parameters[0], FILE_SEPARATOR);
+
+		string element = pathElements[0];
+		int response = 0;
+		File* f = kernel->GetFile(element, GetPathFile(), response);
+
+
+		int i = 0;
+		if (element.back() == DRIVE_SUFFIX)
+		{
+			if (response != 0)
+			{
+				errorOutput->WriteLine("Drive does not exist.");
+				return response;
+			}
+			else
+			{
+				if (pathElements.size() == 1)
+				{
+					errorOutput->WriteLine("Error: It is not allowed to create a drive.");
+					return 26; // TODO error id
+				}
+				else
+				{
+					i = 1;
+				}
+
+			}
+		}
+		else
+		{
+			f = pathFile;
+		}
+		File* tmp;
+		for (; i < pathElements.size(); i++)
+		{
+			element = pathElements[i];
+			tmp = kernel->GetFile(element, f, response);
+
+			if (response == 0 && i == pathElements.size() - 1)
+			{
+				errorOutput->WriteLine("Error: File or folder " + element + " already exists.");
+				return 25; // TODO error code;
+			}
+
+			if (response == 0)
+			{
+				if (tmp->IsFolder())
+				{
+					f = tmp;
+					continue;
+				}
+				else
+				{
+					errorOutput->WriteLine("Error: " + tmp->GetName() + " is not a folder.");
+					return -1;
+				}
+			}
+			else
+			{
+				if (response == 2)
+				{
+					errorOutput->WriteLine("Error: No parent folder above drive.");
+					return response;
+				}
+				break;
+			}
+			
+		}
+
+		for (int j = i; j < pathElements.size(); j++)
+		{
+			element = pathElements[j];
+			f = kernel->CreateNewFile(element, FOLDER_ATT, f, response);
+		}
+
+		/*string drive = kernel->SplitPath(parameters[0], "drive");
 		string currentDir = kernel->SplitPath(parameters[0], "filename");		
 		string parentDir = kernel->SplitPath(parameters[0], "dir");
 		string tmp_path = "";
@@ -83,7 +159,7 @@ int MakeDirectory::RunProcess()
 			parentDir = kernel->SplitPath(tmp_path, "dir");
 		}
 
-		result = processDirs(drive, sepDirs);
+		result = processDirs(drive, sepDirs);*/
 
 			
 	}

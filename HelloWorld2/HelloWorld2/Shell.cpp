@@ -16,13 +16,20 @@ int Shell::RunProcess()
 {
 	string line;
 	vector<process_data> commands;
+	string path;
 	while (true)
 	{		
 		commands.clear();
-		output->Write(GetPathFile()->GetAbsolutePath() + ">");
+		path = GetPathFile()->GetAbsolutePath();
+		if (!GetPathFile()->IsRoot())
+		{
+			path = path.substr(0, path.length() - 1);
+		}
+		output->Write(path + ">");
 		bool success = true;
 		line = input->ReadLine(success);
-		if(!success ){
+		if(!success )
+		{
 			break;
 		}
 		if (line == "exit")

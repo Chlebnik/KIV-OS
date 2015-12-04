@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-
+using namespace std;
 
 string Dir::GetHelpContent()
 {
@@ -19,7 +19,7 @@ bool Dir::HasValidParameters()
 		pathIndex = -1;
 	}
 	else {
-		for (std::vector<string>::iterator it = parameters.begin(); it != parameters.end(); ++it) {
+		for (vector<string>::iterator it = parameters.begin(); it != parameters.end(); ++it) {
 			if (i == 0 && *it == "--help" && parameters.size() == 1) {
 				showHelp = true;
 				valid = true;

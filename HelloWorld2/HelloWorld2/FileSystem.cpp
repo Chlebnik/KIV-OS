@@ -144,6 +144,9 @@ File* FileSystem::GetFile(string path, File* sourceFile, int& response)
 		}
 		else
 		{
+			// TODO error code - file not found
+			response = 27;
+			
 			vector<File*> children = f->GetChildren();
 			for (vector<File*>::iterator iterator = children.begin(); iterator != children.end(); ++iterator)
 			{
@@ -156,6 +159,7 @@ File* FileSystem::GetFile(string path, File* sourceFile, int& response)
 						response = 3;
 						goto endOfElementIteration;
 					}
+					response = 0;
 					break;
 				}
 			}

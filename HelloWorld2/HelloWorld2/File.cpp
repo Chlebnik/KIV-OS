@@ -136,7 +136,12 @@ string File::GetAbsolutePath()
 	}
 	else
 	{
-		return parent->GetAbsolutePath() + FILE_SEPARATOR + name;
+		string appendix = "";
+		if (IsFolder())
+		{
+			appendix.append(1, FILE_SEPARATOR);
+		}
+		return parent->GetAbsolutePath() + name + appendix;
 	}
 }
 
