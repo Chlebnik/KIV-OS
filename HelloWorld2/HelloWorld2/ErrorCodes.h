@@ -1,6 +1,6 @@
 #pragma once
 
-#define ERROR_UNKNOWN_COMMAND 1
+#define ERROR_UNKNOWN_COMMAND -100
 
 //ChangeDirectory
 

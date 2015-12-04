@@ -26,6 +26,7 @@ bool Echo::HasValidParameters()
 }
 
 int Echo::RunProcess() {
+	input->Close();
 	if (showHelp) {
 		output->WriteLine(GetHelpContent());
 		output->Close();
