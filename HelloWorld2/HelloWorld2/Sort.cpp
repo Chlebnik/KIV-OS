@@ -84,7 +84,7 @@ int Sort::RunProcess()
 			bool success = true;
 			line = input->ReadLine(success);
 
-			if (success)
+			if (success || line.length() > 0)
 			{
 				array.push_back(line);
 

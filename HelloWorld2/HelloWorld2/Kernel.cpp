@@ -23,9 +23,31 @@ Kernel::Kernel() : pipeCounter (0), pidCounter(0) {}
 
 string Kernel::ReadLineFromKeyboard(bool& success)
 {
-	string result = ReadLine(cin, success);
-	cin.clear();
-	return result;
+	
+	stringstream line;
+	char c;
+	bool endLoop = false;
+
+
+	while (!endLoop)
+	{
+		c = ReadFromKeyboard(success);
+		if (!success)
+		{
+			// Close - but it will be handled in input itself			
+		}
+		else if (c != '\n')
+		{
+			line << c;
+		}
+		if (!success || c == '\n')
+		{
+			endLoop = true;
+		}
+
+	}
+
+	return line.str();
 }
 
 char Kernel::ReadFromKeyboard(bool& success)
@@ -33,14 +55,20 @@ char Kernel::ReadFromKeyboard(bool& success)
 	string strBuf;
 		
 	char tempChar;
+		cin.clear();
 	cin.get(tempChar);
-	if (cin)
+	bool eofCheck = false;
+	if (tempChar == EOF)
+	{
+		eofCheck = true;
+		//cout << "to me poser";
+	}
+	if (cin && !eofCheck)
 	{
 		success = true;
 	}
 	else
 	{
-		cin.clear();
 		success = false;
 	}
 	

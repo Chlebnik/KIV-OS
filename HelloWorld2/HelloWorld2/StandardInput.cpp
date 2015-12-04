@@ -29,8 +29,20 @@ string StandardInput::ReadLine(bool& success)
 	string line = GetKernel()->ReadLineFromKeyboard(success);
 	if (!success)
 	{
+		Close();
+	}
+	return line;
+/*	if (!success)
+	{
 		closed = true;
-		return "";
+		if (line.length() == 0)
+		{
+			return "";
+		}
+		else
+		{
+			success = true;
+		}
 	}
 	if (line.size() > 0)
 	{
@@ -50,5 +62,5 @@ string StandardInput::ReadLine(bool& success)
 	else
 	{
 		return "";
-	}
+	}*/
 }
