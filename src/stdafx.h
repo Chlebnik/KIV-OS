@@ -5,6 +5,10 @@
 
 #pragma once
 
+#ifdef TESTING_ENV
+#include "../tests/stdafx.h"
+#else
+
 #include <stdio.h>
 #include <tchar.h>
 #include <time.h> 
@@ -63,3 +67,5 @@
 
 #define SHELLS_PID 1
 // TODO: reference additional headers your program requires here
+
+#endif
