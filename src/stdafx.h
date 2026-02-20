@@ -6,9 +6,6 @@
 #pragma once
 
 #include <stdio.h>
-#ifdef _WIN32
-#include <tchar.h>
-#endif
 #include <time.h> 
 #include <string>
 #include <iostream>
@@ -27,6 +24,7 @@
 #include <regex>
 #include <unordered_map>
 #ifdef _WIN32
+#include <tchar.h>
 #include <windows.h>
 #else
 #include <climits>
