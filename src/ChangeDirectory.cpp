@@ -12,38 +12,37 @@ string ChangeDirectory::GetHelpContent()
 
 bool ChangeDirectory::HasValidParameters()
 {
-	bool valid = false;
-	int i = 0;
+	showHelp = false;
+	changeDrive = false;
+	pathIndex = 0;
 
-	if (parameters.size() == 0) {
-		valid = true;
-		showHelp = true;	
-	}else{
-		for (vector<string>::iterator it = parameters.begin(); it != parameters.end(); ++it) {
-			if (i == 0 && *it == "--help" && parameters.size() == 1) {
-				showHelp = true;
-				valid = true;
-			}
-			else if (i == 0 && *it == "/D" && parameters.size() < 3) {
-				changeDrive = true;
-				valid = true;
-			}
-			else if (i == 0 && parameters.size() == 1) {
-				pathIndex = i;
-				changeDrive = false;
-				showHelp = false;
-				valid = true;
-			}
-			else if (i == 1 && parameters.size() == 2){
-				pathIndex = i;
-				showHelp = false;
-				valid = true;
-			}
-			i++;
-		}
+	if (parameters.empty()) {
+		showHelp = true;
+		return true;
 	}
 
-	return valid;
+	if (parameters.size() == 1) {
+		if (parameters[0] == "--help") {
+			showHelp = true;
+			return true;
+		}
+		if (parameters[0] == "/D") {
+			return false;
+		}
+		pathIndex = 0;
+		return true;
+	}
+
+	if (parameters.size() == 2) {
+		if (parameters[0] == "/D") {
+			changeDrive = true;
+			pathIndex = 1;
+			return true;
+		}
+		return false;
+	}
+
+	return false;
 }
 
 int ChangeDirectory::RunProcess()
