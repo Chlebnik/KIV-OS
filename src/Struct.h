@@ -6,12 +6,12 @@ struct process_parameter {
 };
 
 struct process_input {
-	int type;
+	int type = 0;
 	std::string path;
 };
 
 struct process_output {
-	int type;
+	int type = 0;
 	std::string path;
 };
 
