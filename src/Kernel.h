@@ -67,5 +67,7 @@ public:
 	int RemoveFile(string path);
 	int RemoveFile(File* file);
 
+#ifdef _WIN32
 	BOOL QueryLowMemoryStatus();
+#endif
 };

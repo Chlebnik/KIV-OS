@@ -10,7 +10,6 @@
 #else
 
 #include <stdio.h>
-#include <tchar.h>
 #include <time.h> 
 #include <string>
 #include <iostream>
@@ -23,11 +22,44 @@
 #include <atomic>
 #include <thread>
 #include <mutex>
+#include <condition_variable>
 #include <deque>
 #include <map>
 #include <regex>
 #include <unordered_map>
+#ifdef _WIN32
+#include <tchar.h>
 #include <windows.h>
+#else
+#include <climits>
+#include <cstring>
+#include <cctype>
+#include <unistd.h>
+#include <memory>
+
+#define BOOL int
+#define TRUE 1
+#define FALSE 0
+#define boolean bool
+#define TCHAR char
+#define _T(x) x
+#define _In_
+#define _MAX_DRIVE 3
+#define _MAX_DIR 256
+#define _MAX_FNAME 256
+#define _MAX_EXT 256
+#define MAX_PATH 260
+#define FILE_SEPARATOR '/'
+
+typedef int* PBOOL;
+typedef void* HANDLE;
+
+// Stub for QueryMemoryResourceNotification related
+#define LowMemoryResourceNotification 0
+inline HANDLE CreateMemoryResourceNotification(int) { return (HANDLE)0; }
+inline BOOL QueryMemoryResourceNotification(HANDLE, PBOOL) { return FALSE; }
+
+#endif
 
 #include "targetver.h"
 

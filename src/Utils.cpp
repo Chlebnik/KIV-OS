@@ -2,6 +2,7 @@
 
 
 string Utils::WcharToString(wchar_t* text) {
+#ifdef _WIN32
 	string new_text;
 	char ch[260];
 	char DefChar = ' ';
@@ -9,14 +10,21 @@ string Utils::WcharToString(wchar_t* text) {
 	new_text = ch;
 
 	return new_text;
+#else
+    return "";
+#endif
 }
 
 wchar_t* Utils::StringToWchar(string text) {
+#ifdef _WIN32
 	int wchars_num = MultiByteToWideChar(CP_UTF8, 0, text.c_str(), -1, NULL, 0);
 	wchar_t* wstr = new wchar_t[wchars_num];
 	MultiByteToWideChar(CP_UTF8, 0, text.c_str(), -1, wstr, wchars_num);
 
 	return wstr;
+#else
+    return nullptr;
+#endif
 }
 
 vector<string> Utils::Split(const string& str, const char& ch) {
